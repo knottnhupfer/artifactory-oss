@@ -1,0 +1,71 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="form-group">
+    <div id="credentials-container "
+            class="pull-right"
+            ng-if="canInjectUserData">
+        <div class="credentials-label-container" ng-if="userDataInjected">
+            <i class="icon icon-unlock credentials-icon"></i>
+            <span class="remove-credentials-text"
+                    ng-click="removeUserData()"
+                    jf-tooltip="{{removeCredentialsText}}"
+            >Remove Credentials</span>
+        </div>
+        <div id="insert-credentials-box"
+                ng-if="!userDataInjected"
+                class="pull-right">
+            <form>
+                <div class="credentials-label-container">
+                    <i class="icon icon-lock credentials-icon"></i>
+                    <span class="insert-credentials-text"
+                    >{{insertCredentialsText}}</span>
+                </div>
+                <i class="icon icon-go pull-right"
+                        ng-disabled="!injection.password"
+                        ng-click="injection.password && injectUserData()"></i>
+                <jf-field autofocus="true">
+                    <input type="password"
+                            ng-model="injection.password"
+                            class="input-text"
+                            placeholder="{{passwordInputPlaceholder}}"
+                            autocomplete="new-password"
+                            autofocus
+                            jf-enter-press="injectUserData()"
+                            id="password">
+                </jf-field>
+            </form>
+        </div>
+    </div>
+
+    <div class="form-group-cell">
+        <label>Tool</label>
+        <ui-select jf-disable-ng-animate ng-model="selection.repoType" ng-change="filterByType(true)" remove-selected="false" ng-disabled="disableToolAndRepoChange">
+            <ui-select-match placeholder="Select Package Type...">
+                <i ng-if="$select.selected.icon" class="select-repo-icon icon icon-{{$select.selected.icon}}"></i>{{$select.selected.text}}
+            </ui-select-match>
+            <ui-select-choices jf-disable-ng-animate repeat="property in repoTypes | filter: $select.search track by $index">
+                <i ng-if="property.icon" class="select-repo-icon icon icon-{{property.icon}}"></i>
+                <span ng-bind-html="property.text | highlight: $select.search"></span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+    <div class="form-group-cell form-button form-link generate-settings" ng-if="showSettings">
+        <a class="jf-link" href="" ng-if="!generateSettings" ng-click="getGeneratorRepos(showSettings)">Generate {{showSettings}} Settings</a>
+        <a class="jf-back-link" href="" ng-if="generateSettings" ng-click="status.snippetResolved = false; filterByType()">Back to Set Me Up</a>
+    </div>
+</div>

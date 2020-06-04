@@ -1,0 +1,65 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+	<button type="button"
+	        class="close"
+	        data-dismiss="close"
+	        aria-label="Close"
+	        ng-click="$close(true)"><span
+			aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="modal-title">Keyboard Shortcuts</h3>
+</div>
+<div class="modal-body shortcuts-modal">
+	<jf-panel jf-panel-heading="Global Shortcuts">
+		<table class="jf-data-table" cellspacing="10">
+			<tr ng-repeat="shortcut in globalShortcuts">
+				<td>{{shortcut.title}}:</td>
+				<td class="win-keys">
+					<span class="win-shortcut-key" ng-repeat="key in shortcut.keyCombination">
+						<span class="shortcut-key" ng-class="'key-{{key}}'">{{key}}</span><span ng-if="!$last"> + </span>
+					</span>
+				</td>
+				<td>Or</td>
+				<td class="mac-keys">
+					<span class="mac-shortcut-key" ng-repeat="key in shortcut.macKeyCombination">
+						<span class="shortcut-key" ng-class="'key-{{key}}'">{{key}}</span><span ng-if="!$last"> + </span>
+					</span>
+				</td>
+			</tr>
+		</table>
+	</jf-panel>
+	<jf-panel jf-panel-heading="Page Dependent Shortcuts">
+		<table class="jf-data-table" cellspacing="10">
+			<tr ng-repeat="shortcut in pageDependentShortcuts">
+				<td>{{shortcut.title}}:</td>
+				<td class="win-keys">
+					<span class="win-shortcut-key" ng-repeat="key in shortcut.keyCombination">
+						<span class="shortcut-key" ng-class="'key-{{key}}'">{{key}}</span><span ng-if="!$last"> + </span>
+					</span>
+				</td>
+				<td>Or</td>
+				<td class="mac-keys">
+					<span class="mac-shortcut-key" ng-repeat="key in shortcut.macKeyCombination">
+						<span class="shortcut-key" ng-class="'key-{{key}}'">{{key}}</span><span ng-if="!$last"> + </span>
+					</span>
+				</td>
+			</tr>
+		</table>
+	</jf-panel>
+</div>

@@ -1,0 +1,35 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget addons"
+     ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}"
+     msd-wheel="ctrl.onMouseWheel($event, $delta, $deltaX, $deltaY)">
+    <span class="addons-arrow addons-arrow-prev" ng-click="ctrl.addonPrevButton()"></span>
+    <ul class="addons-wrapper">
+        <li class="addon-tile"
+            ng-repeat="addon in ctrl.addons track by $index" ng-show="ctrl.ready">
+            <div class="addon-links">
+                <a ng-href="{{addon.learnMoreUrl}}" target="_blank">More Info</a>
+                <span>&middot;</span>
+                <a ng-href="{{addon.configurationUrl}}" target="_blank">User Guide</a>
+            </div>
+            <div class="addon-icon iconrepo {{ctrl.getIcon(addon.name)}}"></div>
+            <span ng-class="{'license-required': addon.status != 'Available'}">{{addon.displayName}}</span>
+        </li>
+    </ul>
+    <span class="addons-arrow addons-arrow-next" ng-click="ctrl.addonNextButton()"></span>
+</div>

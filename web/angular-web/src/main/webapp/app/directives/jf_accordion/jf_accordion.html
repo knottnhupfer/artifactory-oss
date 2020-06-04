@@ -1,0 +1,48 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="accordion-style">
+    <accordion close-others="true">
+        <accordion-group ng-repeat="item in jfAccordion.items"
+                         ng-if="!item.isHidden"
+                         heading="{{ item.label | replaceStringForAol }}"
+                         is-open="item.isOpen"
+                         class="accordion-header"
+                         ng-class="{disabled: item.isDisabled}"
+                         is-disabled="item.isDisabled"
+                         ui-sref-active="selected">
+            <div ng-repeat="subitem in item.subItems"
+                 ng-if="!subitem.isHidden"
+                 ng-class="{disabled: subitem.isDisabled}"
+                 jf-disable-feature="{{ subitem.feature }}"
+                 class="accordion-subitem">
+                <div ng-if="subitem.isDisabled"
+                     class="subitem-style">
+                    <div>{{subitem.label}}</div>
+                </div>
+                <div ng-if="!subitem.isDisabled"
+                     ui-sref="{{ subitem.state }} ({{ subitem.stateParams }})"
+                     ng-class="{selected: jfAccordion.isItemActive(subitem)}"
+                     ng-click="jfAccordion.saveState()"
+                     jf-clear-errors
+                     class="subitem-style">
+                    <div>{{subitem.label}}</div>
+                </div>
+            </div>
+        </accordion-group>
+    </accordion>
+</div>

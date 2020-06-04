@@ -1,0 +1,25 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="tree-wrapper">
+    <div class="default-tree-container">
+        <jf-tree api="jfTreeBrowser.treeApi"></jf-tree>
+    </div>
+    <div class="trash-tree-container" ng-show="!jfTreeBrowser.simpleMode && jfTreeBrowser.user.isAdmin() && jfTreeBrowser.isTrashPinned()">
+        <jf-tree api="jfTreeBrowser.treeApi" view-pane-name="trash"></jf-tree>
+    </div>
+</div>

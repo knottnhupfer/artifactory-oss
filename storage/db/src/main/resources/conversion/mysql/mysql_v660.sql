@@ -1,0 +1,1 @@
+ALTER TABLE build_jsons DROP FOREIGN KEY build_jsons_builds_fk;

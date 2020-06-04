@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+
+action=$1
+version=$2
+
+CURRENT_USER=$(id -nu)
+if [ "$CURRENT_USER" != "root" ]; then
+    echo
+    echo "ERROR: Please install Artifactory using root."
+    echo
+    exit 1
+fi
+
+SERVICE_FILE="/etc/init.d/artifactory"
+SERVICE_SYSTEMD_FILE="/lib/systemd/system/artifactory.service"
+
+if [ -e "$SERVICE_FILE" ]; then
+    # Shutting down the artifactory service if running
+    SERVICE_STATUS="$(${SERVICE_FILE} status)"
+    if [[ ! "$SERVICE_STATUS" =~ .*[sS]topped.* ]]; then
+        echo "Stopping the artifactory service..."
+        ${SERVICE_FILE} stop || exit $?
+    fi
+fi
+
+if [ -e "$SERVICE_SYSTEMD_FILE" ]; then
+    awk -F/ '$2 == "docker"' /proc/self/cgroup | read
+    DOCKER_VERIFICATION=$?
+    if [[ ${DOCKER_VERIFICATION} -eq 0 ]] ; then
+        # Shutting down the artifactory service if running
+        ARTIFACTORY_MANAGE_FILE=[[target_artifactory_install]]/bin/artifactoryManage.sh
+        SERVICE_STATUS="$($ARTIFACTORY_MANAGE_FILE status)"
+        if [[ ! "$SERVICE_STATUS" =~ .*[sS]topped.* ]]; then
+            echo "Stopping the artifactory service..."
+            $ARTIFACTORY_MANAGE_FILE stop || exit $?
+        fi
+    else
+        # Shutting down the artifactory service if running
+        SERVICE_STATUS="$(systemctl status artifactory.service)"
+        if [[ ! "$SERVICE_STATUS" =~ .*[sS]topped.* ]]; then
+            echo "Stopping the artifactory service..."
+            systemctl stop artifactory.service || exit $?
+        fi
+    fi
+fi
+
+[ -e /etc/opt/jfrog/artifactory ] && read uid gid <<<$(stat -c '%u %g' /etc/opt/jfrog/artifactory)
+
+group=$(getent group ${gid} | cut -d':' -f 1)
+user=$(getent passwd ${uid} | cut -d':' -f 1)
+if [ "$group" == "nogroup" ] || [ "$user" == "nobody" ] || [ "$group" == "nobody" ]; then
+    uid=""
+    gid=""
+fi
+
+# if Clean install, create artifactory username and group, otherwise, use default ARTIFACTORY_USER
+dpkg -l [[artifactory]] 2>&1 1>/dev/null
+if [ $? -eq 0 ]; then
+    # Upgrade
+    if [ -f [[target_etc_artifactory]]/default ]; then
+        username=$(grep ARTIFACTORY_USER [[target_etc_artifactory]]/default | awk '{print $2}' | awk -F '=' '{print $2}')
+        group_name=$(grep ARTIFACTORY_USER [[target_etc_artifactory]]/default | awk '{print $2}' | awk -F '=' '{print $2}')
+    fi
+
+    if [ -f [[target_tomcat_home]]/conf/server.xml ]; then
+        cp -f [[target_tomcat_home]]/conf/server.xml [[target_tomcat_home]]/conf/server.xml.dpkg-old
+    fi
+
+    if [ -f [[target_etc_artifactory]]/mimetypes.xml ]; then
+        cp -f [[target_etc_artifactory]]/mimetypes.xml [[target_etc_artifactory]]/mimetypes.xml.dpkg-old
+    fi
+else
+    # Initial installation
+    echo "Checking if group [[group_name]] exists..."
+    getent group "[[group_name]]" 2>&1 1>/dev/null
+    if [ $? != 0  ]; then
+      echo "Group [[group_name]] doesn't exist. Creating ..."
+      /usr/sbin/groupadd -r [[group_name]] ${gid:+-g} $gid|| exit $?
+    else
+      echo "Group [[group_name]] exists."
+    fi
+
+    echo "Checking if user [[username]] exists..."
+
+    getent passwd "[[username]]" 2>&1 1>/dev/null
+    if [ $? != 0 ]; then
+      echo "User [[username]] doesn't exist. Creating ..."
+      /usr/sbin/useradd [[username]] -g [[username]] -M -s /usr/sbin/nologin ${uid:+-u} $uid || exit $?
+    else
+      echo "User [[username]] exists."
+    fi
+fi
+
+echo "Checking if ARTIFACTORY_HOME exists"
+if [ ! -d "[[target_artifactory_home]]" ]; then
+  mkdir -p [[target_artifactory_home]]
+  chown -R [[username]]: [[target_artifactory_home]] || exit $?
+fi
+
+# Cleaning the artifactory webapp and work folder
+echo "Removing tomcat work directory"
+if [ -d [[target_tomcat_home]]/work ]; then
+  rm -rf [[target_tomcat_home]]/work || exit $?
+fi
+
+if [ -d [[target_tomcat_home]]/webapps/[[artifactory]] ]; then
+  echo "Removing Artifactory's exploded WAR directory"
+  rm -rf [[target_tomcat_home]]/webapps/[[artifactory]] || exit $?
+fi
+
+if [ -f [[target_etc_artifactory]]/default ]; then
+    echo "NOTE: The following procedures change the ownership of files and may take several minutes. Do not stop the installation/upgrade process."
+    username=$(grep ARTIFACTORY_USER [[target_etc_artifactory]]/default | awk '{print $2}' | awk -F '=' '{print $2}')
+    chown ${username}: [[target_tomcat_home]]
+    chown -R ${username}: [[target_tomcat_home]]/webapps
+    chown -R ${username}: [[target_tomcat_home]]/logs
+    chown ${username}: [[target_artifactory_home]]
+    chown -R ${username}: [[target_var_dir]]/run/
+    chown -R ${username}: /etc[[target_jfrog_home]]
+    chown -R ${username}: [[target_var_dir]]/artifactory/logs
+fi
+
+exit 0

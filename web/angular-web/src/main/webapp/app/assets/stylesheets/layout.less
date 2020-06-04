@@ -1,0 +1,432 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+body, html {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  height: 100%;
+  min-height: 100%;
+}
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: @greenBGLight;
+  color: @grayFontGeneral;
+
+  &.login, &.reset-password, &.forgot-password, &.login_request, &.change-password {
+    background: @grayBGLogin;
+  }
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+// page table layout
+#jf-full-page {
+  display: table;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+
+  .jf-layout-row {
+    display: table-row;
+  }
+  .jf-layout-cell {
+    display: table-cell;
+  }
+}
+
+#jf-relative-viewport {
+  position: relative;
+  height: 100%;
+}
+
+#jf-viewport {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+
+  .jf-footer {
+    position: absolute;
+    font-size: 10px;
+    bottom: 20px;
+    width: 200px;
+    padding: 0 25px;
+    border: none !important;
+    color: @grayFontDarker;
+    pointer-events: none;
+    .wrapper-footer-data {
+      padding-top: 5px;
+      text-align: center;
+    }
+
+    .icon-jfrog-logo {
+      height: 50px;
+      background-position: top center;
+    }
+    &.admin-jf-footer {
+      position: relative;
+      line-height: 13px;
+      padding-top: 20px;
+    }
+  }
+
+  .wrapper-view {
+    padding-left: 50px !important;
+  }
+
+  #jf-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    //left: @mainBarWidth;
+    left: 55px;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    transition: left .25s ease-in-out;
+    &.jf-content-pinned-menu {
+      left: @mainBarWidth;
+    }
+  }
+}
+
+//----------- header----------
+jf-header {
+  height: @topHeaderHeight;
+}
+#jf-header {
+  z-index: 1050;
+  height: @topHeaderHeight;
+  background: @greenBGDark;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .37);
+  position: absolute;
+  width: 100%;
+  padding-left: 15px;
+
+  .navbar-header {
+    float: left;
+  }
+  .navbar-brand {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 60px;
+    margin-left: -16px;
+  }
+
+  a:not(.jf-link) {
+    color: white !important;
+  }
+
+  .log-out {
+    color: @greenFontLight;
+    font-weight: 100;
+  }
+  .header-section {
+    border-left: 1px solid @greenSeparatorBorder;
+    position: relative;
+    line-height: 60px;
+    height: 60px;
+    color: #fff;
+    padding: 0 30px;
+
+    &::before {
+      content: '';
+      width: 1px;
+      height: 100%;
+      display: inline-block;
+      background: @greenDarkSeparatorBorder;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    &.quick-actions {
+      cursor: pointer;
+      padding: 0;
+      .user-header-section {
+        padding: 0 30px;
+      }
+    }
+
+    &.header-help {
+      padding: 0;
+
+      &:not([disabled]) {
+        &:hover, &.open {
+          .dropdown-toggle {
+            cursor: pointer;
+          }
+        }
+      }
+
+      i.icon-more {
+        margin-left: 5px;
+        margin-right: 0;
+        font-size: 12px;
+        top: 0;
+        &:before {
+          content: 'A';
+          -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+          display: inline-block;
+          color: #fff;
+        }
+      }
+
+      .dropdown-toggle {
+        display: block;
+        line-height: 61px;
+        padding: 0 20px;
+        cursor: default;
+      }
+
+      .dropdown-menu {
+        right: 3px;
+        margin-top: 0;
+        border-radius: 0;
+        border: 0 none;
+        padding: 0;
+
+        .triangle {
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 0 10.5px 13px;
+          border-color: transparent transparent #fff transparent;
+          position: absolute;
+          top: -12px;
+          left: 65%;
+        }
+
+        a {
+          height: 40px;
+          line-height: 40px;
+          font-size: 13px;
+          padding: 0 14px;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+
+  .header-section + .header-section.header-help {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    .dropdown-menu {
+      right: unset;
+      left: unset;
+      .triangle {
+        left: 45%;
+      }
+    }
+  }
+
+  .search-wrapper {
+    height: @topHeaderHeight;
+    padding: 4px 5px 50px 5px;
+  }
+
+  .icon-search-container {
+    display: inline-block;
+    height: 45px;
+    width: 70px;
+    position: relative;
+    transition: width 0.4s ease-out;
+    backface-visibility: hidden;
+    outline: none;
+    @media screen and (max-width: 850px) {
+      display: none !important;
+    }
+
+    .search-input {
+      &::-webkit-input-placeholder {
+        /* WebKit browsers */
+        color: @white;
+        padding: 0 0 0 8px;
+      }
+      &::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: @white;
+        padding: 0 0 0 8px;
+      }
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        color: @white;
+        padding: 0 0 0 8px;
+      }
+    }
+
+    &.active {
+      width: 300px;
+      border-radius: 50px;
+
+      .glyphicon-remove-circle {
+        opacity: 1;
+      }
+      .search-input {
+        width: 200px;
+        color: @white;
+
+      }
+    }
+
+    .header-search-btn {
+      color: @white;
+      font-size: 19px;
+      line-height: 46px;
+      cursor: pointer;
+      z-index: 999;
+      margin: 2px 5px 3px 25px;
+      display: inline-block;
+
+      &:before {
+        position: relative;
+        top: 4px;
+      }
+    }
+    .glyphicon-remove-circle {
+      opacity: 0;
+      color: #FFFFFF;
+      font-size: 20px;
+      position: absolute;
+      top: 12px;
+      transition: opacity 0.4s ease-out;
+      cursor: pointer;
+      right: 15px;
+    }
+
+    .search-input {
+      cursor: default;
+      width: 0;
+      padding: 5px;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      line-height: 28px;
+      background-color: rgba(255, 255, 255, 0);
+      transition: width 0.4s ease-out;
+      font-weight: 300;
+    }
+    .search-input.active {
+      width: 240px;
+    }
+  }
+}
+
+// content layout
+
+.content-layout-container {
+  h1 {
+    color: @blackBGMediumDark;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+    margin: 0;
+    padding: 0 0 0 15px;
+    line-height: 50px;
+  }
+
+  .content-wrapper {
+    position: absolute;
+    top: 50px;
+    bottom: 15px;
+    left: 15px;
+    right: 15px;
+
+    .card {
+      background: @white;
+      box-shadow: 0 1px 4px 1px rgba(0, 0, 0, .17);
+      padding: 0;
+
+      .content-with-footer {
+        position: absolute;
+        top: 0;
+        bottom: @layoutFooterHeight;
+        right: 0;
+        left: 0;
+        overflow-y: auto;
+      }
+    }
+
+    .card-pole-pad {
+      &, .content-with-footer {
+        padding-top: 15px;
+        padding-bottom: 15px;
+      }
+    }
+    .card-side-pad {
+      &, .content-with-footer {
+        padding-right: 30px;
+        padding-left: 30px;
+      }
+    }
+  }
+
+  &.with-head-bar {
+    .content-wrapper {
+      top: 116px;
+    }
+  }
+  &.artifacts-container {
+    .content-wrapper {
+      top: 50px !important;
+    }
+  }
+  &.permissions-form,
+  &.repo-form {
+    .card .content-with-footer {
+      overflow-y: hidden;
+      .row {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .content-footer {
+    background: @grayBorderLight;
+    height: @layoutFooterHeight;
+    line-height: @layoutFooterHeight;
+    padding: 0 40px;
+    position: absolute;
+    width: 100%;
+    z-index: 99;
+    bottom: 0;
+  }
+}
+
+form[name="PermissionForm.form"] {
+  .content-with-footer {
+    .jf-wizard-container {
+      .wizard-content {
+        height: ~"calc(100% - 125px)";
+        flex-grow: 0;
+      }
+      jf-checkbox {
+        label {
+          position: relative;
+        }
+      }
+    }
+  }
+}

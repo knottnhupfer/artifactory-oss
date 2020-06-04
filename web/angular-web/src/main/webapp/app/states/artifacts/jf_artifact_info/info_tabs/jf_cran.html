@@ -1,0 +1,103 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="cran">
+    <jf-panel jf-panel-heading="Package Info" ng-if="jfCran.cranData.cranInfo">
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfCran.cranData.cranInfo"
+                    ng-if="key != 'description'">
+                <td ng-if="!(key === 'deprecated' && !value)">{{jfCran.DICTIONARY[key] || key }}:</td>
+                <td ng-if="key != 'maintainers' &&
+                            key != 'sources' &&
+                            key != 'keywords' &&
+                            key != 'archs' &&
+                            !(key === 'deprecated' && !value)">
+                    {{value}}
+                </td>
+                <!-- Table cell specific for maintainers, sources & keywords -->
+                <td ng-if="key === 'cranDependencies' ||
+                            key === 'cranImports' ||
+                            key === 'cranSuggests' ||
+                            key === 'cranEnhances' ||
+                            key === 'cranLinkingTo'">
+                    <!-- Content for dependencies -->
+                    <div ng-if="value.length && key === 'cranDependencies'"
+                         ng-repeat="item in value track by $index"
+                         class="licenses-list inline-block">
+                        <a href="{{item}}">{{item}}</a>
+                    </div>
+                </td>
+                <td ng-if="key == 'archs'">
+                    <div ng-if="jfCran.cranData.cranInfo.archs.length" class="keywords-list inline-block"
+                            ng-repeat="arch in jfCran.cranData.cranInfo.archs track by $index">
+                        <span>{{arch}}</span><span ng-if="jfCran.cranData.cranInfo.archs.length>1 && $index<jfCran.cranData.cranInfo.archs.length-1">,&nbsp;</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Description"
+            ng-if="jfCran.cranData.cranInfo.description">
+        <p>{{jfCran.cranData.cranInfo.description}}</p>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Dependencies"
+            ng-if="jfCran.cranData.cranDependencies.length">
+        <jf-grid grid-options="jfCran.gridDependenciesOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Suggests"
+            ng-if="jfCran.cranData.cranSuggests.length">
+        <jf-grid grid-options="jfCran.gridDependenciesOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Imports"
+            ng-if="jfCran.cranData.cranImports.length">
+        <jf-grid grid-options="jfCran.gridImportsOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Enhances"
+            ng-if="jfCran.cranData.cranEnhances.length">
+        <jf-grid grid-options="jfCran.gridEnhancesOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Linkings To"
+            ng-if="jfCran.cranData.cranLinkingTo.length">
+        <jf-grid grid-options="jfCran.gridLinkingToOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+
+    </jf-panel>
+</div>

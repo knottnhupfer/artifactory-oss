@@ -1,0 +1,43 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="closeModal()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">{{modalTitle}}</h3>
+</div>
+<div class="modal-body clearfix ha-licenses-modal">
+    <form>
+        <div class="form-group">
+            <div class="form-group-cell double">
+                <jf_drag_and_drop_txt id="ha-add-license-dnd"
+                                      dnd-content="newLicenses.text"
+                                      dnd-style="dndStyle"
+                                      dnd-on-error="dndOnError(msg)"
+                                      dnd-call-to-action="'Copy your license(s) text or <b>drop a file</b>'">
+                </jf_drag_and_drop_txt>
+                <label class="preserve-lb">{{helpText}}</label>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer ha-licenses-modal">
+    <div class="pull-right modal-footer-buttons-container">
+        <button class="btn btn-primary" ng-click="saveLicenses()">Save</button>
+    </div>
+</div>

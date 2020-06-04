@@ -1,0 +1,33 @@
+<div class="infection-path-viewer" ng-class="{'deep':InfectionPathViewer.infectionPath.length > 4}">
+        <div class="infection-level infection-level{{$index}}"
+        ng-style="{'width':'{{(40 + $index * 70) / InfectionPathViewer.devider }}px', 'height':'{{(40 + $index * 70) / InfectionPathViewer.devider }}px', 'z-index':'{{1999 - $index}}'}"
+             ng-repeat="infectionFile in InfectionPathViewer.infectionPath">
+</div>
+    <div class="infection-path-caption">
+        <span ng-bind-html="InfectionPathViewer.caption" jf-tooltip-on-overflow></span>
+    </div>
+<div id="infection-level-files">
+        <div ng-if="InfectionPathViewer.type != 'component'" class="infection-level-file-name"
+        ng-style="{'margin-top':'{{((-9 + $index * -35) / InfectionPathViewer.devider ) - 6 }}px'}"
+             ng-repeat="infectionFile in InfectionPathViewer.infectionPath"
+             jf-tooltip-on-overflow>
+        <i class="icon icon-{{infectionFile.icon}}"></i>{{infectionFile.name}}
+</div>
+
+
+        <div
+        ui-sref="components.details({componentID: infectionFile.package_id,componentVersion:infectionFile.version})"
+        ng-if="InfectionPathViewer.type === 'component'" class="infection-level-file-name"
+        ng-style="{'margin-top':'{{((-9 + $index * -35) / InfectionPathViewer.devider) - 6 }}px'}"
+        ng-repeat="infectionFile in InfectionPathViewer.infectionPath"
+        jf-tooltip-on-overflow>
+
+    <i ng-if="infectionFile.type === 'generic'" class="icon icon-general"></i><i
+            ng-if="infectionFile.type === 'maven'" class="icon icon-pom"></i> <i
+        ng-if="infectionFile.type !== 'maven' && infectionFile.type !== 'generic'"
+        class="icon icon-{{infectionFile.type}}"></i><a
+        ng-if="infectionFile.version">{{infectionFile.name + ':' + infectionFile.version}}</a>
+<a ng-if="!infectionFile.version">{{infectionFile.name}}</a>
+</div>
+</div>
+</div>

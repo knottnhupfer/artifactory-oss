@@ -1,0 +1,71 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container bundles-layout-container"
+     ng-if="BundlesList.ArtifactoryFeatures.isEnterprisePlus() || BundlesList.ArtifactoryFeatures.isEdgeNode()">
+    <h1>Release Bundles</h1>
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <jf-tabs tabs="BundlesList.tabs"
+                     dictionary="BundlesList.DICTIONARY"
+                     tab-width="245"
+                     container-margin="0">
+                <div class="main-view">
+                    <jf-tab name="target">
+                        <div class="tab-inner-wrapper">
+                            <jf-table-view
+                                    options="BundlesList.targetTableViewOptions"
+                                    object-name="Bundle">
+                            </jf-table-view>
+                        </div>
+                    </jf-tab>
+                    <jf-tab name="source">
+                        <div class="tab-inner-wrapper">
+                            <jf-table-view
+                                    options="BundlesList.sourceTableViewOptions"
+                                    object-name="Bundle">
+                            </jf-table-view>
+                        </div>
+                    </jf-tab>
+                </div>
+            </jf-tabs>
+        </div>
+    </div>
+</div>
+
+<div class="bundles-na" ng-if="!BundlesList.ArtifactoryFeatures.isEnterprisePlus() && !BundlesList.ArtifactoryFeatures.isEdgeNode()">
+    <div class="illustration"></div>
+    <div>
+        <h1>Upgrade to JFrog Enterprise+ and distribute your software securely, reliably and automatically.</h1>
+        <a href="https://www.jfrog.com/confluence/display/DIST/Release+Bundles" target="_blank">Learn More</a>
+        <ul>
+            <li>
+                <i class="icon-eplus"></i>
+                <p>Release Bundles are distributed with JFrog Distribution to Artifactory Edge Nodes and are part of the Enterprise+ platform.</p>
+            </li>
+            <li>
+                <i class="icon-eplus"></i>
+                <p>Release Bundles group together the contents that are part of your release, providing the bill of materials for your software releases that can then be pushed to your edge devices.</p>
+            </li>
+            <li>
+                <i class="icon-eplus"></i>
+                <p>Release Bundles are secure and immutable, ensuring that no manipulation can be made by unauthorized users while distributing them.</p>
+            </li>
+        </ul>
+
+    </div>
+</div>

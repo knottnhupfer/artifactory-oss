@@ -1,0 +1,15 @@
+{
+  "properties" : null,
+  "version" : "1.0.0",
+  "name" : "testBuild",
+  "number" : "1",
+  "type" : "GENERIC",
+  "buildAgent" : {
+    "name" : "Jenkins"
+  },
+  "agent" : {
+    "name" : "Jenkins"
+  },
+  "started" : "2019-06-27T13:53:32.725+0300",
+  "durationMillis" : 0
+}

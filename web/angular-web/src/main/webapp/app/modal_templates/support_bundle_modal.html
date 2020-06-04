@@ -1,0 +1,136 @@
+<form name="SupportPage.newBundleForm">
+	<div class="modal-header">
+		<h3 class="modal-title">{{ title }}</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-group">
+			<div class="form-group-cell">
+				<jf-field validations="common" autofocus="true">
+					<label class="mandatory" for="name">Support Bundle Name</label>
+					<input type="text"
+					       class="input-text"
+					       id="name"
+					       required
+					       ng-model="bundleData.supportBundleName">
+				</jf-field>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="form-group-cell">
+				<jf-field validations="common">
+					<label for="description">Support Bundle Description</label>
+					<input type="text"
+					       class="input-text"
+					       id="description"
+					       ng-model="bundleData.supportBundleDescription">
+				</jf-field>
+			</div>
+		</div>
+		<!-- Configuration Files -->
+		<div class="form-group form-checkbox">
+			<div class="form-group-cell">
+				<jf-checkbox text="Configuration Files">
+					<input type="checkbox"
+					       id="includeConfigFiles"
+					       ng-model="bundleData.configuration">
+				</jf-checkbox>
+			</div>
+		</div>
+		<!-- System Info -->
+		<div class="form-group form-checkbox">
+			<div class="form-group-cell">
+				<jf-checkbox text="System Info">
+					<input type="checkbox"
+					       id="includeSystemInfo"
+					       ng-model="bundleData.systemInfoConfiguration">
+				</jf-checkbox>
+			</div>
+		</div>
+		<!-- Logs -->
+		<div class="form-group form-checkbox">
+			<div class="form-group-cell">
+				<jf-checkbox text="Logs">
+					<input type="checkbox"
+					       id="includeLogs"
+					       ng-model="bundleData.systemLogsConfiguration">
+				</jf-checkbox>
+			</div>
+		</div>
+		<!-- Date Span -->
+		<div class="form-group">
+			<div class="form-group-cell">
+				<label class="label-wight">Date Span</label>
+				<selectize config="SupportPage.timePeriodConfig"
+				           options="SupportPage.timePeriodOptions"
+				           ng-change="onChangeTimePeriod()"
+				           ng-model="bundleData.timePeriodSelection"
+				           ng-init="bundleData.timePeriodSelection = 1"
+				           ng-disabled="!bundleData.systemLogsConfiguration">
+				</selectize>
+			</div>
+		</div>
+		<div class="form-group form-checkbox-group"
+		     ng-show="bundleData.timePeriodSelection != 1">
+			<div class="form-group-cell form-calendar">
+				<label>Start Date</label>
+				<jf-datetimepicker
+						ng-if="SupportPage.dateFormat && SupportPage.today"
+						model="bundleData.startDate"
+						on-change="SupportPage.onChange({startDate: bundleData.startDate, endDate: bundleData.endDate,state: 'startDate'})"
+						is-enabled="bundleData.timePeriodSelection != 'CUSTOM'"
+						options="SupportPage.fromDateOptions">
+				</jf-datetimepicker>
+			</div>
+			<div class="form-group-cell form-calendar">
+				<label>End Date</label>
+				<jf-datetimepicker
+						attr-id="test"
+						ng-if="SupportPage.dateFormat && SupportPage.today"
+						model="bundleData.endDate"
+						on-change="SupportPage.onChange({startDate: bundleData.startDate, endDate: bundleData.endDate,state: 'endDate'})"
+						is-enabled="bundleData.timePeriodSelection != 'CUSTOM'"
+						options="SupportPage.toDateOptions">
+				</jf-datetimepicker>
+			</div>
+		</div>
+		<div class="form-group form-checkbox">
+			<div class="form-group-cell">
+				<jf-checkbox text="Thread Dump">
+					<input type="checkbox"
+					       id="includeThreadDump"
+					       ng-model="bundleData.threadDumpConfiguration">
+				</jf-checkbox>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="form-group-cell">
+				<jf-field validations="common">
+					<label for="count">Number of Thread Dumps</label>
+					<input type="number"
+					       class="input-text"
+					       required
+					       id="count"
+					       name="count"
+					       ng-disabled="!bundleData.threadDumpConfiguration"
+					       ng-model="bundleData.threadDump.count"/>
+				</jf-field>
+			</div>
+			<div class="form-group-cell">
+				<jf-field validations="common">
+					<label for="interval">Interval (Milliseconds)</label>
+					<input type="number"
+					       class="input-text"
+					       required
+					       id="interval"
+					       name="interval"
+					       ng-disabled="!bundleData.threadDumpConfiguration"
+					       ng-model="bundleData.threadDump.interval"/>
+				</jf-field>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-secondary" ng-click="$dismiss()">Cancel</button>
+		<button class="btn btn-primary" ng-click="createBundle()" ng-disabled="SupportPage.newBundleForm.$invalid">Create</button>
+	</div>
+</form>

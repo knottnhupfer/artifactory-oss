@@ -1,0 +1,40 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>High Availability Configuration</h1>
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+        	<div ng-if="AdminConfigurationHA.ha">
+                <jf-panel jf-panel-heading="Artifactory Nodes" ng-if="AdminConfigurationHA.ha.length > 0">
+                    <!--<div ng-if="AdminConfigurationHA.ha.nodesWithNoLicense > 0"-->
+                         <!--class="alert alert-warning">-->
+                        <!--You have {{AdminConfigurationHA.ha.nodesWithNoLicense}} nodes without license.-->
+                    <!--</div>-->
+
+                    <jf-grid ng-if="AdminConfigurationHA.ha.length"
+                             grid-options="AdminConfigurationHA.gridOptions"
+                             filter-field="id"></jf-grid>
+                </jf-panel>
+	            <div class="alert alert-info"
+                     ng-if="AdminConfigurationHA.ha.length === 0"
+                     ng-bind-html="AdminConfigurationHA.CONFIG_MESSAGES.haNotConfiguredMessage">
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>

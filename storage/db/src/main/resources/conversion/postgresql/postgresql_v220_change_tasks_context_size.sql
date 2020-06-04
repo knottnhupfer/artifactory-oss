@@ -1,0 +1,1 @@
+ALTER TABLE tasks ALTER task_context TYPE VARCHAR(2048);

@@ -1,0 +1,207 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<form name="RepositoryForm.ruleForm">
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$dismiss()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body clearfix rules-popup">
+
+    <div class="form-group">
+        <div class="form-group-cell">
+            <jf-field validations="distRepo" autofocus="true">
+                <label class="mandatory" for="ruleName">Name</label>
+                <input type="text"
+                       class="input-text"
+                       name="ruleName"
+                       id="ruleName"
+                       ui-validate="{existRuleName: 'RepositoryForm.checkUniqueRuleName($value)'}"
+                       ng-model="rule.ruleName"
+                       required />
+            </jf-field>
+        </div>
+    </div>
+
+    <div>
+        <jf-panel jf-panel-heading="Artifactory Input" jf-panel-classes="borderless">
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <label class="mandatory">Package Type</label>
+                    <ui-select ng-model="rule.selectedPackageType" ng-change="RepositoryForm.changeRuleRepoType();" remove-selected="false">
+                        <ui-select-match placeholder="Select Package Type...">
+                            <i ng-if="$select.selected.icon" class="select-repo-icon icon icon-{{$select.selected.icon}}"></i>
+                            {{$select.selected.text}}
+                        </ui-select-match>
+                        <ui-select-choices jf-disable-ng-animate
+                                repeat="property in RepositoryForm.distributionRulesPackages | filter: $select.search track by property.text">
+                            <i ng-if="property.icon" class="select-repo-icon icon icon-{{property.icon}}"></i>
+                            <span ng-bind-html="property.text| highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+
+                </div>
+                <div class="form-group-cell" ng-if="RepositoryForm.rulesModalScope.rule.selectedPackageType.value == 'generic'">
+                    <label>Choose Layout</label>
+                    <ui-select ng-model="rule.RulePackageLayoutSelect" ng-change="RepositoryForm.changeRulePackageLayout();" remove-selected="false">
+                        <ui-select-match placeholder="Select Layout...">
+                            {{$select.selected}}
+                        </ui-select-match>
+
+                        <ui-select-choices jf-disable-ng-animate
+                                repeat="property in RepositoryForm.ruleTokensByLayoutKeys | filter: $select.search track by property">
+                            <span ng-bind-html="property| highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group-cell" ng-if="RepositoryForm.availableTokens.length">
+                    <label>Available Tokens</label>
+                    <div class="available-tokens"><ul><li ng-repeat="item in RepositoryForm.availableTokens | orderBy: item">{{item}}</li></ul></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <jf-field validations="text">
+                        <label>Repository Filter</label>
+                        <jf-help-tooltip html="repositoryFilterTooltip"></jf-help-tooltip>
+                        <input type="text"
+                               class="input-text"
+                               name="filterRepo"
+                               id="filterRepo"
+                               placeholder="e.g. (.*)-local"
+                               ng-model="rule.filterRepo"/>
+                    </jf-field>
+                </div>
+            <!--</div>-->
+            <!--<div class="form-group">-->
+                <div class="form-group-cell">
+                    <jf-field validations="text">
+                        <label>Path Filter</label>
+                        <jf-help-tooltip html="pathFilterToolip"></jf-help-tooltip>
+                        <input type="text"
+                               class="input-text"
+                               name="filterPath"
+                               id="filterPath"
+                               placeholder="e.g. (.*).zip"
+                               ng-model="rule.filterPath"/>
+                    </jf-field>
+                </div>
+            </div>
+        </jf-panel>
+
+
+        <jf-panel jf-panel-heading="Bintray Output" jf-panel-classes="borderless">
+
+            <div class="form-group">
+                <div class="form-group-cell">
+
+                    <jf-field validations="distRepo">
+                        <label for="distributionCoordinatesRepo" class="mandatory">Repository</label>
+                        <input type="text"
+                               class="input-text"
+                               name="distributionCoordinatesRepo"
+                               id="distributionCoordinatesRepo"
+                               ng-model="rule.distributionCoordinatesRepo"
+                               required />
+                    </jf-field>
+                </div>
+                <div class="form-group-cell">
+                    <jf-field validations="text">
+                        <label for="distributionCoordinatesPackage" class="mandatory">Package</label>
+                        <input type="text"
+                               class="input-text"
+                               name="distributionCoordinatesPackage"
+                               id="distributionCoordinatesPackage"
+                               ng-model="rule.distributionCoordinatesPackage"
+                               ng-disabled="rule.selectedPackageType.value === 'nuget' || rule.selectedPackageType.value === 'debian'"
+                               required />
+                    </jf-field>
+                    <span class="input-help-text" ng-style="{'visibility': rule.selectedPackageType.value === 'nuget' || rule.selectedPackageType.value === 'debian' ? 'visible' : 'hidden'}">Bintray package name must match the {{rule.selectedPackageType.serverEnumName}} package name</span>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+
+                <div class="form-group-cell">
+                    <jf-field validations="text">
+                        <label for="distributionCoordinatesVersion" class="mandatory">Version</label>
+                        <input type="text"
+                               class="input-text"
+                               name="distributionCoordinatesVersion"
+                               id="distributionCoordinatesVersion"
+                               ng-model="rule.distributionCoordinatesVersion"
+                               required />
+                    </jf-field>
+                </div>
+
+                <div class="form-group-cell">
+                    <jf-field validations="text">
+                        <label for="distributionCoordinatesPath" class="mandatory">Path</label>
+                        <input type="text"
+                               class="input-text"
+                               name="distributionCoordinatesPath"
+                               id="distributionCoordinatesPath"
+                               ng-model="rule.distributionCoordinatesPath"
+                               ng-disabled="rule.selectedPackageType.value === 'docker'"
+                               required />
+                    </jf-field>
+                </div>
+            </div>
+
+        </jf-panel>
+
+    </div>
+
+    <!--<div>
+        <jf-panel jf-panel-heading="Rule Testing" jf-panel-classes="borderless">
+            <div class="form-group">
+
+                <div class="form-group-cell">
+                    <jf-field>
+                        <label for="testPath">Package Repo Path</label>
+                        <jf-help-tooltip text="Lorem ipsum dolor sit"></jf-help-tooltip>
+                        <input type="text"
+                               class="input-text"
+                               name="testPath"
+                               id="testPath"
+                               ng-model="rule.testPath"
+                               required />
+                    </jf-field>
+                </div>
+                <div class="form-group-cell form-button">
+                    <button ng-click="RepositoryForm.testRule()" class="btn btn-secondary" ng-disabled="!rule.testPath">Test</button>
+                </div>
+            </div>
+
+        </jf-panel>
+    </div>-->
+
+
+</div>
+
+<div class="modal-footer">
+    <div class="modal-footer-buttons-container">
+        <button class="btn btn-default" type="button" ng-click="$dismiss()">Close</button>
+        <button class="btn btn-primary btn-dark" type="button" ng-click="RepositoryForm.saveDistributionRule()" ng-disabled="RepositoryForm.ruleForm.$invalid">Save</button>
+    </div>
+</div>
+</form>

@@ -1,0 +1,28 @@
+
+{
+  "results" : [ {
+    "build.created" : "2012-10-12T02:16:40.000+02:00",
+    "build.created_by" : "me",
+    "build.started" : "2012-09-30T12:30:00.000+02:00",
+    "build.name" : "bb",
+    "build.number" : "1",
+    "build.url" : "http://myserver/jenkins/bb/1",
+    "modules" : [ {
+      "dependencies" : [ {
+        "items" : [ {
+          "releaseBundleFiles" : [ {
+            "releaseBundles" : [ {
+              "release.name" : "bundle2",
+              "release.signature" : "sig2"
+            } ]
+          } ]
+        } ]
+      } ]
+    } ]
+  } ],
+  "range" : {
+    "start_pos" : 0,
+    "end_pos" : 1,
+    "total" : 1
+  }
+}

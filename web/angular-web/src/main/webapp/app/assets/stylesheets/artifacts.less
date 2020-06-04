@@ -1,0 +1,1084 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+/**
+  OLD CSS
+**/
+.artifacts-list,
+.artifact-details {
+  border: 1px solid #EEEEEE;
+
+}
+
+.js-back {
+  width: 300px;
+  height: 8000px;
+  background: red;
+}
+
+.ui-fix {
+  position: relative;
+  min-height: 600px;
+  overflow: auto;
+}
+
+.jf-tree-search-container {
+  display: inline-block;
+  .jf-tree-search {
+    width: 100%;
+    font-size: 15px;
+    padding: 0 5px 0 5px;
+    outline: none;
+    border: 0;
+  }
+
+  .spinner-msg-local {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
+
+/**
+  END OF OLD CSS
+**/
+
+#jf-artifacts {
+  .set-me-up, .deploy-btn {
+    color: @jfColorBlack;
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: 400;
+    cursor: pointer;
+    margin-top: 14px;
+
+    &:hover {
+      color: @jfColorAlmostBlack;
+    }
+
+    span {
+      font-size: 19px;
+      float: left;
+      margin: 1px 6px 0 0;
+    }
+  }
+
+  .set-me-up {
+    margin-right: 20px;
+    letter-spacing: -0.5px;
+
+    span {
+      margin-right: 8px;
+      font-size: 20px;
+    }
+  }
+
+  .deploy-btn {
+    margin-right: 26px;
+
+    &.disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .copy-clip-fix(){
+    .clip-copy-button{
+      position: relative;
+      .copy-to-clip{
+        top: 3px;
+        left: 0px;
+      }
+    }
+  }
+  .artifact-details {
+    padding: 0 0 15px;
+    .jf-data-table {
+      .clip-copy-button {
+        position: absolute;
+        margin-top: -1px;
+      }
+
+      // FF Support
+      @-moz-document url-prefix() {
+        .copy-clip-fix();
+      }
+
+      //Edge Support
+      @supports (-ms-ime-align:auto) {
+      .copy-clip-fix();
+      }
+    }
+
+    .xray-status {
+      float: right;
+      font-size: 35px;
+      margin-right: 20px;
+      margin-top: 10px;
+      color: @greenBGDark;
+    }
+    .repository-type {
+      float: right;
+      margin: 0;
+      background-position: center top;
+      text-align: center;
+
+      .repotype {
+        display: inline-block;
+      }
+      .icon-logo-circle {
+        display: inline-block;
+        width: 18px;
+        height: 22px;
+        background-size: 100%;
+        position: relative;
+        top: 7px;
+        margin-right: 4px;
+      }
+    }
+
+    .artifact-details-header {
+      //margin: 4px 15px 20px 30px;
+      padding: 8px 10px 8px 4px;
+      border-bottom: 1px solid #e9e9e9;
+      margin-bottom: 15px;
+      .jstree-icon {
+        float: left;
+        font-size: 18px;
+        color: @blackBGLight;
+        margin: 0 8px 0 30px;
+        line-height: 28px;
+
+        &.icon-trashcan {
+          line-height: 42px;
+        }
+      }
+    }
+
+    .artifact-name-heading {
+      color: @blackBGLight;
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 0px;
+      line-height: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0;
+      padding: 2px 0;
+      i[class*=icon-star] {
+        font-size: 16px;
+        margin-left: 5px;
+        cursor: pointer;
+      }
+    }
+
+    .inner-buttons {
+      margin-left: 20px;
+
+      a {
+        cursor: pointer;
+        color: @greenFontHeader;
+
+        &:hover {
+          text-decoration: none;
+          color: #327535;
+
+          &:not(.no-separator)::before {
+            color: @greenFontHeader;
+          }
+        }
+        &:not(.no-separator)::before {
+          content: "|";
+          cursor: default;
+          margin: 0 6px 0 4px;
+          position: relative;
+          top: -1px;
+        }
+      }
+    }
+
+    .left-seperator {
+      &:before {
+        content: "|";
+        cursor: default;
+        margin: 0 6px 0 4px;
+        position: relative;
+        top: -1px;
+      }
+    }
+
+    .jf-data-table {
+      td:first-child {
+        min-width: 200px
+      }
+    }
+
+    #jf-general {
+      > .panel-default, > .panel {
+        border: none;
+      }
+
+      .licenses {
+
+        .buttons {
+          margin: 0 20px;
+
+          button {
+            margin: 0 5px;
+          }
+        }
+
+        input[type="checkbox"] {
+          display: inline-block;
+        }
+      }
+    }
+
+  }
+
+  .tree-head-expansion {
+    display: none;
+    padding: 0 20px;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #e9e9e9;
+  }
+
+  .expanded {
+    .tree-head-expansion {
+      display: block;
+      background-color: #fafafa;
+
+      .labeled-item {
+        background: #fff;
+      }
+    }
+  }
+
+  .tree-browser-header {
+    border-bottom: 1px solid @grayBorderLighter;
+    overflow: auto;
+    display: table;
+    height: 40px;
+    width: 100%;
+    position: relative;
+    z-index: 101;
+
+
+    .tree-browser-header-tabs {
+      display: table-row;
+    }
+
+    .tree-browser-header-cell {
+      display: table-cell;
+      vertical-align: middle;
+      height: 100%;
+      &.switch-wrapper,
+      &.sort-and-filter-wrapper {
+        white-space: nowrap;
+      }
+
+      &.switch-wrapper {
+        padding-left: 15px;
+        .tree-browser-tab {
+          &.active {
+            color: @greenBGDark;
+          }
+        }
+      }
+
+      &:nth-child(2) {
+        width: 100%;
+      }
+      .search-tree-wrapper {
+        .icon-search {
+          color: inherit;
+        }
+      }
+    }
+
+
+    .switch-wrapper {
+      a {
+        color: @grayFontGeneral;
+        font-size: 15px;
+        padding: 1px 9px 2px 0;
+        display: inline-block;
+        &.active {
+          color: @greenBGDark;
+        }
+      }
+    }
+
+    .sort-and-filter-wrapper {
+      font-size: 0;
+      span {
+        display: inline-block;
+        text-align: center;
+        font-size: 18px;
+        height: 100%;
+        width: 32px;
+        cursor: pointer;
+        &:hover {
+          color: @greenBGDark;
+        }
+        &.active {
+          background: #f1f1f1;
+          color: @greenBGDark;
+        }
+
+        &.disabled {
+          color: @grayBGDisabled;
+          cursor: default;
+        }
+
+        i {
+          display: inline-block;
+          vertical-align: middle;
+          margin-bottom: -8px;
+        }
+      }
+    }
+  }
+
+  .ui-layout-container {
+    //background: @white;
+    border: none;
+  }
+
+  .artifacts-outer-layout-container, .ui-layout-column, .ui-layout-row {
+    overflow: visible; // Otherwise can't see card shadow
+  }
+
+  .ui-layout-column > .ui-splitbar {
+    background: transparent;
+
+    a {
+      display: none;
+    }
+  }
+
+  .list-declaration {
+    height: 30px;
+    margin-bottom: 10px;
+  }
+
+  .build-tool-btn {
+    min-width: 70px;
+    max-width: 120px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    background: @grayBGMedium;
+    cursor: pointer;
+
+    &.active {
+      background: @greenBGSmallActive;
+      border-top: 2px solid @buildToolBtnBorder;
+      border-bottom: 2px solid @buildToolBtnBorder;
+      color: @white;
+      box-sizing: content-box;
+    }
+  }
+
+  .virtual-repo-item {
+    display: inline-block;
+    margin-right: 5px;
+    padding-left: 1px;
+    line-height: 28px;
+    width: 18%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    a {
+      &:hover .icon:before {
+        color: @jfColorBlack;
+      }
+    }
+
+    .icon {
+      float: left;
+      margin: 2px 8px 0 0;
+    }
+  }
+
+  .buttons button {
+    margin: 0 5px;
+  }
+
+  .main-view {
+    padding: 20px 35px 0;
+    position: absolute;
+    top: 87px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow-y: auto;
+    .properties {
+      overflow: hidden;
+    }
+  }
+
+  .ui-view-search {
+    //transition: 1s height cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+}
+
+.content-layout-container.artifacts-container {
+  .stash-header {
+    h1 {
+      line-height: 52px;
+    }
+    .back-to-repository-browser {
+      font-size: 14px;
+      margin-left: 15px;
+      position: absolute;
+      margin-top: -2px;
+      font-weight: 400;
+    }
+    & + .content-wrapper {
+      top: 85px!important;
+    }
+  }
+}
+
+
+//-----------download modal-------------------------//
+.blocked-items-wrapper {
+  .jf-checkbox {font-weight: normal;}
+  .form-group label {font-weight: normal;}
+}
+.showBlockedFiles {
+  & > td {white-space: normal;}
+
+}
+.xrayBlockedFiles {
+  margin: 10px 0;
+  overflow: hidden;
+  h5 {font-size: 14px;}
+  &.dnd-panel > div {
+    max-width: 400px;
+    padding: 0;
+    .drag-item-text {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
+    .dnd-list.blocked-items-dnd-list {
+      li.drag-item {cursor: default;}
+    }
+  }
+}
+form[name='downloadFolder'] {
+  .jf-data-table {
+    width: 100%;
+    table-layout: fixed;
+    tr {
+      td:first-child {width: 128px;}
+    }
+  }
+}
+//-----------deploy modal-------------------------//
+.file-name-deploy, .file-name-deploy-multi {
+  width: 90%;
+  font-size: 14px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.file-name-deploy {
+  padding-top: 5px;
+  max-height: 25px;
+}
+
+.deploy-steps {
+  width: 48%;
+  font-size: 19px;
+  border: 1px solid @grayBorderDark;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  padding: 10px;
+  padding-left: 30px !important;
+  background: white;
+  cursor: pointer;
+
+  &.active,
+  &.visited {
+    background: @greenBGPrimary;
+    color: white;
+  }
+  &.step-two {
+    position: absolute;
+    margin-left: -30px;
+    border-left: none;
+  }
+  &.step-one {
+    z-index: 2;
+    position: relative;
+
+  }
+}
+
+.file-upload-name {
+  max-width: 25px;
+  word-wrap: break-word;
+}
+
+.input-form {
+  width: auto;
+  display: inline-block !important;
+  margin-left: 60px;
+}
+
+.deploy-label {
+  width: 30%;
+}
+
+.fileupload-name {
+  color: @grayFontLight;
+}
+
+.deploy {
+  .form-group:nth-child(2) {margin-bottom: 21px;}
+
+  .form-group-cell.target-path {
+    width: 240px !important;
+  }
+
+  .deploy-title {
+    color: @grayFontDarker;
+  }
+  .deploy-repo-data {
+    font-weight: 100;
+    div:first-child {
+      margin-bottom: 15px;
+    }
+    label {
+      //width: 120px;
+    }
+  }
+  .deploy-form-fields{
+    .deploy-drop{
+      .form-group {
+        margin-bottom: 27px;
+      }
+    }
+  }
+  .deploy-drop {
+    .form-group {
+      margin-bottom: 21px;
+      &.form-checkbox {margin-bottom: 14px;}
+      .form-group-cell{
+        width:380px!important;
+      }
+    }
+  }
+  .deploy-mode {
+    color: @grayFontLighter;
+    padding: 0 10px;
+
+    &.active {
+      color: @greenBGDark;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .jf-switch {
+    margin-bottom: 23px;
+    .jf-switch-title{
+      width:100%;
+      display: none;
+      padding-bottom:10px;
+    }
+    .jf-switch-options{
+      li{
+        &:before{
+          display: none;
+        }
+        a{
+          padding:0px 77px 8px;
+          border-bottom: 1px solid @greenBGSecondaryBorder;
+          outline: 0;
+          &:hover{
+            text-decoration: none;
+            border-bottom: 1px solid @greenBGDark;
+          }
+          &.active{
+            border-bottom: 1px solid @greenBGDark;
+            position: relative;
+            &:before{
+              content: '';
+              width: 0;
+              height: 0;
+              border-style: solid;
+              border-width: 6px 6px 0;
+              border-color: #43a047 transparent transparent;
+              position: absolute;
+              bottom: -6px;
+              left: 50%;
+              margin-left: -6px;
+            }
+            &:after{
+              content: '';
+              width: 0;
+              height: 0;
+              border-style: solid;
+              border-width: 4px 4px 0;
+              border-color: #fff transparent transparent;
+              position: absolute;
+              bottom: -4px;
+              left: 50%;
+              margin-left: -4px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .alert {
+    margin-top: 15px;
+  }
+
+  .progress-deploy {
+    height: 70px;
+    padding-top: 15px;
+  }
+
+  .progress {
+    width: 82%;
+    margin: 0 10px 0 20px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .repo-type-icon {
+    position: relative;
+    margin-left: 8px;
+    top: 1px;
+    padding-right: 4px;
+  }
+  #repo-layout {
+    word-break: break-all;
+    margin-top: 5px;
+
+    small {
+      display: block;
+      font-family: "Lucida Console", Monaco, monospace;
+      color: #424242;
+      position: relative;
+      top: -1px;
+      font-size: 13px;
+      width: 500px;
+    }
+  }
+}
+.modal .modal-body.deploy-body {
+  padding: 32px 34px 20px;
+  &.not-deployable{
+    min-height: 298px;
+  }
+}
+.deploy .progress-deploy, .progress-file-drop {
+  text-align: center;
+  background-color: @grayBGLight;
+  border: 2px solid #e9e9e9;
+  height: 80px;
+
+  .progress {
+    border-radius: 0 !important;
+    box-shadow: none;
+    background-color: @greenBGSecondary;
+  }
+  .progress-bar {
+    background: @greenFontHeader;
+    box-shadow: none;
+  }
+}
+.file-upload-progress .progress-file-drop {height: auto;}
+.progress-file-drop {
+  width: 82%;
+  margin: 9px auto 0;
+}
+
+/*.deploy-footer {
+  margin-top: 10px;
+}*/
+
+//-------------repo tabs----------------//
+.artifact-file-icon {
+  position: absolute;
+  right: 20px;
+  top: 35px;
+
+  img {
+    width: 40px;
+  }
+}
+
+.info-key {
+  width: 20%;
+  display: inline-block;
+  vertical-align: top;
+
+  &.half {
+    width: 50%;
+  }
+}
+
+//---------------rpm tab-------------------//
+.rpm {
+  .event-author {
+    color: @grayFontMediumDark;
+  }
+  .event-container {
+    overflow-y: auto;
+    max-height: 350px;
+  }
+
+  jf-panel[jf-panel-classes^="event-container changelogs"] {
+    position: static;
+
+    .panel-heading{
+      position: absolute;
+      left: 4px;
+    }
+    .panel-body{
+      position: relative;
+      top: 21px;
+      margin-bottom: 10px;
+      z-index: -1;
+    }
+  }
+
+  .changelogs {
+    .panel-heading {
+      color: @blackFontDark !important;
+    }
+    .panel-container {
+      margin-top: 0;
+    }
+
+  }
+}
+
+//---------------docker ancestry tab------------//
+.labeled-value a {
+  color: #87B343;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.builds-tab {
+  .builds-tab-tabs-row {
+    margin: 25px 0;
+    font-size: 15px;
+    font-weight: 100;
+    .builds-mode {
+      color: @grayFontLighter;
+      padding: 0 10px;
+      &.active {
+        color: @greenBGDark;
+      }
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+//------------------Set me up-----------------------//
+.set-me-up-modal {
+  min-height: 390px;
+
+  h2 {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+    .form-group-cell.generate-settings {
+      width: 180px !important;
+    }
+  }
+
+  &.modal-body .form-group-cell {
+    width: 240px !important;
+  }
+
+  .generate-title-label {
+    font-weight: 700;
+  }
+
+  .set-me-up-actions {
+    margin: 20px 0;
+    font-size: 16px;
+
+    .text-button {
+      font-size: 14px;
+
+      span {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .CodeMirror {
+    margin-bottom: 15px;
+  }
+
+  .settings-view {
+    position: relative;
+    margin-bottom: 20px;
+
+    p {
+      margin-bottom: 5px;
+      line-height: 22px;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+    }
+
+    .copy-to-clip {
+      right: 9px;
+      margin-top: 0;
+    }
+    .CodeMirror-sizer{
+      margin-top: 7px;
+    }
+  }
+
+  .package-build-settings{
+    display: inline-block;
+  }
+
+  .alert{
+    &.config-message{
+      a{
+        color:#00569a;
+      }
+    }
+  }
+
+  .credentials-label-container {
+    margin-bottom: 5px;
+    span{
+      &.remove-credentials-text,
+      &.insert-credentials-text {
+        font-weight: 100;
+      }
+      &.remove-credentials-text{
+        cursor: pointer;
+      }
+    }
+    .credentials-icon{
+      font-size: 18px;
+      vertical-align: -1.5px;
+    }
+  }
+
+  #insert-credentials-box {
+    padding: 23px;
+    border: 1px solid @grayButtonSecondaryDisabled;
+    margin: 0 0 25px 0;
+
+    form {
+      width: 283px;
+      height: 40px;
+    }
+    .input-text {
+      width: 240px;
+    }
+
+    .icon-go {
+      font-size: 26px;
+      line-height: 42px;
+
+      &[disabled] {
+        color: #ddd;
+        cursor: default;
+      }
+      &:not([disabled]):hover {
+        color: @greenFontHeader;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.settings-view.preline {
+  white-space: pre-line;
+}
+
+
+
+#deploy-progress-frame {
+  margin-top: 10px;
+  //border: 1px black solid;
+  width: 100%;
+  height: 12px;
+  overflow: hidden;
+}
+
+#deploy-progress-line {
+  background-color: @greenBorderDark;
+  height: 12px;
+}
+
+.drop-zone-wrapper {
+
+  // Prevent from upload-files-frame to be displayed as long as no files were uploaded
+  .drop-zone:not(.drop-zone-load){
+    .upload-files-frame{
+      display: none;
+    }
+  }
+
+  .progress-deploy{
+    &.uploaded{
+      padding-top: 5px;
+      height: 47px;
+      .icon.icon-clear{
+        top: 5px;
+      }
+    }
+  }
+}
+
+.trash-pin {
+  position: absolute;
+  height: 30px;
+  right: 40px;
+  font-size: 18px;
+  &:before {
+    color: #949494 !important;
+  }
+  &:hover:before {
+    color: black !important;
+  }
+}
+
+.sorting-menu-backdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background:#f1f1f1;
+  opacity: .5;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.icon-tree_filter-icon {
+  position: relative; z-index: 201; cursor: pointer
+}
+
+
+
+
+////////////////////
+///// New Tree /////
+////////////////////
+
+.tree-browser-container {
+  height: ~"calc(100% - 40px)";
+  overflow: hidden;
+  .new-tree {
+    height: 100%;
+    .stash-tree-container {
+      height: 100%;
+      .jf-tree {
+        .jf-tree-item {
+          padding-left: 10px;
+          .indentation-flex-wrap {
+            left: 10px !important;
+          }
+        }
+      }
+    }
+    jf-tree-browser {
+      display: block;
+      height: 100%;
+      .tree-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .default-tree-container {
+          min-height: ~"calc(100% - 250px)";
+          flex-grow: 1;
+        }
+        .trash-tree-container {
+          max-height: 150px;
+          min-height: 30px;
+//          flex-grow: 1;
+        }
+
+        .jf-tree {
+          .jf-tree-item {
+            padding-left: 10px;
+            .indentation-flex-wrap {
+              left: 10px !important;
+            }
+
+            &.favorite {
+              .tree-node-icon {
+                color: @greenBGDark;
+              }
+            }
+
+            &.load-more {
+              color: blue;
+              .tree-node-icon {
+                visibility: hidden;
+              }
+              .jf-tree-item-content {
+                color: blue !important;
+              }
+            }
+
+            &.trashcan,
+            &.in-trashcan {
+              background-color: #f7f7f7 !important;
+              &.selected {
+                background-color: #ededed !important;
+              }
+              &.pre-selected {
+                background-color: #ededed !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

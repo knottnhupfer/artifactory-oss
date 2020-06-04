@@ -1,0 +1,150 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="Browsers.activeSortingMenu"
+     class="sorting-menu-backdrop"
+     ng-click="Browsers.toggleSortAndFilterMenu()"></div>
+<div class="tree-browser-header">
+    <div class="tree-browser-header-tabs">
+
+        <div class="tree-browser-header-cell switch-wrapper">
+            <a class="tree-browser-tab" ng-class="{active: Browsers.state.params.browser === 'tree'}"
+                    ng-hide="Browsers.state.params.browser === 'stash'"
+                    ng-click="Browsers.switchBrowser('tree')">Tree</a>
+            <a class="tree-browser-tab" ng-class="{active: Browsers.state.params.browser === 'simple'}"
+                    ng-hide="Browsers.state.params.browser === 'stash'"
+                    ng-click="Browsers.switchBrowser('simple')">Simple</a>
+        </div>
+
+        <div class="tree-browser-header-cell">
+            <div class="search-tree-wrapper" ng-click="Browsers.showTreeSearch()" style="width: 100%; display: table;">
+                <a class="icon icon-search" style="display:table-cell; width:1px"></a>
+                <jf-tree-search></jf-tree-search>
+            </div>
+        </div>
+
+        <div class="tree-browser-header-cell sort-and-filter-wrapper" ng-if="Browsers.stateParams.browser !== 'stash'">
+            <span ng-click="Browsers.isFavoritesEnabled() && Browsers.filterFavorites()"
+                  jf-tooltip="Filter Favorites Repositories"
+                  ng-class="{'active' : Browsers.isFavoritesOn(), 'disabled': !Browsers.isFavoritesEnabled()}">
+                <i class="icon-star-full"></i>
+            </span>
+            <span ng-click="Browsers.toggleSortAndFilterMenu()"
+                  jf-tooltip="Sort and Filter"
+                  ng-class="{'active' : Browsers.isFiltersOn()}">
+                <i class="icon-sort-and-filter"></i>
+            </span>
+        </div>
+
+    </div>
+</div>
+
+
+<div ng-show="Browsers.activeSortingMenu" class="sort-and-filter-menu">
+    <!-- filter -->
+    <div class="bottom-seperator">
+        <a href class="pull-right clear-filters jf-link" ng-if="Browsers.isFiltersOn()" ng-click="Browsers.resetFilters()">Clear</a>
+        <h4>Filter by</h4>
+
+
+        <jf-multi-dropdown  title="Filter by Package Type"
+                label="Package Type"
+                show-selected="true"
+                show-label-counter="true"
+                no-items-message="No items"
+                on-open-state-change="Browsers.packageDropDownOpened = opened"
+                on-change="Browsers.changeFilter()"
+                items="Browsers.selectionRepoPkgList"></jf-multi-dropdown>
+
+        <br>
+        <br>
+
+        <jf-multi-dropdown  title="Filter by Repository Type"
+                label="Repository Type"
+                show-selected="true"
+                show-label-counter="true"
+                on-open-state-change="Browsers.repoDropDownOpened = opened"
+                no-items-message="No items"
+                on-change="Browsers.changeFilter()"
+                items="Browsers.selectionRepoTypeList"></jf-multi-dropdown>
+        <!-- /filter -->
+    </div>
+
+
+    <div class="bottom-seperator">
+        <h4>Sort by</h4>
+        <!-- sort -->
+        <div>
+            <jf-radio-button text="Repository Type">
+                <input type="radio"
+                        ng-model="Browsers.sortMethod"
+                        name="sorting"
+                        value="repo_type"
+                        ng-change="Browsers.changeSortingMethod()">
+            </jf-radio-button>
+        </div>
+        <div>
+            <jf-radio-button text="Package Type">
+                <input type="radio"
+                        ng-model="Browsers.sortMethod"
+                        name="sorting"
+                        value="pkg_type"
+                        ng-change="Browsers.changeSortingMethod()">
+            </jf-radio-button>
+        </div>
+        <div>
+            <jf-radio-button text="Repository Key">
+                <input type="radio"
+                        ng-model="Browsers.sortMethod"
+                        name="sorting"
+                        value="repo_key"
+                        ng-change="Browsers.changeSortingMethod()">
+            </jf-radio-button>
+        </div>
+    </div>
+    <!-- /sort -->
+
+    <div class="compress-empty-folders" ng-if="Browsers.allowCompactFolders">
+        <jf-checkbox text="Compress Empty Folders">
+            <input type="checkbox"
+                    ng-change="Browsers.toggleCompactFolders()"
+                    ng-model="Browsers.compactFolders">
+        </jf-checkbox>
+    </div>
+</div>
+
+<div class="tree-browser-container" ng-class="{'expanded': Browsers.activeFilter}">
+    <div class="tree-head-expansion">
+        <div class="labeled-item"
+             ng-click="Browsers.editFilter()"
+             ng-if="Browsers.activeFilter">{{Browsers.searchText}}
+            <a href=""
+               class="remove"
+               tabindex="-1"
+               title="Remove"
+               ng-click="$event.stopPropagation(); Browsers.clearFilter(); Browsers.JFrogEventBus.dispatch(Browsers.EVENTS.TREE_REFRESH_FILTER);">×</a>
+        </div>
+    </div>
+    <div class="alert alert-info no-filter-matches" ng-if="Browsers.filterHasNoMatches">No repositories match your current filter<br><a ng-click="Browsers.resetAllFilters()">Reset all filters</a></div>
+    <div ng-if="Browsers.state.params.browser === 'tree' || Browsers.state.params.browser === 'simple'" class="new-tree">
+        <jf-tree-browser browser-controller="Browsers" simple-mode="Browsers.state.params.browser === 'simple'"></jf-tree-browser>
+    </div>
+
+    <div ng-if="Browsers.state.params.browser === 'stash'" class="new-tree">
+        <jf-stash-browser start-compact="Browsers.compactFolders"></jf-stash-browser>
+    </div>
+</div>

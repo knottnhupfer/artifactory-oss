@@ -1,0 +1,38 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="jf-effective-permissions">
+    <jf-switch ng-model="jfEffectivePermissions.currentTab"
+                ng-change="jfEffectivePermissions.triggerTimoutBeforeSwitch()"
+                jf-switch-title="View:"
+                options="['Users', 'Groups', 'Permission Targets']"></jf-switch>
+    <jf-grid    ng-show="jfEffectivePermissions.currentTab==='Users'"
+                grid-options="jfEffectivePermissions.userEffectivePermissionsGridOption"
+                filter-field="principal"
+                auto-focus="true"
+                object-name="User"></jf-grid>
+    <jf-grid    ng-show="jfEffectivePermissions.currentTab==='Groups'"
+                grid-options="jfEffectivePermissions.groupEffectivePermissionsGridOption"
+                filter-field="permissionName"
+                auto-focus="true"
+                object-name="Group"></jf-grid>
+    <jf-grid    ng-show="jfEffectivePermissions.currentTab==='Permission Targets'"
+                grid-options="jfEffectivePermissions.permissionTargetsGridOption"
+                filter-field="principal"
+                auto-focus="true"
+                object-name="Permission Target"></jf-grid>
+</div>

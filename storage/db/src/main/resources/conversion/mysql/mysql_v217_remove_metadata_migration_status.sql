@@ -1,0 +1,1 @@
+delete from migration_status where identifier = 'metadata-service-migration';

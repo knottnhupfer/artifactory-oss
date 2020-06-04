@@ -1,0 +1,39 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container ha-licnses-manager-container">
+    <h1>Artifactory Licenses</h1>
+
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <label id="ha-licenses-update-message">
+                Note: Cluster nodes licenses status updates every 5 seconds (<a class="refresh-status" ng-click="jfManageHaLicenses.refreshTable()">refresh status</a>).
+            </label>
+            <div class="pull-right admin-grid-buttons">
+                <a id="new-ha-license-button" ng-click="jfManageHaLicenses.launchAddHaLicenseModal()">
+                    <i class="grid-button-icon icon icon-new"></i>New
+                </a>
+            </div>
+            <jf-grid grid-options="jfManageHaLicenses.gridOption"
+                    filter-field="licensedTo"
+                    filter-field2="nodeId"
+                    auto-focus="true"
+                    object-name="License"
+                    class="licenses-management"></jf-grid>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget quick-search" ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}">
+    <form class="table-row">
+        <div class="quick-search-input-wrapper">
+            <div class="search-input">
+                <span class="icon icon-search" ng-click="ctrl.search()"></span>
+                <jf-field>
+                    <input type="text"
+                           class="input-text"
+                           jf-enter-press="ctrl.search()"
+                           id="quick"
+                           name="query"
+                           placeholder="Quick Search"
+                           ng-model="ctrl.query"/>
+                    <span class="sep"></span>
+                </jf-field>
+            </div>
+        </div>
+    </form>
+    <div class="table-row">
+        <div class="quick-search-nav">
+            <div>
+                Or go to
+                <i class="icon-addons-arrow-right"></i>
+            </div>
+            <ul>
+                <li ng-repeat="link in ctrl.links track by $index"
+                        class="{{link.search}}">
+                    <a href
+                            ng-click="ctrl.gotoSearch(link.search)">{{link.title}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

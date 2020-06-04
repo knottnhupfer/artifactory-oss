@@ -1,0 +1,87 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="jf-page-wrapper builds-page-wrapper">
+    <div class="title">
+        <a ng-if="BuildsPage.userCanDistribute"
+                class="push-to-bintray-btn"
+                ng-click="BuildsPage.distribute()"><i class="icon icon-distribution-repo"></i> Distribute
+        </a>
+        <h1><jf-marquee>Builds - {{BuildsPage.buildTitle}}</jf-marquee></h1>
+        <a href="" class="jf-back-link"
+           ng-click="BuildsPage.backToBuilds()">Back to all builds
+        </a>
+    </div>
+    <div class="versions-wrapper jf-content-section list-content-scrolling-container">
+        <h2>Build ID</h2>
+        <ul>
+            <li ng-repeat="build in BuildsPage.builds">
+                <div ng-click="BuildsPage.goToBuildNumber(build)"
+                     ng-class="{'active': build.buildNumber === BuildsPage.$stateParams.buildNumber && build.time == BuildsPage.$stateParams.startTime}"
+                     class="clearfix"
+                     jf-tooltip-on-overflow>
+                    <a href ng-click="BuildsPage.deleteBuildId($event,build.buildNumber)" class="delete-button" ng-if="BuildsPage.user.canManage"><i class="icon-clear"></i></a>
+                    <span>{{ build.buildNumber }}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="jf-page-summary jf-page-summary-switch-style">
+        <jf-summary-row ng-if="BuildsPage.summaryData"
+                columns="BuildsPage.summaryData"
+                parent-scope="BuildsPage.$scope">
+        </jf-summary-row>
+    </div>
+    <div class="build-content jf-content-section">
+
+
+        <div class="builds-inner-wrapper">
+            <jf-tabs tabs="BuildsPage.tabs"
+                    dictionary="BuildsPage.DICTIONARY"
+                    tab-width="165"
+                    container-margin="0">
+
+                <div>
+                    <jf-tab name="published">
+                        <jf-published-modules></jf-published-modules>
+                    </jf-tab>
+                    <jf-tab name="environment">
+                        <jf-environment></jf-environment>
+                    </jf-tab>
+                    <jf-tab name="json">
+                        <jf-build_info_json></jf-build_info_json>
+                    </jf-tab>
+                    <jf-tab name="issues">
+                        <jf-issues></jf-issues>
+                    </jf-tab>
+                    <jf-tab name="diff">
+                        <jf-diff></jf-diff>
+                    </jf-tab>
+                    <jf-tab name="history">
+                        <jf-release-history></jf-release-history>
+                    </jf-tab>
+                    <jf-tab name="licenses">
+                        <jf-licenses></jf-licenses>
+                    </jf-tab>
+                    <jf-tab name="effectivePermission">
+                        <jf-build-effective-permission></jf-build-effective-permission>
+                    </jf-tab>
+                </div>
+            </jf-tabs>
+        </div>
+    </div>
+</div>

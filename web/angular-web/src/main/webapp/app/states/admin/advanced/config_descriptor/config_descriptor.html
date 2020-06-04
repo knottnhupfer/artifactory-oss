@@ -1,0 +1,56 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>Config Descriptor <jf-clip-copy text-to-copy="ConfigDescriptorController.configDescriptor"
+                                        object-name="XML"></jf-clip-copy>
+    </h1>
+    <form>
+        <div class="content-wrapper">
+            <div class="card stretch card-pole-pad card-side-pad">
+                <div class="card-inner-wrapper">
+                    <div class="field-bottom-remark alert alert-warning">
+                        Updating the configuration through direct manipulation of the XML descriptors can be harmful.
+                    </div>
+                    <div class="content-with-footer">
+                        <jf-code-mirror
+                                ng-if="ConfigDescriptorController.configDescriptor !== undefined"
+                                mime-type="xml"
+                                allow-edit="true"
+                                height="flexible"
+                                model="ConfigDescriptorController.configDescriptor"
+                                autofocus="true"
+                                api-access="ConfigDescriptorController.apiAccess">
+                        </jf-code-mirror>
+                    </div>
+                </div>
+            </div>
+            <div class="content-footer">
+                <div class="pull-right">
+                    <button class="btn btn-default"
+                            type="button"
+                            ng-click="ConfigDescriptorController.cancel()">Reset
+                    </button>
+                    <button class="btn btn-primary"
+                            type="button"
+                            ng-click="ConfigDescriptorController.save(ConfigDescriptorController.configDescriptor)">Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

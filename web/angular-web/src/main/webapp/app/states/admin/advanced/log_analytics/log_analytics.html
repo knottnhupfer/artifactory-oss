@@ -1,0 +1,165 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container" jf-disable-ng-animate>
+    <h1>Log Analytics Configuration</h1>
+
+    <div class="content-wrapper">
+        <form class="form" name="LogAnalytics.adminSumoLogicForm" novalidate>
+            <div class="card stretch card-pole-pad card-side-pad">
+                <div>
+                    <jf-panel jf-panel-heading="Sumo Logic Integration">
+                        <div>
+                            <div class="alert alert-static"
+                                 ng-bind-html="LogAnalytics.features.isJCR() ? LogAnalytics.MESSAGES.sumoLogicIntegrationMessageJCR : LogAnalytics.MESSAGES.sumoLogicIntegrationMessage">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <jf-panel jf-panel-heading="{{LogAnalytics.features.getGlobalName()}} Dashboard Settings">
+                                    <div class="form-group form-checkbox">
+                                        <div class="form-group-cell">
+                                            <jf-checkbox text="Enable">
+                                                <input type="checkbox"
+                                                       id="useExistingSettings"
+                                                       ng-change="LogAnalytics.disabledIntegration()"
+                                                       ng-model="LogAnalytics.enableExistingSettings" />
+                                            </jf-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-checkbox" ng-if="false">
+                                        <div class="form-group-cell">
+                                            <label style="padding-right: 8px;">Status:</label>
+                                            <span ng-if="LogAnalytics.statusConnected && LogAnalytics.enableExistingSettings" style="color: #00A000">Connected to dashboard</span>
+                                            <span ng-if="!LogAnalytics.statusConnected || !LogAnalytics.enableExistingSettings" style="color: red;">Not connected to dashboard</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-checkbox sumologic-radio-wrapper">
+                                            <jf-radio-button text="Create New Connection" helper="Create an {{LogAnalytics.features.getGlobalName()}} dashboard">
+                                                <input type="radio"
+                                                       id="new"
+                                                       ng-model="LogAnalytics.connectionMethod"
+                                                       value="new"
+                                                       ng-change='LogAnalytics.changeConnectionMethod(LogAnalytics.connectionMethod)'
+                                                       ng-disabled="!LogAnalytics.enableExistingSettings">
+                                            </jf-radio-button>
+                                            <!--<jf-help-tooltip html="LogAnalytics.TOOLTIP.newConnection"></jf-help-tooltip>-->
+
+                                            <jf-radio-button text="Use Existing Client ID and Secret" helper="Connect this instance to an existing {{LogAnalytics.features.getGlobalName()}} dashboard">
+                                                <input type="radio"
+                                                       id="existing"
+                                                       ng-model="LogAnalytics.connectionMethod"
+                                                       value="existing"
+                                                       ng-change='LogAnalytics.changeConnectionMethod(LogAnalytics.connectionMethod)'
+                                                       ng-disabled="!LogAnalytics.enableExistingSettings">
+                                            </jf-radio-button>
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="form-group-cell">
+                                            <jf-field>
+                                                <label for="clientId" class="mandatory">Client ID</label>
+                                                <input name="clientId"
+                                                       id="clientId"
+                                                       type="text"
+                                                       ng-change="LogAnalytics.changeListener()"
+                                                       ng-required="LogAnalytics.connectionMethod === 'existing'"
+                                                       ng-disabled="LogAnalytics.connectionMethod === 'new' || !LogAnalytics.enableExistingSettings"
+                                                       ng-model="LogAnalytics.sumologic.clientId"
+                                                       class="input-text">
+                                            </jf-field><!-- ng-disabled="!LogAnalytics.enableExistingSettings"-->
+                                        </div>
+                                        <div ng-if="LogAnalytics.sumologic.clientId"
+                                             class="form-group-cell auto-width form-button form-link">
+                                            <jf-clip-copy text-to-copy="LogAnalytics.sumologic.clientId"
+                                                          object-name="Client ID"></jf-clip-copy>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group-cell">
+                                            <jf-field>
+                                                <label for="secret" class="mandatory">Secret</label>
+                                                <input name="secret"
+                                                       id="secret"
+                                                       type="text"
+                                                       ng-change="LogAnalytics.changeListener()"
+                                                       ng-required="LogAnalytics.connectionMethod === 'existing'"
+                                                       ng-disabled="LogAnalytics.connectionMethod === 'new' || !LogAnalytics.enableExistingSettings"
+                                                       ng-model="LogAnalytics.sumologic.secret"
+                                                       class="input-text">
+                                            </jf-field><!-- ng-disabled="!LogAnalytics.enableExistingSettings" -->
+                                        </div>
+                                        <div ng-if="LogAnalytics.sumologic.secret"
+                                             class="form-group-cell auto-width form-button form-link">
+                                            <jf-clip-copy text-to-copy="LogAnalytics.sumologic.secret"
+                                                          object-name="Secret"></jf-clip-copy>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="form-group-cell">
+                                            <jf-field>
+                                                <label>Proxy</label>
+                                                <jf-ui-select jf-select-model="LogAnalytics.proxy"
+                                                              jf-select-disabled="!LogAnalytics.enableExistingSettings"
+                                                              jf-select-change="LogAnalytics.updateProxy()"
+                                                              jf-select-options="LogAnalytics.proxies">
+                                                </jf-ui-select>
+                                            </jf-field>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="form-group-cell">
+                                            <button class="btn btn-primary" type="button"
+                                                    ng-click="LogAnalytics.registerSumoLogicApplication()"
+                                                    ng-if="LogAnalytics.connectionMethod === 'new'"
+                                                    ng-disabled="!LogAnalytics.enableExistingSettings || LogAnalytics.disableRegisterButton">
+                                                Access Dashboard
+                                            </button>
+
+                                            <a class="btn btn-primary"
+                                                ng-href="{{LogAnalytics.sumologic.dashboardUrl}}"
+                                                ng-if="LogAnalytics.sumologic.dashboardUrl && !LogAnalytics.requireAuth() && LogAnalytics.connectionMethod != 'new'"
+                                                ng-disabled="!LogAnalytics.enableExistingSettings"
+                                                target="_blank">
+                                                Access Dashboard
+                                            </a>
+
+                                            <button class="btn btn-primary" type="button"
+                                                    ng-click="LogAnalytics.updateModel(); LogAnalytics.authenticateWithSumo(); LogAnalytics.disableRegisterButton = false"
+                                                    ng-if="(!LogAnalytics.sumologic.dashboardUrl || LogAnalytics.requireAuth()) && LogAnalytics.connectionMethod != 'new'"
+                                                    ng-disabled="(!LogAnalytics.enableExistingSettings || LogAnalytics.disableRegisterButton) || !LogAnalytics.sumologic.clientId || !LogAnalytics.sumologic.secret">
+                                                Access Dashboard
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </jf-panel>
+                            </div>
+                        </div>
+
+                    </jf-panel>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

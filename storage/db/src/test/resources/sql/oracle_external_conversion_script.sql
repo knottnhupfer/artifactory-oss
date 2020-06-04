@@ -1,0 +1,1 @@
+ALTER TABLE users ADD foo VARCHAR(2);

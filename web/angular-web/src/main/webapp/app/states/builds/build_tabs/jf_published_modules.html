@@ -1,0 +1,83 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="builds-published-modules" jf-disable-feature="publishedmodule" jf-disable-ng-animate>
+    <!--    <h4 ng-if="!jfPublishedModules.selectedModule"><span>{{jfPublishedModules.modulesCount}} matches found</span></h4>-->
+    <div class="back-to-modules" ng-if="jfPublishedModules.selectedModule">
+        <a href="" class="jf-back-link"
+           ng-click="jfPublishedModules.backToModules()">Back To All Modules
+        </a>
+    </div>
+
+    <div ng-class="{'published-modules-grid-container': jfPublishedModules.selectedModule}">
+        <div class="clearfix"></div>
+        <jf-grid ng-if="!jfPublishedModules.selectedModule"
+                grid-options="jfPublishedModules.modulesGridOptions"
+                filter-field="moduleId"
+                object-name="module"
+                auto-focus="true"></jf-grid>
+
+        <jf-panel jf-panel-heading="Module Details: {{ jfPublishedModules.selectedModule }}"
+                ng-if="jfPublishedModules.selectedModule">
+
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <jf-checkbox text="Compare With Previous Build">
+                        <input type="checkbox"
+                                ng-model="jfPublishedModules.compare"
+                                ng-change="jfPublishedModules.onCompareChanged()"
+                                name="compare"
+                                ng-disabled="!jfPublishedModules.comparableBuildNumbers.length">
+                    </jf-checkbox>
+<!-- jf-select-disabled="!jfDiff.comparableBuildNumbers.length" -->
+
+
+                    <ui-select  jf-disable-ng-animate
+                                ng-model="jfPublishedModules.selectedBuildNumber"
+                                remove-selected="false"
+                                ng-change="jfPublishedModules.getSubData()"
+                                ng-disabled="!jfPublishedModules.compare">
+
+
+
+                        <ui-select-match placeholder="{{!jfPublishedModules.comparableBuildNumbers || jfPublishedModules.comparableBuildNumbers.length ? '' : 'No comparable builds'}}">
+                            {{$select.selected.buildNumber}}
+                        </ui-select-match>
+                        <ui-select-choices jf-disable-ng-animate repeat="data in jfPublishedModules.comparableBuildNumbers">
+                            <div ng-if="!data.buildStat" ng-bind-html="data.buildNumber  | highlight: $select.search"></div>
+                            <div ng-if="data.buildStat" ng-bind-html="data.buildNumber + ' (' + data.buildStat + ')'  | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <jf-grid grid-options="jfPublishedModules.artifactsGridOptions"
+                        filter-field="name"
+                        object-name="artifact">
+                </jf-grid>
+            </div>
+            <div class="form-group">
+                <jf-grid grid-options="jfPublishedModules.dependenciesGridOptions"
+                        filter-field="name"
+                        object-name="dependency/dependencies">
+                </jf-grid>
+            </div>
+        </jf-panel>
+    </div>
+</div>
+

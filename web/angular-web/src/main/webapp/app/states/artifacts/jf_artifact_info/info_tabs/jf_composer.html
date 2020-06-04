@@ -1,0 +1,84 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="jfComposer.composerData">
+    <jf-panel jf-panel-heading="Package Info"
+            ng-if="jfComposer.composerData.composerGeneralInfo">
+
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfComposer.composerData.composerGeneralInfo" ng-if="key != 'description'">
+                <td>{{jfComposer.DICTIONARY[key]}}:</td>
+                <td ng-if="key != 'licenses' && key != 'authors' && key != 'keywords'" ng-style="{'line-height': '1.5em', 'padding-bottom': '6px'}">
+                    <span ng-if="key != version && value != ''">{{value}}</span>
+                    <span ng-if="key === 'version' && value === ''"><strong>No version found.</strong><br><a href="https://www.jfrog.com/confluence/display/RTF/PHP+Composer+Repositories#PHPComposerRepositories-DeployingComposerPackages" target="_blank">Supply a version</a> to enable indexing.</span>
+                </td>
+
+                <!-- Licences -->
+                <td ng-if="key == 'licenses'">
+                    <div ng-if="jfComposer.composerData.composerGeneralInfo.licenses.length" class="licenses-list inline-block"
+                            ng-repeat="license in jfComposer.composerData.composerGeneralInfo.licenses track by $index">
+                        <span>{{license}}</span><span ng-if="jfComposer.composerData.composerGeneralInfo.licenses.length>1 && $index<jfComposer.composerData.composerGeneralInfo.licenses.length-1">,&nbsp;</span>
+                    </div>
+
+                    <span ng-if="!jfComposer.composerData.composerGeneralInfo.licenses.length">Not Found</span>
+                </td>
+
+                <!-- Authors -->
+                <td ng-if="key == 'authors'">
+                    <div ng-if="jfComposer.composerData.composerGeneralInfo.authors.length" class="authors-list inline-block"
+                            ng-repeat="author in jfComposer.composerData.composerGeneralInfo.authors track by $index">
+                        <span>{{author}}</span><span ng-if="jfComposer.composerData.composerGeneralInfo.authors.length>1 && $index<jfComposer.composerData.composerGeneralInfo.authors.length-1">,&nbsp;</span>
+                    </div>
+
+                    <span ng-if="!jfComposer.composerData.composerGeneralInfo.authors.length">Not Found</span>
+                </td>
+
+                <!-- Keywords -->
+                <td ng-if="key == 'keywords'">
+                    <div ng-if="jfComposer.composerData.composerGeneralInfo.keywords.length" class="keywords-list inline-block"
+                            ng-repeat="keyword in jfComposer.composerData.composerGeneralInfo.keywords track by $index">
+                        <span>{{keyword}}</span><span ng-if="jfComposer.composerData.composerGeneralInfo.keywords.length>1 && $index<jfComposer.composerData.composerGeneralInfo.keywords.length-1">,&nbsp;</span>
+                    </div>
+
+                    <span ng-if="!jfComposer.composerData.composerGeneralInfo.authors.length">Not Found</span>
+                </td>
+
+
+            </tr>
+        </table>
+
+
+    </jf-panel>
+
+
+
+
+    <jf-panel jf-panel-heading="Description"
+            ng-if="jfComposer.composerData.description">
+        <p>{{jfComposer.composerData.description}}</p>
+    </jf-panel>
+
+
+    <jf-panel jf-panel-heading="Require"
+            ng-if="jfComposer.composerData.composerDependencies">
+        <jf-grid grid-options="jfComposer.gridDependenciesOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+    </jf-panel>
+
+</div>

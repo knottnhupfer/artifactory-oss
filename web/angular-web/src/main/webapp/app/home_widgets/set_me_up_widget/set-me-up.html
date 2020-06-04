@@ -1,0 +1,50 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget set-me-up">
+	<div class="list-title">
+		Set Me Up
+	</div>
+	<div class="list-filter">
+		<i class="icon icon-filter"></i>
+		<input type="text"
+		       name="filter"
+		       class="input-text"
+		       ng-style="{color: ctrl.filterHasNoMatches() ? 'red' : 'inherit'}"
+		       ng-model="ctrl.repoFilter"
+		       ng-model-options="{ debounce: 400 }"
+		       ng-change="ctrl.onFilterChange()"
+		       placeholder="Filter by Repository Key" />
+	</div>
+	<div class="list-content no-content" ng-if="!ctrl.repos.length">
+		<p>No repositories to display.</p>
+		<p>Please verify you are <a href ui-sref="login" class="jf-link">logged in</a> or contact your system
+		   administrator.</p>
+	</div>
+	<div class="list-content list-content-scrolling-container" ng-if="ctrl.repos.length">
+		<div class="list-item"
+		     ng-click="ctrl.showSetMeUp(repo)"
+		     ng-repeat="repo in ctrl.repos">
+			<div class="icon icon-{{repo.icon}}"></div>
+			<div class="repo">{{repo.repoKey}}
+			</div>
+		</div>
+		<div class="list-item " style="display: flex;height: 40px;justify-content: center; align-items: center" ng-if="ctrl.loading && !ctrl.noReposToFetch">
+			<div class="icon-hourglass"></div>
+		</div>
+	</div>
+</div>

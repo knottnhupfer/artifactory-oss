@@ -1,0 +1,56 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package org.artifactory.spring;
+
+import org.artifactory.config.CentralConfigKey;
+
+import java.lang.annotation.*;
+
+/**
+ * Annotate classes that can be reloaded.
+ *
+ * @author Tomer Cohen
+ */
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+public @interface Reloadable {
+
+    /**
+     * @return The class by which this bean will be identified for dependency management (initAfter()).
+     */
+    Class<? extends ReloadableBean> beanClass();
+
+    /**
+     * List of classes this bean is dependant on. It is guaranteed that this {@link ReloadableBean} convert and init
+     * methods will be called after the dependent beans. During shutdown the order is the opposite.
+     *
+     * @return List of beans that this one depends upon
+     */
+    Class<? extends ReloadableBean>[] initAfter() default {};
+
+    /**
+     * List of keys to listen on and reload this bean only when the specific keys updated.
+     * If list is empty (default) the bean will reload on every change
+     */
+    CentralConfigKey[] listenOn() default {};
+}

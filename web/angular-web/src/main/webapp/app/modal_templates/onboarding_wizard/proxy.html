@@ -1,0 +1,163 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="proxy-configuration">
+  <form name="WizCtrl.proxyForm">
+    <div class="form-group">
+      <!-- PROXY KEY -->
+      <div class="form-group-cell">
+        <jf-field validations="proxies" autofocus="true" dont-push-down-errors="true">
+          <label for="key" class="mandatory">Proxy Key</label>
+          <input type="text"
+                 name="key"
+                 jf-validator-xml-name
+                 jf-validator-name
+                 ng-model-options="{debounce: { 'default': 500 } }"
+                 ng-disabled="WizCtrl.proxySaved"
+                 autofocus
+                 class="input-text"
+                 id="key"
+                 required
+                 ng-model="WizCtrl.proxy.key"/>
+        </jf-field>
+      </div>
+
+      <!-- DEFAULT PROXY -->
+      <div class="form-group-cell margin-top-25">
+        <jf-checkbox text="System Default">
+          <input type="checkbox"
+                 id="defaultProxy"
+                 name="defaultProxy"
+                 ng-model="WizCtrl.proxy.defaultProxy"
+                 ng-change="WizCtrl.proxy.onChangeDefault()">
+        </jf-checkbox>
+        <jf-help-tooltip html="WizCtrl.proxy.systemDefault"></jf-help-tooltip>
+      </div>
+    </div>
+
+    <!-- HOST -->
+    <div class="form-group">
+      <div class="form-group-cell">
+        <jf-field validations="proxies">
+          <label for="host" class="mandatory">Host</label>
+          <input type="text"
+                 class="input-text"
+                 name="host"
+                 required
+                 id="host"
+                 ng-model="WizCtrl.proxy.host">
+        </jf-field>
+      </div>
+
+      <!-- PORT -->
+      <div class="form-group-cell">
+        <jf-field validations="proxies">
+          <label for="port" class="mandatory">Port</label>
+          <input type="number"
+                 class="input-text"
+                 required
+                 id="port"
+                 name="port"
+                 min="1"
+                 max="65535"
+                 ng-model="WizCtrl.proxy.port">
+        </jf-field>
+      </div>
+    </div>
+
+    <div class="expand-collapse-wrapper">
+      <a href
+              ng-if="!WizCtrl.advancedProxy"
+              ng-click="WizCtrl.advancedProxy = !WizCtrl.advancedProxy">More Options <i class="icon icon-down-arrow"></i>
+      </a>
+      <a href
+              ng-if="WizCtrl.advancedProxy"
+              ng-click="WizCtrl.advancedProxy = !WizCtrl.advancedProxy">Less Options <i class="icon icon-up-arrow"></i>
+      </a>
+    </div>
+
+    <div collapse="!WizCtrl.advancedProxy">
+      <div class="form-group">
+        <!-- USER NAME-->
+        <div class="form-group-cell">
+          <jf-field validations="proxies">
+            <label for="username">User Name</label>
+            <input type="text"
+                   class="input-text"
+                   id="username"
+                   name="username"
+                   ng-model="WizCtrl.proxy.username">
+          </jf-field>
+        </div>
+        <!-- prevent auto complete -->
+        <input type="text" class="hidden"/>
+        <input type="password" class="hidden"/>
+        <!-- PASSWORD -->
+        <div class="form-group-cell">
+          <jf-field validations="proxies">
+            <label for="password">Password</label>
+            <input type="password"
+                   class="input-text"
+                   autocomplete="new-password"
+                   id="password"
+                   name="password"
+                   ng-model="WizCtrl.proxy.password">
+          </jf-field>
+        </div>
+      </div>
+      <div class="form-group">
+        <!-- NT HOST -->
+        <div class="form-group-cell">
+          <jf-field validations="proxies">
+            <label for="nt_host">NT Host</label>
+            <input type="text"
+                   class="input-text"
+                   id="nt_host"
+                   name="nt_host"
+                   ng-model="WizCtrl.proxy.ntHost">
+          </jf-field>
+        </div>
+
+        <!-- NT PORT -->
+        <div class="form-group-cell">
+          <jf-field validations="proxies">
+            <label for="nt_domain">NT Domain</label>
+            <input type="text"
+                   class="input-text"
+                   id="nt_domain"
+                   name="nt_domain"
+                   ng-model="WizCtrl.proxy.domain">
+          </jf-field>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-group-cell">
+          <jf-field validations="proxies">
+            <label for="target_hosts">Redirecting Proxy Target Hosts</label>
+            <jf-help-tooltip html="WizCtrl.proxy.redirectingProxyTargetHosts"></jf-help-tooltip>
+            <textarea class="input-text"
+                      id="target_hosts"
+                      name="target_hosts"
+                      cols="4"
+                      rows="4"
+                      ng-model="WizCtrl.proxy.redirectedToHosts"></textarea>
+          </jf-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

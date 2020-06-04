@@ -1,0 +1,185 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+//.builds {
+#jf-builds {
+  .breadcrumb {
+    padding: 13px 60px;
+    margin: 0;
+    background: rgba(245, 245, 245, 1);
+    border-top: 1px solid @grayBGMedium;
+    border-radius: 4px;
+    display: block;
+
+    li {
+      font-size: 14px;
+      position: relative;
+    }
+
+    a {
+      color: @blackFontDark;
+
+      &:hover {
+        color: rgba(42, 100, 150, 1);
+      }
+    }
+
+    & > .active {
+      color: rgba(153, 153, 153, 1);
+    }
+
+    & > li + li {
+      margin-left: 56px;
+
+      &:before {
+        color: @greenBGDark;
+        margin: 0px 28px;
+        content: "›";
+        font-size: 28px;
+        font-weight: 300;
+        position: absolute;
+        left: -60px;
+        top: -12px;
+      }
+    }
+  }
+
+  .card-side-pad {
+    padding-right: 35px;
+    padding-left: 35px;
+  }
+
+  .main-view {
+    padding: 20px 35px;
+    position: absolute;
+    top: 130px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    overflow-y: auto;
+  }
+
+  //h2 {
+  //  color: @blueFontDark;
+  //  font-size: 18px;
+  //  line-height: 24px;
+  //  font-weight: 400;
+  //  padding: 8px 35px;
+  //  border-bottom: 1px solid #e9e9e9;
+  //  margin: 0 0 15px;
+  //}
+
+  /*.build-info h2 {
+    padding-bottom: 30px;
+    padding-left: 35px;
+  }*/
+
+  .builds-diff,
+  .builds-published-modules {
+    .grid-container {
+      margin-top: 0;
+    }
+    .compare-selection {
+      margin-top: 20px;
+      margin-bottom: -10px;
+      select {
+        margin-right: 20px;
+        margin-left: 10px;
+      }
+    }
+
+    .status-unchanged {
+      color: @grayFontDark;
+    }
+    .status-updated {
+      color: @blueLinkBasic;
+    }
+    .status-new {
+      color: green;
+    }
+    .status-removed {
+      color: @grayFontLighter;
+    }
+
+    &.license-required {
+      &::after {
+        content: "";
+      }
+
+      h4 span {
+        position: relative;
+
+        .license-required-icon;
+
+        &::after {
+          top: -2px;
+          right: -24px;
+        }
+      }
+    }
+  }
+
+  .builds-diff  {
+    min-height: 100px;
+  }
+
+  .scopes-options {
+    margin: 15px 0 0 25px;
+  }
+
+  .general-summary {
+    .summary-ok {
+
+    }
+    .summary-warn {
+      color: @redError;
+    }
+
+    i {
+      font-size: 20px;
+      float: left;
+      margin: -1px 10px 0 0;
+    }
+
+    span {
+      padding-right: 10px;
+    }
+  }
+
+
+  .licenses-tab {
+    .licenses-summary {
+      padding: 20px 0;
+    }
+  }
+
+
+}
+
+.found-license-container {
+  margin-bottom: 20px;
+
+  button {
+    margin-left: 20px;
+  }
+}
+
+.back-to-modules {
+  margin-right: 10px;
+}

@@ -1,0 +1,266 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container"> <!-- classes: with-head-bar -->
+    <div class="pull-right text-right user-actions">
+        <jf-actions parent-controller="UserForm" init-method="initActions"></jf-actions>
+    </div>
+
+    <h1>{{UserForm.title}}</h1>
+
+    <div class="content-wrapper">
+        <form name="UserForm.userForm" ng-submit="UserForm.save()">
+            <div class="card stretch card-pole-pad card-side-pad">
+                <div class="content-with-footer">
+                    <div class="user-form"
+                         ng-if="(UserForm.mode==='edit' && UserForm.userdata) || UserForm.mode==='create'">
+
+                        <jf-panel ng-if="UserForm.isAnonymous()" jf-panel-heading="User Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field validations="users" autofocus="true">
+                                        <label for="userA" class="mandatory">User Name</label>
+                                        <input name="username"
+                                               type="text"
+                                               jf-validator-name
+                                               jf-validator-max-text-length="100"
+                                                ui-validate="{invalidUsername: 'UserForm.checkUserName($value)'}"
+                                               ng-model-options="{debounce: { 'default': 500 } }"
+                                               ng-model="UserForm.userdata.name"
+                                               class="input-text"
+                                               ng-disabled="UserForm.mode==='edit'"
+                                               id="userA"
+                                               autofocus required>
+                                    </jf-field>
+                                </div>
+                            </div>
+                        </jf-panel>
+
+                        <jf-panel ng-if="!UserForm.isAnonymous()" jf-panel-heading="User Settings">
+                            <div class="form-group" ng-if="UserForm.userdata.locked">
+                                <div class="alert alert-warning special-locked-user">User exceeded the max failed login attempts and is now locked out. <a href ng-click="UserForm.unlockUser()">Click to unlock</a>.</div>
+                            </div>
+                            <div class="form-group" ng-if="UserForm.userdata.credentialsExpired && !UserForm.userdata.locked">
+                                <div class="alert alert-warning">This user's credentials was expired. <a href ng-click="UserForm.unexpirePassword()">Click to unexpire</a>.</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field validations="users" autofocus="true">
+                                        <label for="username" class="mandatory">User Name</label>
+                                        <input name="username"
+                                               jf-validator-name
+                                               jf-validator-max-text-length="100"
+                                                ui-validate="{invalidUsername: 'UserForm.checkUserName($value)'}"
+                                               ng-model-options="{debounce: { 'default': 500 } }"
+                                               type="text"
+                                               ng-model="UserForm.userdata.name"
+                                               class="input-text"
+                                               ng-disabled="UserForm.mode==='edit'"
+                                               id="username"
+                                               autofocus required>
+                                    </jf-field>
+                                </div>
+                                <div class="form-group-cell">
+                                    <jf-field validations="users">
+                                        <label for="email" class="mandatory">Email Address</label>
+                                        <input name="email"
+                                               type="email"
+                                               jf-fake-readonly
+                                               ng-model="UserForm.userdata.email"
+                                               ng-change="UserForm.onEmailChanged()"
+                                               class="input-text"
+                                               id="email" required>
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox margin-top-25">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Admin Privileges"
+                                                 ng-if="UserForm.isInAdminGroup"
+                                                 jf-tooltip="User is associated with a group that has Admin privileges.">
+                                        <input type="checkbox"
+                                               ng-change="UserForm.onClickAdmin()"
+                                               ng-model="UserForm.setDisabledChecked"
+                                               disabled>
+                                    </jf-checkbox>
+                                    <jf-checkbox text="Admin Privileges"
+                                                 ng-if="!UserForm.isInAdminGroup">
+                                        <input type="checkbox"
+                                                ng-change="UserForm.onClickAdmin()"
+                                                ng-model="UserForm.userdata.admin">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Disable UI Access">
+                                        <input type="checkbox"
+                                                ng-change="UserForm.onCheckboxChanged()"
+                                                ng-disabled="UserForm.userIsEffectiveAdmin()"
+                                               ng-model="UserForm.userdata.disableUIAccess">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Can Update Profile">
+                                        <input type="checkbox"
+                                               ng-change="UserForm.onCheckboxChanged()"
+                                               ng-disabled="UserForm.userIsEffectiveAdmin()"
+                                               ng-model="UserForm.userdata.profileUpdatable">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Disable Internal Password">
+                                        <input type="checkbox"
+                                               ng-disabled="UserForm.userIsEffectiveAdmin()"
+                                               ng-change="UserForm.onChangePasswordDisabled();"
+                                               ng-model="UserForm.userdata.internalPasswordDisabled">
+                                    </jf-checkbox>
+                                    <jf-help-tooltip html="UserForm.TOOLTIP.disableInternalPassword"></jf-help-tooltip>
+                                </div>
+                            </div>
+
+                            <jf-panel
+                                    jf-panel-heading="{{ UserForm.mode==='edit' ? 'Change Password' : 'Set Password'}}">
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        ng-if="false && UserForm.mode==='edit' && !UserForm.changePassword"
+                                        ng-disabled="UserForm.userdata.internalPasswordDisabled"
+                                        ng-click="UserForm.changePassword = true">Change Password
+                                </button>
+                                <div>
+                                    <!-- prevent auto complete -->
+                                    <input type="text" class="hidden"/>
+                                    <input type="password" class="hidden"/>
+                                    <div class="form-group">
+                                        <div class="form-group-cell">
+                                            <jf-field validations="users">
+                                                <label for="password"
+                                                       ng-class="{'mandatory':(UserForm.mode==='create' || UserForm.passwordReEnabled || UserForm.changePassword) && !UserForm.userdata.internalPasswordDisabled}">Password</label>
+                                                <input type="password"
+                                                       jf-fake-readonly
+                                                       ng-model="UserForm.input.password"
+                                                       class="input-text"
+                                                       ui-validate="{minlength: '!UserForm.input.password || UserForm.input.password.length >= 4'}"
+                                                       ui-validate-watch="'UserForm.input.password'"
+                                                       id="password"
+                                                       name="password"
+                                                       ng-disabled="UserForm.userdata.internalPasswordDisabled"
+                                                       ng-required="(UserForm.mode==='create' || UserForm.passwordReEnabled || UserForm.changePassword) && !UserForm.userdata.internalPasswordDisabled">
+                                            </jf-field>
+                                        </div>
+                                        <div class="form-group-cell margin-top-25">
+                                            <label class="no-margin-bottom">Password Strength</label>
+                                            <jf-password-strength password="UserForm.input.password"
+                                                    rank="UserForm.passwordRank"></jf-password-strength>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group half-margin-bottom">
+                                        <div class="form-group-cell">
+                                            <jf-field validations="users">
+                                                <label for="retypePassword"
+                                                       ng-class="{'mandatory':UserForm.mode==='create'}">Retype
+                                                    Password</label>
+                                                <input type="password"
+                                                       jf-fake-readonly
+                                                       name="retypePassword"
+                                                       ng-model="UserForm.input.retypePassword"
+                                                       class="input-text"
+                                                       id="retypePassword"
+                                                       ui-validate="{pwdNoMatch: 'UserForm.checkPwdMatch($value) || UserForm.userForm.password.$error.minlength'}"
+                                                       ui-validate-watch="'UserForm.input.password'"
+                                                       ng-disabled="UserForm.userdata.internalPasswordDisabled"
+                                                       ng-required="(UserForm.mode==='create' || UserForm.changePassword) && !UserForm.userdata.internalPasswordDisabled">
+                                            </jf-field>
+                                            <span ng-if="UserForm.userForm.retypePassword.$error.pwdNoMatch"
+                                                  class="jf-validation">Passwords do not match</span>
+                                        </div>
+                                        <!--
+                                                                                <div ng-if="UserForm.mode==='edit'"
+                                                                                     class="form-group-cell margin-top-25">
+                                                                                    <button type="button"
+                                                                                            class="btn btn-secondary"
+                                                                                            ng-click="UserForm.changePassword = false; UserForm.clearPasswordFields();">Cancel And Keep Current Password
+                                                                                    </button>
+                                                                                </div>
+                                        -->
+                                    </div>
+                                </div>
+                            </jf-panel>
+                        </jf-panel>
+                        <jf-panel ng-if="!UserForm.isAnonymous()" jf-panel-heading="Related Groups">
+                            <div class="form-group">
+                                <div class="form-group-cell double">
+                                    <jf-drag-drop
+                                            ng-if="UserForm.groupsList"
+                                            on-change="UserForm.onChangeGroups()"
+                                            exclude-list="UserForm.groupsList"
+                                            include-list="UserForm.userdata.groups"
+                                            use-pagination="UserForm.groupsData.length > 500"
+                                            objects-name="Groups"
+                                            custom-template="UserForm.groupDndTemplate"
+                                            custom-template-scope="UserForm.$scope">
+                                    </jf-drag-drop>
+                                </div>
+                            </div>
+                        </jf-panel>
+                        <jf-panel jf-panel-heading="User Permissions">
+                            <div class="alert alert-info"
+                                 ng-if="UserForm.userIsEffectiveAdmin()">{{UserForm.MESSAGES.userIsAdmin}}</div>
+
+
+                            <jf-switch ng-model="UserForm.switchView"
+                                    options="['Repositories', 'Builds']">
+                            </jf-switch>
+
+                            <div class="permissions-table-wrapper">
+                                <jf-grid ng-if="UserForm.switchView === 'Repositories'"
+                                         grid-options="UserForm.permissionsGridOptions"
+                                         filter-field="permissionName"
+                                         object-name="Permission"
+                                         filter-on-change="true">
+                                </jf-grid>
+
+                                <jf-grid ng-if="UserForm.switchView === 'Builds'"
+                                        grid-options="UserForm.buildsPermissionsGridOptions"
+                                        filter-field="permissionName"
+                                        object-name="Permission"
+                                        filter-on-change="true">
+                                </jf-grid>
+                            </div>
+
+                        </jf-panel>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-footer">
+                <div class="pull-right">
+                    <button class="btn btn-default" type="button"
+                            ng-click="UserForm.cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="submit"
+                            ng-disabled="UserForm.isSaveDisabled()">Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+{
+  "results": [
+    {
+      "release.created": "2012-09-30T12:13:20.002+02:00",
+      "release.name": "sorceBundle",
+      "release.signature": "another_sig3",
+      "release.status": "STATUS",
+      "release.type": "SOURCE",
+      "release.version": "1.0.2",
+      "releaseBundleFiles": [
+        {
+          "items": [
+            {
+              "dependencies": [
+                {
+                  "modules": [
+                    {
+                      "builds": [
+                        {
+                          "build.created": "2012-10-12T02:16:40.000+02:00",
+                          "build.created_by": "me",
+                          "build.started" : "2012-09-30T12:30:00.000+02:00",
+                          "build.name": "bb",
+                          "build.number": "1",
+                          "build.url": "http://myserver/jenkins/bb/1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "release.created": "2012-09-30T12:13:20.000+02:00",
+      "release.name": "bundle1",
+      "release.signature": "sig1",
+      "release.status": "STATUS",
+      "release.type": "TARGET",
+      "release.version": "1.0.0",
+      "releaseBundleFiles": [
+        {
+          "items": [
+            {
+              "dependencies": [
+                {
+                  "modules": [
+                    {
+                      "builds": [
+                        {
+                          "build.created": "2012-10-12T02:16:40.000+02:00",
+                          "build.created_by": "me",
+                          "build.started" : "2012-09-30T12:30:00.000+02:00",
+                          "build.name": "bb",
+                          "build.number": "1",
+                          "build.url": "http://myserver/jenkins/bb/1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "release.created": "2012-09-30T12:13:20.001+02:00",
+      "release.name": "bundle2",
+      "release.signature": "sig2",
+      "release.status": "STATUS",
+      "release.type": "TARGET",
+      "release.version": "1.0.1",
+      "releaseBundleFiles": [
+        {
+          "items": [
+            {
+              "dependencies": [
+                {
+                  "modules": [
+                    {
+                      "builds": [
+                        {
+                          "build.created": "2012-10-12T02:16:40.000+02:00",
+                          "build.created_by": "me",
+                          "build.started" : "2012-09-30T12:30:00.000+02:00",
+                          "build.name": "bb",
+                          "build.number": "1",
+                          "build.url": "http://myserver/jenkins/bb/1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "range": {
+    "start_pos": 0,
+    "end_pos": 3,
+    "total": 3
+  }
+}

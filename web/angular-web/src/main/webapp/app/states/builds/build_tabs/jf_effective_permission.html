@@ -1,0 +1,17 @@
+<div class="jf-effective-permissions">
+
+    <jf-switch
+            jf-switch-title="View:"
+            ng-model="jfEffectivePermission.currentTab"
+            options="['Users', 'Groups', 'Permission Targets']">
+    </jf-switch>
+
+
+    <jf-table-view ng-if="jfEffectivePermission.currentTab === 'Users'"
+                    options="jfEffectivePermission.usersEffectivePermissionsOptions"></jf-table-view>
+    <jf-table-view ng-if="jfEffectivePermission.currentTab === 'Groups'"
+                    options="jfEffectivePermission.groupsEffectivePermissionsOptions"></jf-table-view>
+    <jf-table-view ng-if="jfEffectivePermission.currentTab === 'Permission Targets'"
+                    options="jfEffectivePermission.permissionTargetsOptions"></jf-table-view>
+
+</div>

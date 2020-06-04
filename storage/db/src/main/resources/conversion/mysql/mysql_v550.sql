@@ -1,0 +1,1 @@
+ALTER TABLE binaries ADD COLUMN sha256 CHAR(64);

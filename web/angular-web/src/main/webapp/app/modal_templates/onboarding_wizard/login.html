@@ -1,0 +1,52 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div>
+    <form name="WizCtrl.loginForm">
+        <div class="form-group margin-top-25">
+            <div class="form-group-cell">
+                <jf-field validations="users" autofocus="true">
+                    <label for="user" class="mandatory">Username</label>
+                    <input name="user"
+                           type="text"
+                           ng-model="WizCtrl.login.user"
+                           class="input-text"
+                           required
+                           id="user">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'no-margin-bottom': WizCtrl.errorMessage}">
+            <div class="form-group-cell">
+                <jf-field validations="users">
+                    <label for="password" class="mandatory">Password</label>
+                    <input type="password"
+                           name="password"
+                           jf-enter-press="WizCtrl.$wizardCtrl.nextStep()"
+                           autocomplete="new-password"
+                           ng-model="WizCtrl.login.password"
+                           class="input-text"
+                           id="password"
+                           required>
+                </jf-field>
+            </div>
+        </div>
+
+        <div class="jf-form-errors preserve-lb" ng-if="WizCtrl.errorMessage" ng-bind="WizCtrl.errorMessage"></div>
+
+    </form>
+</div>

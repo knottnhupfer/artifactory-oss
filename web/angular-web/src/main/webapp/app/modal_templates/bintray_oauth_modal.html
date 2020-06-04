@@ -1,0 +1,51 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$dismiss()"><span
+            aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">Bintray Authorization</h3>
+</div>
+<div class="modal-body property-modal">
+    <div ng-if="!isBackFromBintray">
+        <p>To use the Bintray distribution repository you will need to provide Artifactory with permission to your Bintray
+            organization. In order to authorize Artifactory you will need to authenticate with Bintray admin
+            credentials.</p>
+        <p class="text-right retrieve-token"><a href="" class="jf-link" ng-click="RepositoryForm.goToBintray()"><i
+                class="icon icon-bintray"></i> Get Authorization</a></p>
+    </div>
+    <div ng-if="isBackFromBintray">
+        Paste authorization code here:
+            <textarea rows="3"
+                      cols="5"
+                      class="input-text"
+                      ng-model="config.bintraySecretString"
+                      jf-enter-press="saveBintrayAuthInModel()"
+                      autofocus="true">
+            </textarea>
+        If you do not have an authorization code <a class="jf-link" href="" ng-click="RepositoryForm.goToBintray()">navigate to
+        Bintray</a> to retrieve code.
+    </div>
+</div>
+
+<div class="modal-footer" ng-if="isBackFromBintray">
+    <div class="pull-right modal-footer-buttons-container">
+        <button class="btn btn-primary"
+                ng-click="saveBintrayAuthInModel()" ng-disabled="config.bintraySecretString == ''">Save
+        </button>
+    </div>
+</div>

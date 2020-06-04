@@ -1,0 +1,41 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<h1>Build Browser</h1>
+<div class="content-wrapper">
+    <div class="card stretch card-pole-pad card-side-pad" style="display: flex">
+        <div class="all-builds-wrapper" style="flex:1">
+            <div class="list-filter" >
+                <input type="text"
+                        name="filter"
+                        class="input-text"
+                        ng-model="AllBuilds.filter"
+                        ng-model-options="{ debounce: 400 }"
+                        ng-change="AllBuilds.onFilterChange()"
+                        placeholder="Search builds"/>
+
+            </div>
+            <jf-table-view
+                    ng-class="{'empty-table': AllBuilds.showNoDataMessage}"
+                    options="AllBuilds.tableViewOptions"
+                    object-name="Bundle">
+            </jf-table-view>
+        </div>
+    </div>
+</div>
+
+

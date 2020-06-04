@@ -1,0 +1,1 @@
+update artifact_bundles set storing_repo = 'release-bundles' where type = 'TARGET';

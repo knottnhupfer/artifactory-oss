@@ -1,0 +1,529 @@
+[
+  {
+    "repoType": "bower",
+    "layout": "bower-default",
+    "localRepoKeys": [
+      "bower-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "bower-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "bower",
+        "defaultDeployment": "bower-local",
+        "includedLocalRepos": [
+          "bower-local"
+        ],
+        "includedRemoteRepos": [
+          "bower-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "chef",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "chef-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "chef-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "chef",
+        "defaultDeployment": "chef-local",
+        "includedLocalRepos": [
+          "chef-local"
+        ],
+        "includedRemoteRepos": [
+          "chef-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "cocoapods",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "cocoapods-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "cocoapods-remote"}
+    ]
+  },
+  {
+    "repoType": "conan",
+    "layout": "conan-default",
+    "localRepoKeys": [
+      "conan-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "conan-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "conan",
+        "defaultDeployment": "conan-local",
+        "includedLocalRepos": [
+          "conan-local"
+        ],
+        "includedRemoteRepos": [
+          "conan-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "composer",
+    "layout": "composer-default",
+    "localRepoKeys": [
+      "php-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "php-remote"}
+    ]
+  },
+  {
+    "repoType": "cran",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "cran-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "cran-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "cran",
+        "defaultDeployment": "cran-local",
+        "includedLocalRepos": [
+          "cran-local"
+        ],
+        "includedRemoteRepos": [
+          "cran-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "docker",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "docker-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "docker-remote"},
+      {
+        "repoKey": "bintray-docker-remote",
+        "url": "https://docker.bintray.io"
+      }
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "docker",
+        "defaultDeployment": "docker-local",
+        "includedLocalRepos": [
+          "docker-local"
+        ],
+        "includedRemoteRepos": [
+          "bintray-docker-remote",
+          "docker-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "debian",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "debian-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "debian-remote"}
+    ],
+    "virtualRepoKeys": [
+    {
+      "repoKey": "debian",
+      "defaultDeployment": "debian-local",
+      "includedLocalRepos": [
+        "debian-local"
+      ],
+      "includedRemoteRepos": [
+        "debian-remote"
+      ]
+    }
+  ]
+  },
+  {
+    "repoType": "gems",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "gems-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "gems-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "gems",
+        "defaultDeployment": "gems-local",
+        "includedLocalRepos": [
+          "gems-local"
+        ],
+        "includedRemoteRepos": [
+          "gems-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "gitlfs",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "gitlfs-local"
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "gitlfs",
+        "defaultDeployment": "gitlfs-local",
+        "includedLocalRepos": [
+          "gitlfs-local"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "gradle",
+    "layout": "gradle-default",
+    "localRepoKeys": [
+      "gradle-dev-local",
+      "gradle-release-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "jcenter"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "gradle-dev",
+        "defaultDeployment": "gradle-dev-local",
+        "includedLocalRepos": [
+          "gradle-dev-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      },
+      {
+        "repoKey": "gradle-release",
+        "defaultDeployment": "gradle-release-local",
+        "includedLocalRepos": [
+          "gradle-release-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "helm",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "helm-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "helm-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "helm",
+        "defaultDeployment": "helm-local",
+        "includedLocalRepos": [
+          "helm-local"
+        ],
+        "includedRemoteRepos": [
+          "helm-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "go",
+    "layout": "go-default",
+    "localRepoKeys": [
+      "go-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "gocenter"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "go",
+        "defaultDeployment": "go-local",
+        "includedLocalRepos": [
+          "go-local"
+        ],
+        "includedRemoteRepos": [
+          "gocenter"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "sbt",
+    "layout": "sbt-default",
+    "localRepoKeys": [
+      "sbt-dev-local",
+      "sbt-release-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "jcenter"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "sbt-dev",
+        "defaultDeployment": "sbt-dev-local",
+        "includedLocalRepos": [
+          "sbt-dev-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      },
+      {
+        "repoKey": "sbt-release",
+        "defaultDeployment": "sbt-release-local",
+        "includedLocalRepos": [
+          "sbt-release-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "ivy",
+    "layout": "ivy-default",
+    "localRepoKeys": [
+      "ivy-dev-local",
+      "ivy-release-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "jcenter"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "ivy-dev",
+        "defaultDeployment": "ivy-dev-local",
+        "includedLocalRepos": [
+          "ivy-dev-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      },
+      {
+        "repoKey": "ivy-release",
+        "defaultDeployment": "ivy-release-local",
+        "includedLocalRepos": [
+          "ivy-release-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "maven",
+    "layout": "maven-2-default",
+    "localRepoKeys": [
+      "libs-snapshot-local",
+      "libs-release-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "jcenter"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "libs-snapshot",
+        "defaultDeployment": "libs-snapshot-local",
+        "includedLocalRepos": [
+          "libs-snapshot-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      },
+      {
+        "repoKey": "libs-release",
+        "defaultDeployment": "libs-release-local",
+        "includedLocalRepos": [
+          "libs-release-local"
+        ],
+        "includedRemoteRepos": [
+          "jcenter"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "npm",
+    "layout": "npm-default",
+    "localRepoKeys": [
+      "npm-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "npm-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "npm",
+        "defaultDeployment": "npm-local",
+        "includedLocalRepos": [
+          "npm-local"
+        ],
+        "includedRemoteRepos": [
+          "npm-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "puppet",
+    "layout": "puppet-default",
+    "localRepoKeys": [
+      "puppet-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "puppet-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "puppet",
+        "defaultDeployment": "puppet-local",
+        "includedLocalRepos": [
+          "puppet-local"
+        ],
+        "includedRemoteRepos": [
+          "puppet-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "nuget",
+    "layout": "nuget-default",
+    "localRepoKeys": [
+      "nuget-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "nuget-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "nuget",
+        "defaultDeployment": "nuget-local",
+        "includedLocalRepos": [
+          "nuget-local"
+        ],
+        "includedRemoteRepos": [
+          "nuget-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "opkg",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "opkg-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "opkg-remote"}
+    ]
+  },
+  {
+    "repoType": "conda",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "conda-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "conda-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "conda",
+        "defaultDeployment": "conda-local",
+        "includedLocalRepos": [
+          "conda-local"
+        ],
+        "includedRemoteRepos": [
+          "conda-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "pypi",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "pypi-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "pypi-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "pypi",
+        "defaultDeployment": "pypi-local",
+        "includedLocalRepos": [
+          "pypi-local"
+        ],
+        "includedRemoteRepos": [
+          "pypi-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "vagrant",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "vagrant-local"
+    ]
+  },
+  {
+    "repoType": "yum",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "rpm-local"
+    ],
+    "remoteRepoKeys": [
+      {"repoKey": "rpm-remote"}
+    ],
+    "virtualRepoKeys": [
+      {
+        "repoKey": "rpm",
+        "defaultDeployment": "rpm-local",
+        "includedLocalRepos": [
+          "rpm-local"
+        ],
+        "includedRemoteRepos": [
+          "rpm-remote"
+        ]
+      }
+    ]
+  },
+  {
+    "repoType": "generic",
+    "layout": "simple-default",
+    "localRepoKeys": [
+      "generic-local"
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget last-deployed" ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}">
+    <div class="list-title">
+        <a href ng-click="ctrl.refresh()" class="refresh-button pull-right"><i class="icon icon-refresh"></i></a>
+        Last Deployed Builds
+        <span>({{ctrl.dateTime | date: 'dd/MM/yy HH:mm:ss'}})</span>
+    </div>
+
+    <div class="list-content no-content" ng-if="!ctrl.data.mostRecentBuilds.length">
+        <p>No builds to display.</p>
+        <p>
+            <a href="https://www.jfrog.com/confluence/display/RTF/Build+Integration" class="jf-link" target="_blank">Learn how to</a> integrate your build information with Artifactory.
+        </p>
+    </div>
+
+    <div class="list-content" ng-if="ctrl.data.mostRecentBuilds.length">
+        <div class="list-item" ng-if="ctrl.data.mostRecentBuilds.length"
+                ng-repeat="item in ctrl.data.mostRecentBuilds">
+            <a href
+                    ui-sref="builds.build_page({buildName:item.buildName,buildNumber:item.buildNumber,startTime:item.time,tab:null})"
+                    ng-click="ctrl.itemClick()">
+                {{item.buildName}} <span class="build-number">#{{item.buildNumber}}</span>
+            </a>
+        </div>
+    </div>
+</div>

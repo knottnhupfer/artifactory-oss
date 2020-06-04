@@ -1,0 +1,66 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="go">
+    <jf-panel jf-panel-heading="Package Info" ng-if="jfGo.goData.goInfo">
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfGo.goData.goInfo"
+                ng-if="key != 'description'">
+                <td ng-if="!(key === 'deprecated' && !value)">{{jfGo.DICTIONARY[key] || key }}:</td>
+                <td ng-if="key != 'maintainers' && key != 'sources' && key != 'keywords' && !(key === 'deprecated' && !value)">
+                    {{value}}
+                </td>
+
+                <!-- Table cell specific for maintainers, sources & keywords -->
+                <td ng-if="key === 'maintainers' || key === 'sources' || key === 'keywords'">
+
+                    <!-- Content for keywords and maintainers -->
+                    <div ng-if="value.length && key != 'sources'"
+                         ng-repeat="item in value track by $index"
+                         class="licenses-list inline-block">
+                        <span>{{item}}</span><span ng-if="value.length>1 && $index<value.length-1">,&nbsp;</span>
+                    </div>
+                    <!-- Content for sources -->
+                    <div ng-if="value.length && key === 'sources'"
+                         ng-repeat="item in value track by $index"
+                         class="licenses-list inline-block">
+                        <a href="{{item}}">{{item}}</a>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+
+
+    </jf-panel>
+
+
+
+    <jf-panel jf-panel-heading="Description"
+              ng-if="jfGo.goData.goInfo.description">
+        <p>{{jfGo.goData.goInfo.description}}</p>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Dependencies"
+              ng-if="jfGo.goData.goDependencies.length">
+        <jf-grid grid-options="jfGo.gridDependenciesOptions"
+                 filter-field="name"
+                 filter-field2="version"
+                 no-pagination="true"></jf-grid>
+
+    </jf-panel>
+</div>

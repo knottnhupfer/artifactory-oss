@@ -1,0 +1,75 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-show="Artifact.hasData()"
+     class="content-layout-container with-head-bar artifacts-container"
+     id="jf-artifacts">
+<!--
+    <jf-search></jf-search>
+
+    <div ui-view="search" class="ui-view-search"></div>
+-->
+
+    <div class="pull-right text-right deploy-btn disabled"
+         jf-tooltip="{{Artifact.disabledTooltip}}"
+         ng-if="(Artifact.deployIsDisabled() && Artifact.$state.params.browser !== 'stash') &&
+         (!Artifact.ArtifactoryFeatures.isEdgeNode() || Artifact.deployIsAllowedOnEdge())">
+        <span class="icon icon-deploy"></span> Deploy
+    </div>
+    <div class="pull-right text-right deploy-btn"
+         ng-click="Artifact.openDeploy()"
+         ng-if="(!Artifact.deployIsDisabled() && Artifact.$state.params.browser !== 'stash') &&
+         (!Artifact.ArtifactoryFeatures.isEdgeNode() || Artifact.deployIsAllowedOnEdge())">
+        <span class="icon icon-deploy"></span> Deploy
+    </div>
+    <div class="pull-right set-me-up"
+         ng-if="Artifact.$state.params.browser !== 'stash'"
+         ng-click="Artifact.openSetMeUp()">
+        <span class="icon icon-set-me-up"></span> Set Me Up
+    </div>
+
+    <h1 id="artifacts-browser-header" ng-if="Artifact.$state.params.browser !== 'stash'">Artifact Repository Browser</h1>
+    <div class="stash-header" ng-if="Artifact.$state.params.browser === 'stash'">
+        <h1>Stash Browser</h1>
+        <a class="jf-back-link back-to-repository-browser" href="" ng-click="Artifact.exitStashState()">Back to Repository Browser</a>
+    </div>
+
+    <div class="content-wrapper" ng-if="jfSidebar">
+        <div ui-layout>
+            <div ui-layout-container class="artifacts-outer-layout-container">
+                <div ui-layout="{flow : 'column', dividerSize : '15'}">
+                    <div ui-layout-container class="artifacts-list card" size="30%" min-size="25%">
+                        <ui-view></ui-view>
+                    </div>
+
+                    <div ui-layout-container class="artifact-details card" size="70.5%" min-size="35%">
+                        <div class="artifact-details-header">
+                            <div class="pull-right text-right">
+                                <jf-actions parent-controller="Artifact" init-method="initActions" fixed-actions-names="['Download','View']"></jf-actions>
+                            </div>
+                            <div>
+                                <i class="jstree-icon jstree-themeicon jstree-themeicon-custom" ng-class="Artifact.getNodeIcon()" role="presentation"></i>
+                                <h2 class="artifact-name-heading" jf-tooltip-on-overflow>{{Artifact.node.data.isTrashcan() ? 'Trash Can' : Artifact.node.data.text}} <i ng-if="Artifact.node.data.isRepo() && !Artifact.node.data.isTrashcan()" ng-class="Artifact.isFavorite() ? 'icon-star-full' : 'icon-star'" ng-click="Artifact.toggleFavorites(Artifact.node)"></i></h2>
+                            </div>
+                        </div>
+                        <jf-artifact-info></jf-artifact-info>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

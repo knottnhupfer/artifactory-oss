@@ -1,0 +1,1 @@
+{"files":[{"relative_path":"path/to/file1","permissions":"rwxrwx---","content":"Y29udGVudDE="},{"relative_path":"path/file2","permissions":"rw-rw-rw-","content":"Y29udGVudDI="},{"relative_path":"file3","permissions":"rw-rwx--x","content":"Y29udGVudDM="}]}

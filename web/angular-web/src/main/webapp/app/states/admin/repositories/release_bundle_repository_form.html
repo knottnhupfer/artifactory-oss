@@ -1,0 +1,160 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<jf-wizard config="RepositoryForm.wizardConfig">
+	<jf-wizard-element data-title='Basic'>
+		<div name="Basic" class="tab-content">
+
+		<div class="form-group">
+			<div class="form-group-cell"
+					ng-if="RepositoryForm.newRepository">
+				<jf-field validations="repositores"
+						autofocus="true">
+					<label for="repoKey-new" class="mandatory">Repository Key</label>
+					<input type="text" class="input-text"
+							id="repoKey-new"
+							name="repoKey"
+							required
+							jf-repokey-validator="RepositoryForm"
+							ng-model="RepositoryForm.repoInfo.general.repoKey"
+							ng-change="RepositoryForm.onChangeRepoKey()"
+							ng-model-options="{debounce: { 'default': 500 } }"/>
+				</jf-field>
+				<ng-messages for="RepositoryForm.repositoriesForm.repoKey.$error" class="jf-validation">
+					<div ng-message-exp="'repoKeyValidator'" id="repository-key-validator">
+						{{ RepositoryForm.repoKeyValidatorMessage }}
+					</div>
+				</ng-messages>
+			</div>
+			<div class="form-group-cell"
+					ng-if="!RepositoryForm.newRepository">
+				<jf-field validations="repositores" autofocus="true">
+					<label for="repoKey-edit" class="mandatory">Repository Key</label>
+					<input type="text"
+							class="input-text"
+							id="repoKey-edit"
+							name="repoKey"
+							ng-model="RepositoryForm.repoInfo.general.repoKey"
+							ng-disabled="!RepositoryForm.newRepository"/>
+				</jf-field>
+				<ng-messages for="RepositoryForm.repositoriesForm.repoKey.$error" class="jf-validation">
+					<div ng-message-exp="'repoKeyValidator'" id="repository-key-validator">
+						{{ RepositoryForm.repoKeyValidatorMessage }}
+					</div>
+				</ng-messages>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6">
+				<jf-panel jf-panel-heading="General">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<jf-field>
+								<label>Public Description</label>
+								<textarea type="text"
+										class="input-text"
+										name="publicDescription"
+										cols="5"
+										ng-model="RepositoryForm.repoInfo.basic.publicDescription"
+										id="local-repository-public-description-textarea">
+                    </textarea>
+							</jf-field>
+						</div>
+						<div class="form-group-cell">
+							<jf-field>
+								<label>Internal Description</label>
+								<textarea type="text"
+										class="input-text"
+										name="internalDescription"
+										ng-model="RepositoryForm.repoInfo.basic.internalDescription"
+										cols="5"
+										id="local-repository-internal-description-textarea"></textarea>
+							</jf-field>
+						</div>
+					</div>
+				</jf-panel>
+				<jf-panel ng-if="!RepositoryForm.isRightColumnEmptyInLocalRepo()"
+						jf-panel-heading="Include / Exclude Patterns">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<jf-list-maker values="RepositoryForm.repoInfo.basic.includesPatternArray"
+									label="Include Patterns"
+									help-tooltip="RepositoryForm.TOOLTIP.localForm.includesPattern"
+									object-name="Pattern"
+									on-add-value="RepositoryForm.formatNewPattern(newValue)">
+							</jf-list-maker>
+						</div>
+						<div class="form-group-cell">
+							<jf-list-maker values="RepositoryForm.repoInfo.basic.excludesPatternArray"
+									label="Exclude Patterns"
+									help-tooltip="RepositoryForm.TOOLTIP.localForm.excludedPattern"
+									object-name="Pattern"
+									on-add-value="RepositoryForm.formatNewPattern(newValue)">
+							</jf-list-maker>
+						</div>
+					</div>
+				</jf-panel>
+				<!-- Currently has no Xray Integration - might be in use in the near future -->
+				<!--<jf-panel jf-panel-heading="JFrog Xray Integration">-->
+				<!--<div class="alert alert-warning margin-top-25 xray-alert ng-scope" ng-if="RepositoryForm.footerDao.getInfo().xrayConfigured && !RepositoryForm.footerDao.getInfo().xrayEnabled">-->
+				<!--<div>Xray is currently disabled. No events are sent and new alerts are not being assigned to artifacts.</div>-->
+				<!--<div class="button-wrapper"><a class="jf-link" href="" ng-click="AdminConfigurationXray._updateFooter(); AdminConfigurationXray.getData()" class="pull-right xray-refresh refresh-icon"><i class="icon-refresh"></i> Refresh</a></div>-->
+				<!--</div>-->
+				<!--<div ng-if="!RepositoryForm.footerDao.getInfo().xrayConfigured"-->
+				<!--ng-bind-html="RepositoryForm.CONFIG_MESSAGES.remote.noXrayIntegrationMessage"-->
+				<!--class="alert alert-warning margin-top-10">-->
+				<!--</div>-->
+				<!--<div class="form-group form-checkbox" ng-if="RepositoryForm.footerDao.getInfo().xrayEnabled">-->
+				<!--<jf-checkbox text="Enable Indexing In Xray">-->
+				<!--<input type="checkbox"-->
+				<!--id="xrayIndex"-->
+				<!--ng-model="RepositoryForm.repoInfo.basic.xrayConfig.enabled"-->
+				<!--ng-change="RepositoryForm.changeXrayIndexCheckbox()"/>-->
+				<!--</jf-checkbox>-->
+				<!--</div>-->
+				<!--</jf-panel>-->
+			</div>
+
+			<div class="col-lg-6">
+				<!-- Instead of an empty space show this panel to the right-->
+				<jf-panel ng-if="RepositoryForm.isRightColumnEmptyInLocalRepo()"
+						jf-panel-heading="Include / Exclude Patterns">
+					<div class="form-group">
+						<div class="form-group-cell">
+							<jf-list-maker values="RepositoryForm.repoInfo.basic.includesPatternArray"
+									label="Include Patterns"
+									help-tooltip="RepositoryForm.TOOLTIP.localForm.includesPattern"
+									object-name="Pattern"
+									on-add-value="RepositoryForm.formatNewPattern(newValue)">
+							</jf-list-maker>
+						</div>
+						<div class="form-group-cell">
+							<jf-list-maker values="RepositoryForm.repoInfo.basic.excludesPatternArray"
+									label="Exclude Patterns"
+									help-tooltip="RepositoryForm.TOOLTIP.localForm.excludedPattern"
+									object-name="Pattern"
+									on-add-value="RepositoryForm.formatNewPattern(newValue)">
+							</jf-list-maker>
+						</div>
+					</div>
+				</jf-panel>
+			</div>
+		</div>
+
+	</jf-wizard-element>
+</jf-wizard>

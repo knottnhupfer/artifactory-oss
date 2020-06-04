@@ -1,0 +1,125 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="jfArtifactInfo.currentNode">
+
+    <jf-tabs tabs="jfArtifactInfo.infoTabs"
+             dictionary="jfArtifactInfo.DICTIONARY"
+             tab-width="180"
+             container-margin="35"
+             >
+        <div class="main-view">
+            <jf-tab name="General">
+                <jf-general current-node="jfArtifactInfo.currentNode"></jf-general>
+            </jf-tab>
+            <jf-tab name="EffectivePermission">
+                <jf-effective-permissions current-node="jfArtifactInfo.currentNode"></jf-effective-permissions>
+            </jf-tab>
+            <jf-tab name="Builds">
+                <jf-builds current-node="jfArtifactInfo.currentNode"></jf-builds>
+            </jf-tab>
+            <jf-tab name="Xray">
+                <jf-xray current-node="jfArtifactInfo.currentNode"></jf-xray>
+            </jf-tab>
+            <jf-tab name="Watch" feature="watchers">
+                <jf-watchers current-node="jfArtifactInfo.currentNode"></jf-watchers>
+            </jf-tab>
+            <jf-tab name="Properties">
+                <jf-properties current-node="jfArtifactInfo.currentNode"></jf-properties>
+            </jf-tab>
+            <jf-tab name="ViewSource">
+                <jf-view-source current-node="jfArtifactInfo.currentNode"></jf-view-source>
+            </jf-tab>
+            <jf-tab name="PomView">
+                <jf-pom-view current-node="jfArtifactInfo.currentNode"></jf-pom-view>
+            </jf-tab>
+            <jf-tab name="IVYXml">
+                <jf-ivy-view current-node="jfArtifactInfo.currentNode"></jf-ivy-view>
+            </jf-tab>
+            <jf-tab name="GeneralXml">
+                <jf-xml-view current-node="jfArtifactInfo.currentNode"></jf-xml-view>
+            </jf-tab>
+            <jf-tab name="NuPkgInfo">
+                <jf-nuget current-node="jfArtifactInfo.currentNode"></jf-nuget>
+            </jf-tab>
+            <jf-tab name="DebianInfo">
+                <jf-debian-info current-node="jfArtifactInfo.currentNode"></jf-debian-info>
+            </jf-tab>
+            <jf-tab name="OpkgInfo">
+                <jf-opkg-info current-node="jfArtifactInfo.currentNode"></jf-opkg-info>
+            </jf-tab>
+            <jf-tab name="ComposerInfo">
+                <jf-composer current-node="jfArtifactInfo.currentNode"></jf-composer>
+            </jf-tab>
+            <jf-tab name="ChefInfo">
+                <jf-chef-info current-node="jfArtifactInfo.currentNode"></jf-chef-info>
+            </jf-tab>
+            <jf-tab name="PyPIInfo">
+                <jf-py-pi current-node="jfArtifactInfo.currentNode"></jf-py-pi>
+            </jf-tab>
+            <jf-tab name="PuppetInfo">
+                <jf-puppet current-node="jfArtifactInfo.currentNode"></jf-puppet>
+            </jf-tab>
+            <jf-tab name="BowerInfo">
+                <jf-bower current-node="jfArtifactInfo.currentNode"></jf-bower>
+            </jf-tab>
+            <jf-tab name="DockerInfo">
+                <jf-docker current-node="jfArtifactInfo.currentNode"></jf-docker>
+            </jf-tab>
+            <jf-tab name="DockerAncestryInfo">
+                <jf-docker-ancestry current-node="jfArtifactInfo.currentNode"></jf-docker-ancestry>
+            </jf-tab>
+            <jf-tab name="DockerV2Info">
+                <jf-docker-v2 current-node="jfArtifactInfo.currentNode"></jf-docker-v2>
+            </jf-tab>
+            <jf-tab name="RubyGems">
+                <jf-ruby-gems current-node="jfArtifactInfo.currentNode"></jf-ruby-gems>
+            </jf-tab>
+            <jf-tab name="NpmInfo">
+                <jf-npm-info current-node="jfArtifactInfo.currentNode"></jf-npm-info>
+            </jf-tab>
+            <jf-tab name="Rpm">
+                <jf-rpm current-node="jfArtifactInfo.currentNode"></jf-rpm>
+            </jf-tab>
+            <jf-tab name="Cocoapods">
+                <jf-cocoapods current-node="jfArtifactInfo.currentNode"></jf-cocoapods>
+            </jf-tab>
+            <jf-tab name="ConanInfo">
+                <jf-conan current-node="jfArtifactInfo.currentNode"></jf-conan>
+            </jf-tab>
+            <jf-tab name="ConanPackageInfo">
+                <jf-conan-package current-node="jfArtifactInfo.currentNode"></jf-conan-package>
+            </jf-tab>
+            <jf-tab name="HelmInfo">
+                <jf-helm current-node="jfArtifactInfo.currentNode"></jf-helm>
+            </jf-tab>
+            <jf-tab name="GoInfo">
+                <jf-go current-node="jfArtifactInfo.currentNode"></jf-go>
+            </jf-tab>
+            <jf-tab name="CranInfo">
+                <jf-cran current-node="jfArtifactInfo.currentNode"></jf-cran>
+            </jf-tab>
+            <jf-tab name="CondaInfo">
+                <jf-conda current-node="jfArtifactInfo.currentNode"></jf-conda>
+            </jf-tab>
+            <jf-tab name="StashInfo">
+                <jf-stash-info current-node="jfArtifactInfo.currentNode"
+                               allow-export="jfArtifactInfo.user.currentUser.isAdmin() && !jfArtifactInfo.features.isAol()"></jf-stash-info>
+            </jf-tab>
+        </div>
+    </jf-tabs>
+</div>

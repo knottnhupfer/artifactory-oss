@@ -1,0 +1,67 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>Storage Summary</h1>
+
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <div class="row">
+                <div class="col-lg-12" style="display: flex; justify-content: space-between;
+                align-items: center;">
+                    <div>
+                        <span>The data was last refreshed on: {{StorageSummaryController.storageSummary.lastUpdatedCache | date:'dd/MM/yy HH:mm:ss'}}
+                        </span>
+                    </div>
+                    <button type="button"
+                            class="btn btn-primary pull-right"
+                            ng-click="StorageSummaryController.refresh()"
+                            ng-disabled="StorageSummaryController.calculating || StorageSummaryController.disableRefresh">
+                        {{StorageSummaryController.calculating ? 'Calculating...' : 'Refresh'}}
+                    </button>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <jf-panel jf-panel-heading="Binaries">
+                        <ul class="storage-binaries-summary">
+                            <li ng-repeat="key in StorageSummaryController.binariesKeys">
+                                <span>{{key | splitWords}}: <jf-help-tooltip ng-if="StorageSummaryController.TOOLTIP[key]" html="StorageSummaryController.TOOLTIP[key]"></jf-help-tooltip></span>
+                                {{StorageSummaryController.storageSummary.binariesSummary[key]}}
+                            </li>
+                        </ul>
+                    </jf-panel>
+                </div>
+            </div>
+
+            <jf-panel jf-panel-heading="Storage" ng-if="!StorageSummaryController.features.isAol()">
+                <rtfact-storage-viewer></rtfact-storage-viewer>
+            </jf-panel>
+
+
+
+            <jf-grid grid-options="StorageSummaryController.gridOption"
+                     filter-field="repoKey.value"
+                     filter-on-change="true"
+                     auto-focus="true"
+                     object-name="Repository/Repositories">
+            </jf-grid>
+        </div>
+    </div>
+</div>

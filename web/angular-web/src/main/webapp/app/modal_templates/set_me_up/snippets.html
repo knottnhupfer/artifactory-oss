@@ -1,0 +1,92 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="shownRepos.length > 0">
+    <!-- Docker Snippet -->
+    <div class="settings-view" ng-if="snippet">
+    <div class="clearfix"></div>
+    <jf-clip-copy text-to-copy="snippet"
+            class="code-mirror-copy"
+            object-name="Snippet"></jf-clip-copy>
+    <jf-code-mirror mime-type="text/xml"
+            model="snippet">
+    </jf-code-mirror>
+    </div>
+
+    <!-- General Snippet -->
+    <div class="settings-view" ng-if="generalSnippets && generalSnippets.length > 0 && !settingPage">
+    <label class="snippet">General</label>
+    <div ng-repeat="snip in generalSnippets">
+        <p ng-if="snip.title" ng-bind-html="snip.title"><p>
+        <p ng-if="snip.before" ng-bind-html="snip.before"></p>
+        <jf-clip-copy ng-if="snip.snippet"
+                text-to-copy="snip.snippet"
+                class="code-mirror-copy"
+                object-name="Snippet"></jf-clip-copy>
+        <jf-code-mirror ng-if="snip.snippet"
+                mime-type="text/xml"
+                model="snip.snippet">
+        </jf-code-mirror>
+        <p ng-if="snip.after" ng-bind-html="snip.after"></p>
+    </div>
+    </div>
+
+    <!-- Deploy Snippet -->
+    <div class="settings-view" ng-if="deploySnippets && deploySnippets.length > 0 && !settingPage">
+    <label class="snippet">Deploy</label>
+    <div ng-repeat="snip in deploySnippets">
+        <p ng-if="snip.before" ng-bind-html="snip.before"></p>
+        <jf-clip-copy text-to-copy="snip.snippet"
+                class="code-mirror-copy"
+                object-name="Snippet"></jf-clip-copy>
+        <jf-code-mirror mime-type="text/xml"
+                model="snip.snippet">
+        </jf-code-mirror>
+        <p ng-if="snip.after" ng-bind-html="snip.after"></p>
+    </div>
+    </div>
+
+    <!-- Resolve Snippet -->
+    <div class="settings-view" ng-if="readSnippets && readSnippets.length > 0 && !settingPage">
+    <label class="snippet">Resolve</label>
+    <div ng-repeat="snip in readSnippets">
+        <p ng-if="snip.before" ng-bind-html="snip.before"></p>
+        <jf-clip-copy text-to-copy="snip.snippet"
+                class="code-mirror-copy"
+                object-name="Snippet"></jf-clip-copy>
+        <jf-code-mirror mime-type="text/xml"
+                model="snip.snippet">
+        </jf-code-mirror>
+        <p ng-if="snip.after" ng-bind-html="snip.after"></p>
+    </div>
+    </div>
+
+    <!-- Reverse Proxy Snippet -->
+    <div class="settings-view" ng-if="reverseProxySnippet">
+    <label class="snippet">Reverse Proxy</label>
+    <p><a href ng-click="showReverseProxy = !showReverseProxy">Click here</a> to {{showReverseProxy ? 'hide' : 'view'}} reverse proxy configuration snippet.</p>
+    <p>To use reverse proxy configuration, place the snippet in the sites-enabled directory and reload. This will effect Artifactory reverse proxy configuration and Docker repositories if configured.</p>
+    <div ng-if="showReverseProxy">
+        <jf-clip-copy text-to-copy="reverseProxySnippet"
+                class="code-mirror-copy"
+                object-name="Snippet"></jf-clip-copy>
+        <jf-code-mirror mime-type="text"
+                model="reverseProxySnippet">
+        </jf-code-mirror>
+    </div>
+</div>
+</div>

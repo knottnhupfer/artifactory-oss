@@ -1,0 +1,1 @@
+CREATE INDEX binaries_sha256_idx ON binaries (sha256);

@@ -1,0 +1,80 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<nav id="jf-header">
+    <div class="navbar-header">
+        <a ng-if="!jfHeader.isSSOMode()" class="navbar-brand" ui-sref="home">
+            <img class="logo-picture" ng-src="{{jfHeader.logoUrl}}" alt="{{ jfHeader.features.isJCR() ? 'JFrog Container Registry' : 'Artifactory' }}"/>
+        </a>
+        <a ng-if="jfHeader.isSSOMode() && jfHeader.isRedirecting()" class="navbar-brand cursor-default">
+            <img class="logo-picture" ng-src="{{'images/jfrog_general.svg'}}" alt="JFrog"/>
+        </a>
+        <a ng-if="jfHeader.isSSOMode() && !jfHeader.isRedirecting()" class="navbar-brand" ui-sref="home">
+            <img class="logo-picture" ng-src="{{'images/jfrog_general.svg'}}" alt="JFrog"/>
+        </a>
+    </div>
+
+    <div class="navbar-right">
+        <div class="pull-right header-section"
+             ng-class="{'quick-actions': jfHeader.isQuickActionsAvailable()}"
+             ng-if="jfHeader.$state.current.name !== 'login'">
+            <div ng-if="!jfHeader.currentUser.isGuest()"
+                 class="user-header-section"
+                 ng-click="jfHeader.onClickUserHeaderSection($event)">
+                Welcome,
+                <a href ng-click="jfHeader.onClickUserProfile($event)"
+                   class="navbar-link username-header">{{jfHeader.currentUser.name}}</a>
+                <a ng-if="!jfHeader.isQuickActionsAvailable()"
+                   id="logout"
+                   href=""
+                   class="navbar-link"
+                   ng-click="jfHeader.logout()">
+                    <span class="log-out">( Log Out )</span>
+                </a>
+                <div ng-if="jfHeader.isQuickActionsAvailable()"
+                     class="quick-actions-wrapper">
+                    <jf-actions parent-controller="jfHeader"
+                                disable-mouse-over-events
+                                label=""
+                                init-method="initQuickActions"></jf-actions>
+                </div>
+            </div>
+            <div ng-if="jfHeader.currentUser.isGuest()">
+                <a href id="login-link" ng-click="jfHeader.login()">Log In</a>
+            </div>
+        </div>
+        <div class="pull-right header-section header-help dropdown" dropdown
+             ng-disabled="jfHeader.helpLinks.length == 0"
+             ng-if="jfHeader.helpLinksEnabled && !jfHeader.isRedirecting()">
+            <a class="dropdown-toggle help-menu" dropdown-toggle
+               ng-disabled="jfHeader.helpLinks.length == 0">Help <i class="action-icon icon icon-small-arrow-down"></i></a>
+            <ul class="dropdown-menu dropdown-menu-right text-left">
+	            <li class="triangle"></li>
+                <li ng-repeat="helpLink in jfHeader.helpLinks | orderBy:'priority'">
+                    <a href="{{helpLink.link}}"
+                       target="_blank"
+                       class="jf-link"
+                       ng-class="helpLink.title.replace(' ','-').toLowerCase()">
+                        {{helpLink.title}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <jf-header-search ng-if="!jfHeader.hideSearch"></jf-header-search>
+        <span class="pull-left navbar-separator"></span>
+    </div>
+</nav>

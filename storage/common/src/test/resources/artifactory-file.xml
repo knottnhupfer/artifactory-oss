@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<!-- artifactory file info metadata taken from v4.2.1 export -->
+<artifactory-file>
+    <repoPath>
+        <repoKey>libs-release-local</repoKey>
+        <path>aspectjweaver/aspectjweaver/1.5.3/aspectjweaver-1.5.3.jar</path>
+        <folder>false</folder>
+    </repoPath>
+    <name>aspectjweaver-1.5.3.jar</name>
+    <created>1316590989115</created>
+    <lastModified>1316591065519</lastModified>
+    <size>456</size>
+    <mimeType>application/java-archive</mimeType>
+    <additionalInfo>
+        <createdBy>admin</createdBy>
+        <modifiedBy>admin</modifiedBy>
+        <lastUpdated>1316591065520</lastUpdated>
+        <checksumsInfo>
+            <checksums>
+                <checksum>
+                    <type>sha1</type>
+                    <actual>da39a3ee5e6b4b0d3255bfef95601890afd80709</actual>
+                    <original>da39a3ee5e6b4b0d3255bfef95601890afd80709</original>
+                </checksum>
+                <checksum>
+                    <type>md5</type>
+                    <actual>d41d8cd98f00b204e9800998ecf8427e</actual>
+                    <original>d41d8cd98f00b204e9800998ecf8427e</original>
+                </checksum>
+            </checksums>
+        </checksumsInfo>
+    </additionalInfo>
+</artifactory-file>

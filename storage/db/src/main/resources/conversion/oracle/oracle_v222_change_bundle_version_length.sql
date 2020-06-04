@@ -1,0 +1,1 @@
+ALTER TABLE artifact_bundles MODIFY version VARCHAR2(32);

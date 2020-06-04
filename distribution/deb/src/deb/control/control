@@ -1,0 +1,10 @@
+Package: [[artifactId]]
+Version: [[version]]
+Section: misc
+Priority: low
+Architecture: all
+Description: [[description]]
+Maintainer: dev@jfrog.com
+Depends: net-tools
+Provides: artifactory
+Conflicts: jfrog-artifactory-pro, jfrog-artifactory-vrcs, jfrog-artifactory-cpp-ce

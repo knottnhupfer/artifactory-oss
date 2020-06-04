@@ -1,0 +1,474 @@
+<style>
+    .modal .modal-header {
+        background: #f1f1f1;
+    }
+
+    h4 {
+        color: #313131;
+    }
+
+    .issue-detail {
+        display: flex;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .issue-detail > div {
+        display: flex;
+        line-height: 25px;
+        width: 80%;
+        padding-right: 20px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .issue-detail > div:first-child {
+        vertical-align: middle;
+        width: 30%;
+        padding: 0 20px;
+    }
+
+    .issue-detail:nth-child(odd) {
+        background: #f7f7f7;
+    }
+
+    .panel-body {
+        padding: 0;
+    }
+
+    .modal-dialog.modal-lg {
+        max-width: 95% !important;
+    }
+
+    .modal .modal-header {
+        padding-left: 20px;
+    }
+
+    /*.issue-detail:first-child {
+        background: #e4e9eb;
+        font-weight: bold;
+    }*/
+
+    .issue-detail-title {
+        padding-left: 10px;
+    }
+
+    .issue-detail.provider .issue-detail-info {
+        display: inline;
+    }
+
+    .issue-detail-info span a {
+        margin-left: 5px;
+    }
+
+    .panel.panel-default {
+        height: 450px;
+        position: relative;
+        border-radius: 0;
+        overflow: hidden;
+        overflow-y: scroll;
+
+    }
+
+    ul.impacted-artifacts-list {
+        list-style: none;
+        line-height: 30px;
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        position: static;
+    }
+
+    .modal .modal-header button.close {
+        margin: 5px;
+        margin-right: 20px;
+    }
+
+    .infection-path.panel.panel-default:after {
+        content: "";
+        width: 1px;
+        height: 100%;
+        background: #dddddd;
+        left: 20%;
+        top: 0;
+        position: absolute;
+    }
+
+    .impacted-artifacts-list li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .panel-heading {
+        padding: 0;
+    }
+
+    .infection-path-container {
+        height: 100%;
+        position: absolute;
+        right: 0;
+        width: 87%;
+    }
+
+    .panel-body {
+        padding: 0;
+        max-height: 100%;
+    }
+
+    .impacted-artifacts-list {
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        position: absolute;
+        line-height: 40px;
+        width: 20%;
+        padding: 0;
+    }
+
+    .impacted-artifacts-list > div {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        cursor: pointer;
+        padding-left: 15px;
+        width: 100%;
+        padding-right: 30px;
+        position: relative;
+        white-space: nowrap;
+    }
+
+    .selected {
+        background: #f1f1f1;
+        font-weight: bold;
+    }
+
+    .selected:after {
+        content: "\e92d";
+        font-family: 'artifactory';
+        position: absolute;
+        right: 10px;
+        top: 0;
+    }
+
+    .btn.wide-view {
+        position: absolute;
+        right: 20px;
+        border: 1px solid;
+        top: 5px;
+        min-width: 30px;
+        z-index: 999999999;
+        background: #dadada;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        line-height: 30px;
+        width: 30px;
+    }
+
+    .icon-compress:before {
+        align-self: center;
+    }
+
+    .infection-path-viewer {
+        height: auto;
+    }
+
+    .panel.infection-path .infection-path-text-wrapper {
+        display: inline-block;
+        position: static;
+        margin-top: 20px;
+    }
+
+    .details-pane, .path-pane {
+        transition: all 0.25s ease;
+    }
+
+    .infection-path-viewer .infection-level-file-name i {
+        position: absolute;
+        left: 0;
+    }
+
+    .infection-path-viewer .infection-level-file-name {
+
+        padding-left: 20px;
+    }
+
+    .issue-detail-info.inner {
+        flex-direction: column;
+    }
+
+    .issue-detail-info span {
+        color: #b1b1b1;
+        font-size: 14px;
+    }
+
+    .modal-dialog.modal-lg {
+        max-width: 95%;
+    }
+
+    .modal .modal-body {
+        max-height: 575px;
+        padding: 0;
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    .fixed_versions.issue-detail {
+        background: #43a047;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .modal-body .severity {
+        padding-left: 17px;
+    }
+
+
+    .modal-body .severity:before {
+        font-family: 'artifactory' !important;
+        position: relative;
+        content: "\e985";
+        left: -16px;
+        bottom: 0px
+
+    }
+
+    .modal-body .normal.severity:before {
+        content: "\e97f";
+        width: 10px !important;
+        height: 10px !important;
+        display: inline-block;
+    }
+
+
+    .modal-body .severity {
+        position: relative;
+    }
+
+    .modal-body .severity.medium {
+        color: #fb8c00;
+    }
+
+    .modal-body .severity.low {
+        color: #00569a;
+    }
+
+    .modal-body .severity.high {
+        color: #d73f3f;
+    }
+
+    .modal-body .severity.normal {
+        color: #43a047;
+    }
+
+    .modal-body .severity.unknown {
+        color: #707070;
+    }
+
+
+    .row.path-wrapper {
+        position: static;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-height: 270px;
+        overflow-y: scroll;
+        border: 1px solid #dddddd;
+        padding: 5px 15px;
+        right: 0;
+        width: 100%;
+        display: block;
+        margin: 20px 0;
+    }
+
+    .row.path-wrapper > div {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+</style>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$dismiss()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 ng-if="details.cves" class="modal-title"><span
+            ng-if="details.cves[0].cve && !isViolation ">Issue '{{details.cves[0].cve}}'</span></h3>
+    <h3 ng-if="!details.cves && !isViolation" class="modal-title">Issue</h3>
+    <h3 ng-if="isViolation" class="modal-title">Violation on
+                                                {{ctrl.xrayUtils.getComponentPrettyName(infected_comp)}}</h3>
+</div>
+<div class="modal-body clearfix">
+    <div class="panes-container">
+        <div class="row">
+            <div class="btn wide-view icon icon-compress" ng-click="wideMode = !wideMode"></div>
+            <div ng-class="{'col-md-12':wideMode,'col-md-6':!wideMode}" class="details-pane">
+                <div class="panel-heading">
+                    <h4 class="">Details</h4>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div ng-if="!isViolation" class="issue-detail">
+                            <div class="issue-detail-title">Component
+
+                            </div>
+                            <div jf-tooltip-on-overflow class="issue-detail-info"> {{infected_comp}}</div>
+                        </div>
+                        <div ng-if="details.fixed_versions && details.fixed_versions.join(' ').indexOf('0.0.0') < 0"
+                                class="fixed_versions issue-detail">
+                            <div class="issue-detail-title">Fixed
+                                                            Version
+                            </div>
+                            <div class="fixed-versions issue-detail-info inner">
+                                <div class="issue-detail-info"> {{details.fixed_versions.join(', ')}}</div>
+
+                            </div>
+                        </div>
+                        <div ng-class="{[key]:key.toLowerCase() !== 'severity' }"
+                                ng-if="key !=='fixed_versions' && key !=='source' "
+                                ng-repeat="(key,val) in details" class="issue-detail">
+                            <div class="issue-detail-title">{{ctrl.getNomalizedKey(key)}}
+                            </div>
+
+                            <div ng-class="{'severity':key.toLowerCase() == 'severity',[val.toLowerCase()]:key.toLowerCase() == 'severity'}"
+                                    ng-if="!ctrl.isArray(val) && key.toLowerCase() !='source' && key.toLowerCase() !='provider' "
+                                    class="issue-detail-info">{{val|date : 'medium'}}
+                            </div>
+
+                            <div ng-if="key.toLowerCase() =='provider'"
+                                    class="issue-detail-info inner">
+                                {{val}}<span><a target="_blank" ng-href="{{details.source.url}}"
+                                    ng-if="details.source && details.source.url ">(See vulnerability details)</a>
+</span>
+                            </div>
+
+                            <div ng-if="ctrl.isArray(val) && key.toLowerCase() =='cves'"
+                                    class="issue-detail-info inner">
+                                <div ng-repeat="innerVal in val | limitTo: 3 track by $index" class="issue-detail-info">
+                                    {{innerVal.cve}} <span ng-if="innerVal.cvss_v2">(CVSS v2 Score : {{innerVal.cvss_v2}}) </span><span
+                                        ng-if="innerVal.cvss_v3">(CVSS v3 Score : {{innerVal.cvss_v3}}) </span>
+                                </div>
+                                <div collapse="!val.showAll" ng-if="$index >= 3" ng-repeat="innerVal in val"
+                                        class="issue-detail-info">
+                                    {{innerVal.cve}} <span ng-if="innerVal.cvss_v2">(CVSS v2 Score : {{innerVal.cvss_v2}}) </span>
+                                </div>
+                                <div ng-if="val.length > 3 && !val.showAll"><a href ng-click="val.showAll = true">Show
+                                                                                                                  All</a>
+                                </div>
+                                <div ng-if="val.length > 3 && val.showAll"><a href ng-click="val.showAll = false">Show
+                                                                                                                  Less</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="ctrl.isArray(val) && (key.toLowerCase() =='references' || key.toLowerCase() =='fix_patches' )"
+                                    class="issue-detail-info inner">
+                                <div ng-if="ctrl.isLink(innerVal)"
+                                        ng-repeat="innerVal in val | limitTo: 3 track by $index"
+                                        class="issue-detail-info">
+                                    <a target="_blank" ng-href="{{innerVal}}">{{innerVal}}</a>
+                                </div>
+                                <div ng-if="ctrl.isLink(innerVal)" collapse="!val.showAll" ng-if="$index >= 3"
+                                        ng-repeat="innerVal in val" class="issue-detail-info"><a target="_blank"
+                                        ng-href="{{innerVal}}">{{innerVal}}</a>
+                                </div>
+
+                                <div ng-if="val.length > 3 && !val.showAll"><a href ng-click="val.showAll = true">Show
+                                                                                                                  All</a>
+                                </div>
+                                <div ng-if="val.length > 3 && val.showAll"><a href ng-click="val.showAll = false">Show
+                                                                                                                  Less</a>
+                                </div>
+                            </div>
+                            <div ng-if="ctrl.isArray(val) && key.toLowerCase() =='bugs'"
+                                    class="issue-detail-info inner">
+                                <div
+                                        ng-repeat="innerVal in val | limitTo: 3 track by $index"
+                                        class="issue-detail-info">
+                                    {{innerVal}}
+                                </div>
+                                <div collapse="!val.showAll" ng-if="$index >= 3"
+                                        ng-repeat="innerVal in val" class="issue-detail-info">{{innerVal}}
+                                </div>
+
+                                <div ng-if="val.length > 3 && !val.showAll"><a href ng-click="val.showAll = true">Show
+                                                                                                                  All</a>
+                                </div>
+                                <div ng-if="val.length > 3 && val.showAll"><a href ng-click="val.showAll = false">Show
+                                                                                                                  Less</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="ctrl.isArray(val) && key.toLowerCase() =='versions' || key.toLowerCase() =='infected_versions' ||  key.toLowerCase() =='paths'"
+                                    class="issue-detail-info inner">
+                                <div
+                                        ng-repeat="innerVal in val | limitTo: 3 track by $index"
+                                        class="issue-detail-info">
+                                    {{innerVal}}
+                                </div>
+                                <div collapse="!val.showAll" ng-if="$index >= 3"
+                                        ng-repeat="innerVal in val" class="issue-detail-info">{{innerVal}}
+                                </div>
+
+                                <div ng-if="val.length > 3 && !val.showAll"><a href ng-click="val.showAll = true">Show
+                                                                                                                  All</a>
+                                </div>
+                                <div ng-if="val.length > 3 && val.showAll"><a href ng-click="val.showAll = false">Show
+                                                                                                                  Less</a>
+                                </div>
+                            </div>
+                            <!-- Policies -->
+                            <div ng-if="ctrl.isArray(val) && key.toLowerCase() =='matched_policies'"
+                                    class="issue-detail-info inner">
+                                <div
+                                        ng-repeat="innerVal in val | limitTo: 3 track by $index"
+                                        class="issue-detail-info">
+                                    {{innerVal.policy}}
+                                    <span class="issue-detail-info">(Violated Rule: {{innerVal.rule}})</span>
+                                </div>
+                                <div collapse="!val.showAll" ng-if="$index >= 3"
+                                        ng-repeat="innerVal in val" class="issue-detail-info">{{innerVal.policy}}
+                                    <span class="issue-detail-info">(Violated Rule: {{innerVal.rule}})</span>
+                                </div>
+
+                                <div ng-if="val.length > 3 && !val.showAll"><a href ng-click="val.showAll = true">Show
+                                                                                                                  All</a>
+                                </div>
+                                <div ng-if="val.length > 3 && val.showAll"><a href ng-click="val.showAll = false">Show
+                                                                                                                  Less</a>
+                                </div>
+                            </div>
+                            <!-- Policies -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div ng-class="{'col-md-12':wideMode,'col-md-6':!wideMode}" class="path-pane">
+                <div class="panel-heading">
+                    <h4 class="">Impact</h4>
+                </div>
+                <div class="panel panel-default infection-path">
+                    <div class="panel-body">
+                        <div class="col-md-4 impacted-artifacts-list">
+                            <div ng-repeat="item in graph.impact_paths" ng-click="itemClicked($index,ctrl)"
+                                    ng-class="{ 'selected': $index == ctrl.selectedIndex }"
+                                    jf-tooltip-on-overflow>
+                                {{item.source}}
+                            </div>
+                        </div>
+
+                        <div class=" infection-path-container col-md-8">
+                            <infection-path-viewer infection-path="graph.impact_paths[ctrl.selectedIndex].parts"
+                                    type="component"
+                                    caption="test"></infection-path-viewer>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- <div ng-if="paths.length" class="row path-wrapper"><label ng-if="paths.length == 1">Location:</label> <label ng-if="paths.length > 1">Locations <span>({{paths.length}})</span> : </label> <div ng-repeat="path in paths">{{path}}</div> </div> -->
+            </div>
+        </div>
+    </div>
+</div>

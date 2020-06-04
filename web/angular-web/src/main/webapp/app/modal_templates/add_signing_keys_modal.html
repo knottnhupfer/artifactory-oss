@@ -1,0 +1,130 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="closeModal()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">{{modalTitle}}</h3>
+</div>
+<div class="modal-body clearfix signing-keys-modal">
+    <form>
+        <div class="form-group">
+            <div id="alias-name-wrap" class="form-group-cell">
+                <jf-field>
+                    <label for="alias-name" class="mandatory">Alias Name</label>
+                    <input type="text"
+                           class="input-text"
+                           id="alias-name"
+                           name="repoKey"
+                           ng-model="aliasName"
+                           required
+                    />
+                </jf-field>
+            </div>
+            <div id="key-type-wrap" class="form-group-cell">
+                <label>Key File Type</label>
+                <jf-ui-select
+                        jf-select-model="keyFileType"
+                        jf-select-options="availableKeyFileTypes">
+                    <!--jf-select-display-attr="fileType"-->
+                </jf-ui-select>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="keyFileType === 'SSH/SSL/TLS (.pem)'">
+            <div id="pem-file-dnd" class="form-group-cell double">
+                <jf_drag_and_drop_txt
+                        id="add-pem-file-dnd"
+                        dnd-content="newSigningKeys.text"
+                        dnd-style="dndStyle"
+                        dnd-on-error="dndOnError(msg)"
+                        dnd-call-to-action="'Copy your key(s) text or <b>drop a .pem file</b>'">
+                </jf_drag_and_drop_txt>
+                <label class="preserve-lb">{{pemFileHelpText}}</label>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if=" keyFileType === 'Debian (.gpg)'">
+            <div class="form-group-cell ">
+                <label>Public Key</label>
+                <jf-art-file-drop jf-file-uploader="uploaderPublicKey"></jf-art-file-drop>
+            </div>
+            <div class="form-group-cell public-key-upload-button">
+                <button class="btn btn-secondary upload-button"
+                        ng-click="uploadPublicKey()"
+                        ng-disabled="!canUploadPublicKey()">
+                    Upload
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if=" keyFileType === 'Debian (.gpg)'">
+            <div class="form-group-cell">
+                <label>Private Key</label>
+                <jf-art-file-drop jf-file-uploader="uploaderPrivateKey"></jf-art-file-drop>
+            </div>
+            <div class="form-group-cell private-key-upload-button">
+                <button class="btn btn-secondary upload-button"
+                        ng-click="uploadPrivateKey()"
+                        ng-disabled="!canUploadPrivateKey()">
+                    Upload
+                </button>
+            </div>
+        </div>
+
+        <jf-panel
+                ng-if="keyFileType === 'Java Key Store (.jks)'"
+                jf-panel-heading="Add Key-Store">
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <label class="mandatory">Key-Store</label>
+                    <jf-art-file-drop jf-file-uploader="uploaderKeyStore"
+                            ng-disabled="!keyStoreExist"></jf-art-file-drop>
+                </div>
+                <div class="form-group-cell">
+                    <!-- prevent auto complete -->
+                    <input type="password" class="hidden"/>
+
+                    <jf-field validations="signingKeys">
+                        <label class="mandatory">Key-Store Password</label>
+                        <input name="keyStorePassword"
+                                type="password"
+                                ng-disabled="!keyStoreExist"
+                                ng-model="keyPair.keyStorePassword"
+                                ng-required="keyStorePassRequired"
+                                class="input-text">
+                    </jf-field>
+                </div>
+                <div class="form-group-cell form-button">
+                    <button class="btn btn-secondary upload-button"
+                            type="button"
+                            ng-click="uploadKeyStore()"
+                            ng-disabled="!canUploadKeystore()">
+                        Unlock
+                    </button>
+                </div>
+            </div>
+        </jf-panel>
+
+    </form>
+</div>
+<div class="modal-footer ha-licenses-modal">
+    <div class="pull-right">
+        <button class="btn btn-primary" ng-click="saveKeys()">Save</button>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="builds-release-history">
+    <jf-panel ng-repeat="history in jfReleaseHistory.historyData"
+              jf-panel-heading="{{history.status}}">
+
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in history" ng-if="jfReleaseHistory.DICTIONARY[key]">
+                <td>{{jfReleaseHistory.DICTIONARY[key]}}:</td>
+                <td ng-if="key !== 'timestamp' && key !== 'url'">{{ value }}</td>
+                <td ng-if="key === 'url'">
+                    <a ng-href="{{value}}"
+                            target="_blank">{{value}}</a>
+                </td>
+                <td ng-if="key === 'timestamp'">
+                    {{ value | date:"d MMMM, yyyy HH:mm:ss Z" }}
+                </td>
+            </tr>
+        </table>
+    </jf-panel>
+
+    <div class="alert alert-warning" ng-if="jfReleaseHistory.historyData && !jfReleaseHistory.historyData.length">
+        This build has no release history.
+    </div>
+</div>

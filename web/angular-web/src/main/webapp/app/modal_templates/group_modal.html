@@ -1,0 +1,66 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <h3 class="modal-title">{{groupModalTitle}}</h3>
+</div>
+<div class="modal-body">
+
+    <form name="newUserForm">
+        <div class="form-group">
+            <label for="groupName">Group Name:</label>
+
+            <input name="groupName"
+                   type="text"
+                   ng-model="group.name"
+                   class="form-control"
+                   id="groupName" required>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input name="description"
+                       type="text"
+                       ng-model="group.description"
+                       class="form-control"
+                       id="description" required>
+            </div>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox"
+                          ng-model="group.newUserDefault"> Automatically Join New Users to this Group</label>
+        </div>
+
+        <div class="">
+            <div ng-switch="mode"
+                 class="btn-group modal-footer-buttons-container">
+                <button ng-switch-when="edit"
+                        class=" btn btn-primary" ng-click="updateGroup(group)">Save
+                </button>
+                <button ng-switch-default
+                        class="btn btn-primary" ng-click="createNewGroup(group)">Save
+                </button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default" ng-click="closeModal()
+                ">Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+
+
+</div>

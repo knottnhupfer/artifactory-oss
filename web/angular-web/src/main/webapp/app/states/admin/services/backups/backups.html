@@ -1,0 +1,43 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>Backups Management</h1>
+
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <div class="alert alert-static"
+                    ng-if="AdminServicesBackups.gridBackupsOptions.length !== 0 && AdminServicesBackups.gridBackupsOptions.data[0]._emptyRow"
+                    ng-bind-html="AdminServicesBackups.noBackupsMessage">
+            </div>
+            <div class="pull-right admin-grid-buttons">
+                <a ui-sref="^.backups.new" id="new-button">
+                    <i class="grid-button-icon icon icon-new"></i>New
+                </a>
+            </div>
+            <jf-grid grid-options="AdminServicesBackups.gridBackupsOptions"
+                     filter-field="key"
+                     filter-on-change="true"
+                     object-name="backup"
+                     auto-focus="true">
+            </jf-grid>
+        </div>
+    </div>
+</div>
+
+
+

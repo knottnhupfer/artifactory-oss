@@ -1,0 +1,44 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div jf-disable-ng-animate class="constant-messages-container"
+      ng-if="jfMessages.getConstantMessages().length || jfMessages.getSystemMessage()">
+    <div class="constant-message system"
+         ng-if="jfMessages.systemMessage">
+        <div class="message-container">
+            <div class="message-title"
+                 ng-if="jfMessages.systemMessage.title"
+                 ng-style="{color: jfMessages.systemMessage.color}"
+                 ng-bind-html="jfMessages.systemMessage.title + (jfMessages.systemMessage.message ? ': ' : '')"></div>
+            <div class="message-text"
+                 ng-if="jfMessages.systemMessage.message">
+                <span ng-bind-html="jfMessages.systemMessage.message | parseLinks"></span>
+            </div>
+        </div>
+    </div>
+    <div class="constant-message default"
+         ng-repeat="message in jfMessages.constantMessages track by $index"
+         ng-class="{error: message.type==='error',warning: message.type==='warning',info: message.type==='info',bordered: jfMessages.constantMessages.length > 1}"
+         ng-if="!jfMessages.isDismissed(message.dismissCode)">
+        <div class="message-text">
+            <span ng-bind-html="message.message"></span>
+            <a class="dismiss-button"
+                ng-if="message.dismissCode"
+                ng-click="jfMessages.dismissMessage(message.dismissCode)">Dismiss</a>
+        </div>
+    </div>
+</div>

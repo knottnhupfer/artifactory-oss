@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.artifactory.oss.docker</groupId>
+    <artifactId>artifactory-oss-docker</artifactId>
+    <packaging>pom</packaging>
+    <name>Artifactory OSS Docker</name>
+
+    <parent>
+        <groupId>org.artifactory.oss</groupId>
+        <artifactId>artifactory-distribution-parent</artifactId>
+        <version>6.20.0</version>
+    </parent>
+
+    <properties>
+        <rpmbuild.dir>${project.build.directory}/rpmbuild</rpmbuild.dir>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-remote-resources-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>bundle</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*.sh</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>docker</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.artifactory.oss</groupId>
+                    <artifactId>jfrog-artifactory-server-xml-template</artifactId>
+                    <version>${project.version}</version>
+                    <type>zip</type>
+                </dependency>
+                <dependency>
+                    <groupId>org.artifactory.oss</groupId>
+                    <artifactId>${zipFilename}</artifactId>
+                    <version>${project.version}</version>
+                    <type>zip</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>extract-server-xml-template</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.artifactory.oss</groupId>
+                                            <artifactId>jfrog-artifactory-server-xml-template</artifactId>
+                                            <type>zip</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-needed-files</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.artifactory.oss</groupId>
+                                            <artifactId>${zipFilename}</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                            <destFileName>standalone.zip</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.postgresql</groupId>
+                                            <artifactId>postgresql</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>validate-server-xml-template</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${project.build.directory}/server-xml-template-${project.version}</workingDirectory>
+                                    <arguments>
+                                        <argument>test-server-xml-template.sh</argument>
+                                        <argument>${project.build.directory}/standalone.zip</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-build-artifactory</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${project.directory}</workingDirectory>
+                                    <arguments>
+                                        <argument>build-docker.sh</argument>
+                                        <argument>jfrog/artifactory-oss</argument>
+                                        <argument>${project.version}</argument>
+                                        <argument>Dockerfile.artifactory</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

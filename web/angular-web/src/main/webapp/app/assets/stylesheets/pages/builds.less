@@ -1,0 +1,124 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+@build-gray: #f1f1f1;
+
+.builds-layout-container {
+  height: 100%;
+}
+
+.builds-page-wrapper {
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 60px 120px 1fr;
+    grid-gap: 15px;
+    grid-template-areas:  "header header"
+                          "sidebar summary"
+                          "sidebar content";
+    padding: 0 20px 10px;
+    .title {
+      grid-area: header;
+      h1 {
+        padding: 4px 25px 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: -4px;
+        .jf-marquee-container {
+          padding: 4px 0;
+          margin-top: -4px;
+          margin-bottom: -4px;
+        }
+      }
+      .push-to-bintray-btn {
+        float: right;
+        margin-top: 16px;
+        margin-right: 20px;
+        color: @grayFontGeneral;
+        font-size: 16px;
+        i {
+          margin-right: 5px;
+        }
+        &:hover,
+        &:hover i:before {
+          color: darken(@grayFontGeneral, 10%);
+        }
+      }
+      .jf-back-link {
+        position: relative;
+        z-index: 2;
+        top: -6px;
+      }
+    }
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  .builds-published-modules,
+  .builds-diff {
+    .ui-select-placeholder {
+      color: red;
+    }
+  }
+
+  .jf-page-summary {
+    grid-area: summary;
+    padding: 0;
+  }
+  .build-content {
+    grid-area: content;
+    overflow: auto;
+  }
+  .builds-inner-wrapper {
+    height: 100%;
+    padding: 20px 50px;
+    overflow: auto;
+    box-sizing: border-box;
+    .nav-tabs {
+      margin: 20px 0;
+      &>li:first-child {margin: 0;}
+    }
+  }
+
+  .json-panel {
+    .copy-to-clip.code-mirror-copy {
+      right: 30px;
+    }
+  }
+
+  .summary-row .summery-labeled-item jf-summary-row-item>span:not(.no-ellipsis) a {
+    max-width: ~'calc(100% - 30px)' !important;
+  }
+}
+
+.all-builds-wrapper {
+  height: 100%;
+  overflow: hidden;
+  .setTableHeight();
+  .jf-table-view{
+    margin-top: 45px;
+  }
+
+  .list-filter{
+    max-width: 380px;
+    position: absolute;
+    top :34px;
+    min-width: 150px;
+    width: 100%;
+  }
+}

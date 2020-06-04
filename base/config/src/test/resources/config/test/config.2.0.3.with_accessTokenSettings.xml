@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<config xmlns="http://artifactory.jfrog.org/xsd/2.0.3">
+    <offlineMode>false</offlineMode>
+    <helpLinksEnabled>true</helpLinksEnabled>
+    <fileUploadMaxSizeMb>100</fileUploadMaxSizeMb>
+    <dateFormat>dd-MM-yy HH:mm:ss z</dateFormat>
+    <addons>
+        <showAddonsInfo>true</showAddonsInfo>
+        <showAddonsInfoCookie>1485459864890</showAddonsInfoCookie>
+    </addons>
+    <security>
+        <anonAccessEnabled>false</anonAccessEnabled>
+        <anonAccessToBuildInfosDisabled>false</anonAccessToBuildInfosDisabled>
+        <hideUnauthorizedResources>false</hideUnauthorizedResources>
+        <passwordSettings>
+            <encryptionPolicy>supported</encryptionPolicy>
+            <expirationPolicy>
+                <enabled>false</enabled>
+                <passwordMaxAge>60</passwordMaxAge>
+                <notifyByEmail>true</notifyByEmail>
+            </expirationPolicy>
+            <resetPolicy>
+                <enabled>true</enabled>
+                <maxAttemptsPerAddress>3</maxAttemptsPerAddress>
+                <timeToBlockInMinutes>60</timeToBlockInMinutes>
+            </resetPolicy>
+        </passwordSettings>
+        <ldapSettings/>
+        <ldapGroupSettings/>
+        <userLockPolicy>
+            <enabled>false</enabled>
+            <loginAttempts>5</loginAttempts>
+        </userLockPolicy>
+        <accessTokenSettings>
+            <userTokenMaxExpiresInMinutes>60</userTokenMaxExpiresInMinutes>
+        </accessTokenSettings>
+    </security>
+    <localRepositories>
+        <localRepository>
+            <key>generic-local</key>
+            <type>generic</type>
+            <includesPattern>**/*</includesPattern>
+            <dockerApiVersion>V2</dockerApiVersion>
+            <forceNugetAuthentication>false</forceNugetAuthentication>
+            <blackedOut>false</blackedOut>
+            <handleReleases>true</handleReleases>
+            <handleSnapshots>true</handleSnapshots>
+            <maxUniqueSnapshots>0</maxUniqueSnapshots>
+            <maxUniqueTags>0</maxUniqueTags>
+            <suppressPomConsistencyChecks>true</suppressPomConsistencyChecks>
+            <propertySets/>
+            <archiveBrowsingEnabled>false</archiveBrowsingEnabled>
+            <snapshotVersionBehavior>unique</snapshotVersionBehavior>
+            <localRepoChecksumPolicyType>client-checksums</localRepoChecksumPolicyType>
+            <calculateYumMetadata>false</calculateYumMetadata>
+            <yumRootDepth>0</yumRootDepth>
+            <debianTrivialLayout>false</debianTrivialLayout>
+        </localRepository>
+    </localRepositories>
+    <remoteRepositories/>
+    <virtualRepositories/>
+    <distributionRepositories/>
+    <proxies/>
+    <reverseProxies/>
+    <propertySets/>
+    <repoLayouts/>
+    <remoteReplications/>
+    <localReplications/>
+    <gcConfig>
+        <cronExp>0 0 /4 * * ?</cronExp>
+    </gcConfig>
+    <cleanupConfig>
+        <cronExp>0 12 5 * * ?</cronExp>
+    </cleanupConfig>
+    <virtualCacheCleanupConfig>
+        <cronExp>0 12 5 * * ?</cronExp>
+    </virtualCacheCleanupConfig>
+    <folderDownloadConfig>
+        <enabled>false</enabled>
+        <maxDownloadSizeMb>1024</maxDownloadSizeMb>
+        <maxFiles>5000</maxFiles>
+        <maxConcurrentRequests>10</maxConcurrentRequests>
+    </folderDownloadConfig>
+    <trashcanConfig>
+        <enabled>true</enabled>
+        <allowPermDeletes>false</allowPermDeletes>
+        <retentionPeriodDays>14</retentionPeriodDays>
+    </trashcanConfig>
+    <replicationsConfig>
+        <blockPushReplications>false</blockPushReplications>
+        <blockPullReplications>false</blockPullReplications>
+    </replicationsConfig>
+    <bintrayApplications/>
+    <sumoLogicConfig>
+        <enabled>false</enabled>
+    </sumoLogicConfig>
+</config>

@@ -1,0 +1,288 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="alert alert-warning" ng-if="jfGeneral.generalData.blackedOutMessage">
+    {{ jfGeneral.generalData.blackedOutMessage }}
+</div>
+<div class="alert alert-warning"
+     ng-if="!jfGeneral.generalData.blackedOutMessage && jfGeneral.generalData.offlineMessage">
+    {{ jfGeneral.generalData.offlineMessage }}
+</div>
+<div class="alert alert-warning" ng-if="jfGeneral.currentNode.data.cached === false">
+    This item is not cached.
+</div>
+<jf-panel jf-panel-heading="Info"
+          ng-if="jfGeneral.generalData.info && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+
+    <div ng-if="jfGeneral.generalData.info.repoType.length"
+         class="repository-type">
+        <div class="repotype iconrepo iconrepo-{{jfGeneral.generalData.info.repoType.toLowerCase()}}"></div>
+        <div ng-if="jfGeneral.generalData.info['smartRepo']"><span class="icon-logo-circle"></span>Smart Repository</div>
+    </div>
+    <table class="jf-data-table">
+        <tr ng-repeat="(key,value) in jfGeneral.generalData.info"
+            ng-if="(key != 'repoType' && key != 'repositoryLayout') || !jfGeneral.isDistRepo()">
+
+            <td ng-if="jfGeneral.shouldDisplayInfoEntry(key)">
+                {{jfGeneral.DICTIONARY[key]}}:
+            </td>
+            <td ng-if="key === 'bintrayUrl'">
+                {{jfGeneral.DICTIONARY[key]}}:
+            </td>
+            <td ng-if="key === 'bintrayUrl'">
+                <a href="{{value}}" target="_blank">{{value}}</a>
+            </td>
+
+            <td ng-if="jfGeneral.shouldDisplayInfoEntry(key)">
+                {{key === 'repoType' && value === 'golang' || value === 'GitLfs' ? '' : value}}
+                {{key === 'repoType' && value === 'golang' ? 'Go' : ''}}
+                {{key === 'repoType' && value === 'GitLfs' ? 'Git LFS' : ''}}
+                <jf-clip-copy ng-if="key === 'repositoryPath'"
+                        text-to-copy="value" object-name="Path"></jf-clip-copy>
+                <jf-clip-copy ng-if="key === 'name' && !jfGeneral.isCurrentNodeAFolderInArchive()"
+                        text-to-copy="jfGeneral.getFullFilePath()" object-name="full file path"></jf-clip-copy>
+
+                <jf-help-tooltip ng-if="jfGeneral.TOOLTIP[key]" html="jfGeneral.TOOLTIP[key]"></jf-help-tooltip>
+            </td>
+
+            <td ng-if="key === 'originPath'">
+                {{jfGeneral.DICTIONARY[key]}}:
+            </td>
+            <td ng-if="key === 'originPath'">
+                <a href ng-click="jfGeneral.goToOriginPath(value)">{{value}}</a>
+                <jf-clip-copy text-to-copy="value" object-name="Path"></jf-clip-copy>
+            </td>
+
+            <td ng-if="key == 'licenses'">{{jfGeneral.DICTIONARY[key]}}:</td>
+            <td ng-if="key == 'licenses'">
+                <div class="licenses-list inline-block"
+                     ng-repeat="license in jfGeneral.generalData.info.licenses track by $index">
+                    <a ng-if="license.url !== '' && license.url !== undefined"
+                       href="{{license.url}}" target="_blank">{{license.name}}</a>
+                    <span ng-if="license.url == '' || license.url === undefined">{{license.name}}</span>
+                    <span ng-if="jfGeneral.generalData.info.licenses.length>1 && $index<jfGeneral.generalData.info.licenses.length-1">,&nbsp;</span>
+                </div>
+                <span ng-if="!jfGeneral.generalData.info.licenses.length">Not Found</span>
+
+                <div class="inline-block" ng-if="jfGeneral.canAnnotate">
+                    <span class="inner-buttons">
+                        <a class="no-separator" ng-click="jfGeneral.editLicenses()" ng-bind="jfGeneral.generalData.info.licenses[0].name == 'Not Found' ? 'Add' : 'Edit'"></a>
+                        <a ng-click="jfGeneral.scanForLicenses()">Scan</a>
+                        <span ng-if="jfGeneral.generalData.info.licenses[0].name != 'Not Found'">
+                            <a ng-click="jfGeneral.deleteLicenses()">Delete</a>
+                        </span>
+                        <span ng-if="jfGeneral.generalData.fileType==='archive'">
+                            <a ng-click="jfGeneral.searchForArchiveFile()" ng-if="!jfGeneral.noArchiveLicense">{{jfGeneral.SearchForArchiveLicense}}</a>
+                            <span class="left-seperator" ng-if="jfGeneral.noArchiveLicense">{{jfGeneral.SearchForArchiveLicense}}</span>
+                        </span>
+                    </span>
+                    <jf-help-tooltip ng-if="jfGeneral.TOOLTIP[key]" html="jfGeneral.TOOLTIP[key]"></jf-help-tooltip>
+                </div>
+            </td>
+
+            <td ng-if="key == 'filtered'" colspan="2">
+                <label for="filtered" class="weight-normal">
+                    <jf-checkbox text="{{jfGeneral.DICTIONARY[key]}}">
+                        <input type="checkbox"
+                               id="filtered"
+                               ng-model="jfGeneral.generalData.info.filtered"
+                               ng-change="jfGeneral.onFilteredResourceCB()">
+                    </jf-checkbox>
+                </label>
+                <jf-help-tooltip ng-if="jfGeneral.TOOLTIP[key]" html="jfGeneral.TOOLTIP[key]"></jf-help-tooltip>
+            </td>
+
+            <td ng-if="key == 'artifactsCount' && jfGeneral.artifactsCountEnabled()">{{jfGeneral.DICTIONARY[key]}}:</td>
+            <td ng-if="key == 'artifactsCount' &&  jfGeneral.artifactsCountEnabled() && !jfGeneral.calculatingArtifactsCount && !jfGeneral.finishedArtifactCount">
+                <a class="jf-link" ng-click="jfGeneral.calculateArtifactsCountAndSize()">Show</a>
+            </td>
+            <td ng-if="key == 'artifactsCount' && !jfGeneral.calculatingArtifactsCount &&  jfGeneral.artifactsCountEnabled() && jfGeneral.finishedArtifactCount">
+                {{jfGeneral.generalData.info.artifactsCount}}
+            </td>
+            <td ng-if="key == 'artifactsCount' && jfGeneral.calculatingArtifactsCount && jfGeneral.artifactsCountEnabled()">
+                <div class="icon-hourglass"></div>
+            </td>
+            <td ng-if="key == 'signingKeyLink'">
+                <a href="{{jfGeneral.generalData.info.signingKeyLink}}"
+                   target="_blank" class="debian-value">Download Public Key</a>
+            </td>
+
+        </tr>
+    </table>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Package Information"
+          ng-if="jfGeneral.generalData.bintrayInfoEnabled && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+
+    <div ng-if="jfGeneral.bintrayData.iconURL"
+         class="artifact-file-icon">
+        <img ng-src="{{ jfGeneral.bintrayData.iconURL }}"/>
+    </div>
+
+    <div class="preserve-lb"
+         ng-if="!jfGeneral.bintrayData.errorMessage && !jfGeneral.bintrayData.name">Getting latest package information
+        from Bintray...
+    </div>
+
+    <div class="text-danger preserve-lb"
+         ng-if="jfGeneral.bintrayData.errorMessage">{{jfGeneral.bintrayData.errorMessage}}
+    </div>
+
+    <table class="jf-data-table" ng-if="jfGeneral.bintrayData.name && !jfGeneral.bintrayData.errorMessage">
+        <tr>
+            <td>Name:</td>
+            <td><a href="{{ jfGeneral.bintrayData.nameLink }}" target="_blank">{{ jfGeneral.bintrayData.name }}</a></td>
+        </tr>
+        <tr ng-if="jfGeneral.bintrayData.description">
+            <td>Description:</td>
+            <td>{{ jfGeneral.bintrayData.description }}</td>
+        </tr>
+        <tr>
+            <td>Latest Version:</td>
+            <td><a href="{{ jfGeneral.bintrayData.latestVersionLink }}" target="_blank">{{
+                jfGeneral.bintrayData.latestVersion }}</a></td>
+        </tr>
+    </table>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Dependency Declaration"
+          ng-if="jfGeneral.generalData.dependencyDeclaration && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+    <ul class="list-inline list-declaration">
+        <li>Build Tool:</li>
+        <li ng-repeat="item in jfGeneral.generalData.dependencyDeclaration.types"
+            class="build-tool-btn"
+            ng-class="{active:jfGeneral.isDeclarationSelected(item)}"
+            ng-click="jfGeneral.selectDeclaration(item)"> {{item}}
+        </li>
+    </ul>
+
+    <jf-clip-copy text-to-copy="jfGeneral.generalData.dependencyDeclaration.dependencyData"
+                  class="code-mirror-copy"
+                  object-name="Snippet"></jf-clip-copy>
+
+    <jf-code-mirror mime-type="text/xml"
+                    model="jfGeneral.generalData.dependencyDeclaration.dependencyData">
+    </jf-code-mirror>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Virtual Repository Associations"
+          ng-if="jfGeneral.generalData.virtualRepositories.length && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+    <div ng-repeat="item in jfGeneral.generalData.virtualRepositories"
+         class="virtual-repo-item" jf-tooltip-on-overflow>
+        <a class="jf-link" target="_blank" ng-href="{{item.linkUrl }}" ng-if="!item.showAll">
+            <i class="icon icon-virtual-repo"></i>{{item.repoKey}}
+        </a>
+        <a href
+           class="show-all"
+           ng-if="item.showAll"
+           ng-click="item.toggle()">
+            {{item.text}}
+        </a>
+
+    </div>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Included Repositories"
+          ng-if="jfGeneral.generalData.includedRepositories.length && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+    <div ng-repeat="item in jfGeneral.generalData.includedRepositories"
+         class="virtual-repo-item" jf-tooltip-on-overflow>
+        <a class="jf-link" target="_blank" ng-href="{{ item.linkUrl }}" ng-if="!item.showAll">
+            <i ng-if="item.type=='local'" class="icon icon-local-repo"></i>
+            <i ng-if="item.type=='remote'" class="icon icon-remote-repo"></i>
+            <i ng-if="item.type=='virtual'" class="icon icon-virtual-repo"></i>
+            {{item.repoKey}}
+        </a>
+        <a href
+           class="jf-link show-all"
+           ng-if="item.showAll"
+           ng-click="item.toggle()">
+            {{item.text}}
+        </a>
+    </div>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Checksums"
+          ng-if="jfGeneral.generalData.checksums && !jfGeneral.isTrashcan() && !jfGeneral.isInTrashcan()">
+
+    <div class="jf-data-table-ellipsis">
+        <div ng-if="!jfGeneral.generalData.checksums.sha2">
+            <div class="key-cell">SHA-256:</div>
+            <a ng-if="!jfGeneral.features.isOss()"
+               ng-class="{'not-allowed':!jfGeneral.canCalculateSha256()}"
+               ng-click="jfGeneral.getSha256()">
+                <span ng-if="!jfGeneral.sha256Calculated">Calculate&nbsp;</span>
+                <div class="local-spinner" ng-if="jfGeneral.calculatingSha256">
+                    <div class="icon-hourglass"></div>
+                </div>
+            </a>
+            <span class="license-required license-required-PRO"
+                  ng-if="jfGeneral.features.isOss()">
+                <a class="not-allowed">Calculate</a>
+            </span>
+        </div>
+        <div ng-repeat="(_key,_value) in jfGeneral.generalData.checksums"
+             ng-if="_key != 'showFixChecksums' && _key != 'message' && _key != 'sha1Value'"
+             jf-tooltip-on-overflow>
+            <div class="key-cell">{{jfGeneral.getChecksumKey(_value)}}:</div>{{jfGeneral.getChecksumVal(_value)}}
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div ng-if="jfGeneral.generalData.checksums.showFixChecksums">
+        <div class="text-danger preserve-lb"
+             ng-if="jfGeneral.generalData.checksums.message">{{jfGeneral.generalData.checksums.message}}
+        </div>
+        <button class="btn btn-sm btn-primary"
+                ng-click="jfGeneral.fixChecksum()">Fix Checksum
+        </button>
+    </div>
+</jf-panel>
+
+<div ng-if="jfGeneral.isTrashcan() || jfGeneral.isInTrashcan()">
+    <div class="alert alert-warning" ng-if="!jfGeneral.isTrashcanEnabled()">
+        Trash Can is currently disabled. Artifacts will be permanently deleted.
+    </div>
+    <jf-panel jf-panel-heading="Info">
+
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfGeneral.generalData.trash" ng-if="jfGeneral.generalData.trash">
+
+                <td>
+                    {{jfGeneral.DICTIONARY.trash[key]}}:
+                </td>
+                <td>
+                    {{value}}
+                </td>
+
+            </tr>
+            <tr ng-if="jfGeneral.generalData.type !== 'file' && jfGeneral.generalData.type !== 'archive'">
+                <td>Artifact Count / Size:</td>
+                <td ng-if="!jfGeneral.calculatingArtifactsCount && !jfGeneral.finishedArtifactCount">
+                    <a class="jf-link" ng-click="jfGeneral.calculateArtifactsCountAndSize()">Show</a>
+                </td>
+                <td ng-if="!jfGeneral.calculatingArtifactsCount && jfGeneral.finishedArtifactCount">
+                    {{jfGeneral.generalData.info.artifactsCount}}
+                </td>
+                <td ng-if="jfGeneral.calculatingArtifactsCount">
+                    <div class="icon-hourglass"></div>
+                </td>
+            </tr>
+
+        </table>
+    </jf-panel>
+</div>

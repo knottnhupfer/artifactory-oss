@@ -1,0 +1,60 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="repository-type-modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$close()"
+                id="repository-select-package-type-close"><span
+                aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">Select Package Type</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group type-filter">
+            <div class="form-group-cell">
+                <input type="text"
+                       class="input-text"
+                       ng-model="typeFilter"
+                       placeholder="Filter by package type"
+                       id="package-type-filter"
+                       autofocus="autofocus"
+                       jf-enter-press="selectPackage()"
+                       ng-style="{color:checkNoResults(typeFilter) ? 'red' : '#707070'}"
+                       jf-auto-focus>
+            </div>
+        </div>
+        <div class="technologies">
+            <ul class="list-unstyled">
+                <li ng-repeat="type in packageTypes"
+                        ng-if="!type.ignore"
+                        class="wizard-package-type"
+                        ng-class="{
+                            'package-highlight': highlightCheck(typeFilter,type),
+                            'package-selected': isSelected()
+                          }"
+                        jf-disable-feature="{{ type.value }}"
+                        ng-click="selectRepoType(type)"
+                        id="repository-select-package-type-{{ type.value }}">
+                    <div>
+                        <div class="repotype iconrepo iconrepo-{{type.icon}}" ng-class="{'no-help-text' : !type.helpText}"></div>
+                        <span ng-if="type.helpText">{{type.text}}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>JFrog Xray Integration</h1>
+    <div class="content-wrapper xray-configurations">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <div class="alert alert-warning jf-link" ng-if="!AdminConfigurationXray.footerDao.getInfo().xrayConfigured">
+                <a href ng-click="AdminConfigurationXray._updateFooter(); AdminConfigurationXray.getData()"
+                        class="pull-right"><i class="icon-refresh"></i> Refresh</a>
+                <span ng-bind-html="AdminConfigurationXray.notConnnectedToXrayMessage"></span>
+            </div>
+            <jf-panel jf-panel-heading="Xray Configuration" ng-if="AdminConfigurationXray.footerDao.getInfo().xrayConfigured">
+                <div class="form-group form-checkbox">
+                    <jf-checkbox text="Enable Xray Integration">
+                        <input type="checkbox"
+                                id="xrayIndex"
+                                ng-change="AdminConfigurationXray.xrayEnabledChange()"
+                                ng-model="AdminConfigurationXray.xrayEnabled">
+                    </jf-checkbox>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-cell">
+                        <jf-checkbox text="Allow downloads when Xray is unavailable">
+                            <input type="checkbox"
+                                    ng-disabled="!AdminConfigurationXray.xrayEnabled"
+                                    ng-change="AdminConfigurationXray.setAllowWhenUnavailable()"
+                                    ng-model="AdminConfigurationXray.xrayAllowWhenUnavailable">
+                        </jf-checkbox>
+                        <jf-help-tooltip html="AdminConfigurationXray.TOOLTIP.admin.configuration.xray.allowWhenXrayUnavilable"></jf-help-tooltip>
+                    </div>
+                    <div class="form-group-cell">
+                        <jf-checkbox text="Allow downloads of blocked artifacts">
+                            <input type="checkbox"
+                                    ng-disabled="!AdminConfigurationXray.xrayEnabled"
+                                    ng-change="AdminConfigurationXray.setAllowBlockedDownload()"
+                                    ng-model="AdminConfigurationXray.xrayAllowBlocked">
+                        </jf-checkbox>
+                        <jf-help-tooltip html="AdminConfigurationXray.TOOLTIP.admin.configuration.xray.allowDownloadsBlocked"></jf-help-tooltip>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-cell form-checkbox">
+                        <jf-checkbox text="Bypass System Default Proxy Configuration">
+                            <input type="checkbox"
+                                    ng-model="AdminConfigurationXray.bypassDefaultProxy"
+                                    ng-disabled="!AdminConfigurationXray.xrayEnabled"
+                                    ng-change="AdminConfigurationXray.setBypassDefaultProxy()">
+                        </jf-checkbox>
+                        <jf-help-tooltip
+                                html="AdminConfigurationXray.TOOLTIP.admin.configuration.xray.bypassDefaultProxy"></jf-help-tooltip>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-cell">
+                        <label>Override System Default Proxy</label>
+                        <jf-help-tooltip
+                                html="AdminConfigurationXray.TOOLTIP.admin.configuration.xray.overrideDefaultProxy"></jf-help-tooltip>
+                        <jf-ui-select jf-select-model="AdminConfigurationXray.proxy"
+                                jf-select-disabled="!AdminConfigurationXray.xrayEnabled || AdminConfigurationXray.bypassDefaultProxy"
+                                jf-select-change="AdminConfigurationXray.updateProxy()"
+                                jf-select-options="AdminConfigurationXray.proxyOptions">
+                        </jf-ui-select>
+                    </div>
+                    <div class="form-group-cell">
+                        <label for="blockUnscannedTimeoutSeconds" class="mandatory">Block Unscanned Artifacts Download Timeout (Sec)</label>
+                        <jf-help-tooltip
+                                html="AdminConfigurationXray.TOOLTIP.admin.configuration.xray.blockUnscannedTimeoutSeconds"></jf-help-tooltip>
+                        <input type="number"
+                                class="input-text"
+                                id="blockUnscannedTimeoutSeconds"
+                                name="blockUnscannedTimeoutSeconds"
+                                min="0"
+                                ng-disabled="!AdminConfigurationXray.xrayEnabled"
+                                required
+                                ng-model="AdminConfigurationXray.blockUnscannedTimeoutSeconds" />
+                    </div>
+                    <div class="form-group-cell margin-top-25">
+                        <button class="btn btn-secondary"
+                                ng-click="AdminConfigurationXray.updateBlockUnscannedTimeout()"
+                                ng-disabled="!AdminConfigurationXray.xrayEnabled">Update</button>
+                    </div>
+                </div>
+            </jf-panel>
+            <div class="pull-right admin-grid-buttons">
+                <a ng-click="AdminConfigurationXray.add()"
+                        ng-if="AdminConfigurationXray.footerDao.getInfo().xrayConfigured"
+                        ng-disabled="!AdminConfigurationXray.xrayEnabled" id="new-button">
+                    <i class="grid-button-icon icon icon-new"></i>Add
+                </a>
+            </div>
+            <jf-grid
+                    ng-if="AdminConfigurationXray.xrayEnabled"
+                    grid-options="AdminConfigurationXray.gridOptions"
+                    filter-field="name"
+                    object-name="repository/repositories"
+                    auto-focus="true">
+            </jf-grid>
+        </div>
+    </div>
+</div>

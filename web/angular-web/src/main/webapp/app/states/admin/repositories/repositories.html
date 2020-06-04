@@ -1,0 +1,49 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1 id="repositories-header">{{ Repositories.currentRepoType | capitalize }} Repositories</h1>
+
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <div class="alert alert-static"
+                    ng-if="!Repositories.gridData || Repositories.gridData.length===0"
+                    ng-bind-html="Repositories.noReposMessage">
+            </div>
+            <div class="pull-right admin-grid-buttons" ng-if="!Repositories.features.isEnterprisePlus() || Repositories.currentRepoType !== 'distribution'">
+                <a ng-click="Repositories.createNewRepo()" id="repositories-new">
+                    <i class="grid-button-icon icon icon-new"></i>New
+                </a>
+            </div>
+            <div class="pull-right distribution-repo-options" ng-if="Repositories.features.isEnterprisePlus() && Repositories.currentRepoType === 'distribution'">
+                <jf-actions parent-controller="Repositories"
+                        disable-mouse-over-events
+                        label="Create"
+                        init-method="initActionsDropdown">
+                </jf-actions>
+            </div>
+            <jf-grid
+                    grid-options="Repositories.gridOption"
+                    filter-field="repoKey"
+                    filter-field2="repoType"
+                    filter-on-change="true"
+                    object-name="repository/repositories"
+                    auto-focus="true">
+            </jf-grid>
+        </div>
+    </div>
+</div>

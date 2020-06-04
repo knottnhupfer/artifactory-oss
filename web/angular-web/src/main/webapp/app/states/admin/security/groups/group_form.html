@@ -1,0 +1,125 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container"> <!-- classes: with-head-bar -->
+    <h1>{{GroupForm.title}}</h1>
+
+    <div class="content-wrapper group-form">
+        <form name="GroupForm.groupForm" ng-submit="GroupForm.save()">
+            <div class="card stretch card-pole-pad card-side-pad">
+                <div class="content-with-footer">
+                    <div ng-if="(GroupForm.mode === 'edit' && GroupForm.groupdata) || GroupForm.mode === 'create'">
+                        <jf-panel jf-panel-heading="Group Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field validations="groups" autofocus="true">
+                                        <label for="groupName" class="mandatory">Group Name</label>
+                                        <input name="groupName"
+                                               type="text"
+                                               jf-validator-name
+                                               jf-validator-max-text-length="64"
+                                               ng-model-options="{debounce: { 'default': 500 } }"
+                                               ng-model="GroupForm.groupdata.name"
+                                               class="input-text"
+                                               ng-disabled="GroupForm.mode==='edit'"
+                                               id="groupName"
+                                               required>
+                                    </jf-field>
+                                </div>
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label for="description">Description</label>
+                                        <input name="description"
+                                               type="text"
+                                               ng-model="GroupForm.groupdata.description"
+                                               class="input-text"
+                                               id="description">
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group no-margin-bottom">
+                                <div class="form-group-cell">
+                                    <jf-checkbox class="display-block" text="Automatically Join New Users to this Group">
+                                        <input type="checkbox"
+                                               ng-model="GroupForm.groupdata.newUserDefault"
+                                               ng-disabled="GroupForm.groupdata.adminPrivileges">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                            <div class="form-group no-margin-bottom">
+                                <div class="form-group-cell">
+                                    <jf-checkbox class="display-block" text="Admin Privileges">
+                                        <input type="checkbox"
+                                                ng-change="GroupForm.onAdminPrivelegesChange()"
+                                                ng-model="GroupForm.groupdata.adminPrivileges">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                        </jf-panel>
+                        <jf-panel jf-panel-heading="Users">
+                            <div class="form-group">
+                                <div class="form-group-cell double">
+                                    <jf-drag-drop
+                                            ng-if="GroupForm.usersList"
+                                            exclude-list="GroupForm.usersList"
+                                            include-list="GroupForm.groupdata.usersInGroup"
+                                            use-pagination="GroupForm.usersData.length > 500"
+                                            objects-name="Users"
+                                            custom-template="GroupForm.userDndTemplate"
+                                            custom-template-scope="GroupForm.$scope">>
+                                    </jf-drag-drop>
+                                </div>
+                            </div>
+                        </jf-panel>
+                        <jf-panel jf-panel-heading="Group Permissions" ng-if="GroupForm.mode==='edit'">
+                            <div class="alert alert-info"
+                                    ng-if="GroupForm.groupdata.adminPrivileges">{{GroupForm.MESSAGES.groupIsAdmin}}</div>
+
+                            <jf-switch ng-model="GroupForm.switchView"
+                                    options="['Repositories', 'Builds']">
+                            </jf-switch>
+                            <div class="permissions-table-wrapper">
+                                <jf-grid ng-if="GroupForm.switchView === 'Repositories'"
+                                         grid-options="GroupForm.permissionsGridOptions"
+                                         filter-field="permissionName"
+                                         object-name="Permission"
+                                         filter-on-change="true">
+                                </jf-grid>
+
+                                <jf-grid ng-if="GroupForm.switchView === 'Builds'"
+                                        grid-options="GroupForm.buildPermissionsGridOptions"
+                                        filter-field="permissionName"
+                                        object-name="Permission"
+                                        filter-on-change="true">
+                                </jf-grid>
+                            </div>
+                        </jf-panel>
+                    </div>
+                </div>
+            </div>
+            <div class="content-footer">
+                <div class="pull-right">
+                    <button class="btn btn-default" type="button" ng-click="GroupForm.cancel()">Cancel</button>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            ng-disabled="GroupForm.isSaveDisabled()">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -1,0 +1,29 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget artifacts-count" ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}">
+    <div class="row top">
+        <div class="table-cell">
+            <a href class="refresh-count" ng-click="ctrl.updateCount()"><i class="icon icon-refresh"></i></a>
+            <span class="big-num">{{ctrl.homepageData.artifactCount | number}}</span>
+            Number of artifacts
+        </div>
+    </div>
+    <div class="row bottom">
+        <div class="table-cell"></div>
+    </div>
+</div>

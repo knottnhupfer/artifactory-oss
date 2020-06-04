@@ -1,0 +1,121 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div>
+    <div class="rtfact-storage-element"
+         ng-click="StorageElement.onClick($event)">
+
+        <!-- Title Row -->
+        <div class="storage-element-row storage-title"
+             ng-class="{'sharding': StorageElement.element.data.type === 'sharding',
+                        'open-details': StorageElement.showShardingDetails}"
+             ng-if="StorageElement.level === 'top'">
+            <span class="storage-element-name" ng-if="StorageElement.STORAGE_TYPES_DICTIONARY[StorageElement.element.data.type]">{{StorageElement.STORAGE_TYPES_DICTIONARY[StorageElement.element.data.type]}}
+                <jf-help-tooltip ng-if="StorageElement.element.data.type === 'file-system'" html='StorageElement.TOOLTIP.fileSystemStorage'></jf-help-tooltip></span>
+            <span class="storage-element-name" ng-if="!StorageElement.STORAGE_TYPES_DICTIONARY[StorageElement.element.data.type]">{{StorageElement.element.data.type}}</span>
+            <span ng-if="StorageElement.element.data.type === 'sharding'"
+                  class="sharding-details">
+                <div class="show-sharding-details"
+                     ng-click="StorageElement.showShardingDetails = !StorageElement.showShardingDetails">
+                    <i class="icon icon-plus-sign pull-left" ng-class="{'close-sign': StorageElement.showShardingDetails}"></i>
+                    {{!StorageElement.showShardingDetails ? 'Show' : 'Hide'}} details
+                </div>
+
+                <div class="sharding-keyval-list">
+                    <div class="sharding-keyval"><span>Mount:</span> {{StorageElement.element.subElements.length}}</div>
+                    <div class="sharding-keyval"><span>Redundancy:</span> {{StorageElement.element.data.redundancy}}</div>
+                    <div class="sharding-keyval"><span>Write Behaviour:</span> {{StorageElement.wordify(StorageElement.element.data.writeBehavior)}}</div>
+                    <div class="sharding-keyval"><span>Read Behaviour:</span> {{StorageElement.wordify(StorageElement.element.data.readBehavior)}}</div>
+                    <div class="sharding-keyval"><span>Max Balancing Runtime:</span> {{StorageElement.prettyTimeDiff(StorageElement.element.data.maxBalancingRunTime)}}</div>
+                </div>
+            </span>
+        </div>
+
+        <!-- Directory Row -->
+        <div class="storage-element-row"
+              ng-if="StorageElement.level === 'top' && StorageElement.element.data.binariesDir">
+            <span>
+                Directory: {{StorageElement.element.data.binariesDir}}
+            </span>
+        </div>
+
+        <!-- Usage Row -->
+        <div class="storage-element-row usage"
+             ng-if="StorageElement.level === 'top' && StorageElement.element.data.usageSpace !== undefined && StorageElement.element.data.totalSpace !== undefined">
+            <div class="usage-string">Used: {{StorageElement.getUsageString(true) || 'N/A'}}</div>
+            <div class="storage-usage-container" ng-if="!StorageElement.SpecialValues.isSpecialValue(StorageElement.element.data.usageSpace)">
+                <rtfact-storage-usage total="StorageElement.getTotalSpace()"
+                                      used="StorageElement.getUsageSpace()"
+                                      thresholds="StorageElement.thresholds"></rtfact-storage-usage>
+            </div>
+        </div>
+
+        <!-- Caches -->
+        <div ng-if="StorageElement.element.caches && StorageElement.element.caches.length"
+             class="caches-container"
+             ng-repeat="cache in StorageElement.element.caches track by $index">
+            <rtfact-storage-element level="top" element="cache"></rtfact-storage-element>
+        </div>
+
+        <!-- Sub elements for shard -->
+        <div class="subs-container"
+             ng-if="StorageElement.level === 'top' && StorageElement.element.data.type === 'sharding' && StorageElement.element.subElements && StorageElement.element.subElements.length">
+            <div ng-repeat="subElement in StorageElement.element.subElements" class="sub-container">
+                <div ng-style="{width: StorageElement.getSubWidth(subElement)}" class="pull-left sub-wrapper" ng-class="{'selected-sub': StorageElement.selectedSub.element === subElement}">
+                    <rtfact-storage-element level='sub' parent="StorageElement" element="subElement"></rtfact-storage-element>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sub View -->
+        <div class="storage-element-as-sub" ng-if="StorageElement.level === 'sub'">
+
+            <i class="icon icon-plus-sign pull-right" ng-class="{'close-sign': StorageElement.parent.selectedSub === StorageElement}"></i>
+
+            <div class="overflow-tooltip-trigger"
+                 ng-if="StorageElement.isTextOverflowing()"
+                 jf-tooltip="{{StorageElement.element.data.id}}<br>{{StorageElement.getUsageString()}}">
+                <div class="mini-label">
+                    <div>{{StorageElement.element.data.id}}</div>
+                </div>
+            </div>
+
+            <div class="text-content" ng-style="{visibility: (StorageElement.isTextOverflowing() ? 'hidden' : 'visible')}">
+                <div>{{StorageElement.element.data.id}}
+                    <span ng-if="StorageElement.element.subElements && StorageElement.element.subElements.length">
+                        (M={{StorageElement.element.subElements.length}})
+                    </span>
+                </div>
+                <div class="sub-usage-text" ng-if="StorageElement.element.data.usageSpace !== undefined && StorageElement.element.data.totalSpace !== undefined">
+                    {{StorageElement.getUsageString() || 'Usage Info Unavailable'}}
+                </div>
+            </div>
+
+            <rtfact-storage-usage ng-if="!StorageElement.SpecialValues.isSpecialValue(StorageElement.element.data.usageSpace)"
+                                  class="sub-usage"
+                                  total="StorageElement.element.data.totalSpace"
+                                  used="StorageElement.element.data.usageSpace"></rtfact-storage-usage>
+        </div>
+
+    </div>
+
+
+    <!-- Selected sub, opened in full display below -->
+    <div ng-if="StorageElement.selectedSub" class="storage-element-anim">
+        <rtfact-storage-element level='top' above="StorageElement" element="StorageElement.selectedSub.element"></rtfact-storage-element>
+    </div>
+</div>

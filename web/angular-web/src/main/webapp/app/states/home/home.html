@@ -1,0 +1,49 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container home-page">
+    <div class="home-header-container">
+        <h1 class="home-header-happily" ng-if="Home.homepageData.artifactCount !== undefined">
+            {{Home.homeTitle}}
+            {{Home.homepageData.artifactCount | number}}
+            {{Home.homepageData.artifactCount === 1 ? "artifact" : "artifacts"}}</h1>
+
+        <jf-news ng-if="Home.jfNewsIsOn && Home.isAol()"></jf-news>
+
+        <div jf-hide-for-aol class="artifactory-details">
+            <span class="artifactory-version" ng-if="Home.homepageData.version">{{Home.features.getGlobalName()}} Version {{Home.homepageData.version}}</span>
+            <span class="artifactory-up-time" ng-if="Home.homepageData.upTime">(Uptime is {{Home.homepageData.upTime}})</span>
+        </div>
+        <div jf-hide-for-aol class="artifactory-details artifactory-latest-version" ng-if="Home.homepageData.latestRelease">Latest Release: <a class="jf-link" target="_blank" ng-href="{{Home.homepageData.latestReleaseLink}}">{{Home.homepageData.latestRelease}}</a></div>
+
+
+
+        <p ng-if="Home.homepageData.displayAccountManagementLink" class="artifactory-details">
+            <a class="jf-link" target="_blank" ng-href="{{Home.homepageData.accountManagementLink}}">
+                <i class="icon icon-padlock"></i>Log in to account management
+            </a>
+        </p>
+    </div>
+
+    <div class="content-wrapper">
+        <jf-widgets-layout widgets="Home.widgets"
+                           layout="Home.widgetsLayout"
+                           options="Home.widgetsOptions"
+                           footer-text="Home.footerText"></jf-widgets-layout>
+
+    </div>
+</div>

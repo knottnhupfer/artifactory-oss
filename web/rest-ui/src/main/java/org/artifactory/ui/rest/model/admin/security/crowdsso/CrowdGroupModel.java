@@ -1,0 +1,51 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package org.artifactory.ui.rest.model.admin.security.crowdsso;
+
+import org.artifactory.addon.sso.crowd.CrowdExtGroup;
+import org.artifactory.rest.common.model.RestModel;
+import org.artifactory.rest.common.util.JsonUtil;
+
+/**
+ * @author Chen Keinan
+ */
+public class CrowdGroupModel extends CrowdExtGroup implements RestModel {
+
+    public CrowdGroupModel(String groupName, String description) {
+        super(groupName, description);
+    }
+
+    public CrowdGroupModel() {
+        super();
+    }
+
+    public CrowdGroupModel(CrowdExtGroup crowdExtGroup) {
+        super.setDescription(crowdExtGroup.getDescription());
+        super.setGroupName(crowdExtGroup.getGroupName());
+        super.setExistsInArtifactory(crowdExtGroup.isExistsInArtifactory());
+        super.setImportIntoArtifactory(crowdExtGroup.isExistsInArtifactory());
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtil.jsonToString(this);
+    }
+}

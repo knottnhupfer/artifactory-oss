@@ -1,0 +1,101 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="center-login">
+    <form name="Login.loginForm" class="jumbotron login-form" ng-submit="Login.login()" novalidate id="login-form">
+        <a ng-if="Login.canExit && !Login.isRedirecting()" class="pull-right close-button" ui-sref="home">&#10005;</a>
+        <div class="login-inner" ng-if="!Login.isLoggedIn()">
+            <h3 ng-if="Login.isSSOMode()">Welcome to JFrog!</h3>
+            <h3 ng-if="!Login.isSSOMode()">Welcome to {{ Login.ArtifactoryFeatures.isJCR() ? 'JFrog Container Registry' : 'JFrog Artifactory'}}!</h3>
+
+
+
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <jf-field validations="users" autofocus="true">
+                        <input name="user"
+                               type="text"
+                               ng-model="Login.user.user"
+                               class="input-text"
+                               placeholder="Username *"
+                               ng-change="Login.userPasswordChanged()"
+                               required
+                               id="user">
+                    </jf-field>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{'no-margin-bottom': Login.errorMessage}">
+                <div class="form-group-cell">
+                    <jf-field validations="users">
+                        <input type="password"
+                               name="password"
+                               ng-model="Login.user.password"
+                               class="input-text"
+                               placeholder="Password *"
+                               ng-change="Login.userPasswordChanged()"
+                               id="password"
+                               required>
+                    </jf-field>
+                </div>
+            </div>
+
+            <div class="jf-form-errors preserve-lb" ng-if="Login.errorMessage" ng-bind="Login.errorMessage"></div>
+
+            <div class="form-group form-checkbox" ng-if="Login.canRememberMe" >
+                <div class="form-group-cell">
+                    <a href tabindex="-1" ng-click="Login.gotoForgotPwd()" jf-clear-errors ng-if="Login.canResetPassword" id="forgot-password">Forgot Password?</a>
+
+
+                </div>
+            </div>
+            <div class="form-group oauth-login" ng-if="Login.isOAuthEnabled() || Login.ssoProviderLink">
+                <div class="form-group-cell">
+                    <div class="oauth-login-title">Or sign in with:</div>
+                    <div class="oauth-login-links-container">
+
+                        <a ng-repeat="provider in Login.oauth.providers" ng-if="Login.isOAuthEnabled()" ng-mousedown="Login.onGotoOAuth()" ng-href="{{provider.url}}" class="icon-oauth-{{provider.type.toLowerCase()}}" jf-clear-errors>
+                            <span jf-tooltip="Login to {{provider.name}}">{{provider.name}}</span>
+                        </a>
+
+                        <a href
+                           ng-click="Login.ssoLogin()"
+                           jf-clear-errors
+                           target="_blank"
+                           id="sso-login"
+                           ng-if="Login.ssoProviderLink"
+                           class="icon-oauth-sso"><span>SAML SSO</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-inner logged-in" ng-if="Login.shouldShowAlreadyLoginMessage()">
+            <h3 class="logged-in-message">You are already logged in.</h3>
+            <h4 class="logged-in-call-to-action">
+               Go to <a ng-click="Login.goHome()">Home Page <i class="icon icon-home"></i></a> or <a ng-click="Login.logOut()">Log Out <i class="icon icon-logout"></i></a>
+            </h4>
+        </div>
+        <div class="login-button-bar" ng-if="!Login.isLoggedIn()">
+            <jf-checkbox text="Remember me" tabindex="2" class="remember-me" ng-if="Login.canRememberMe" >
+                <input type="checkbox" id="remember-me" ng-model="Login.rememberMe">
+            </jf-checkbox>
+            <button type="submit" class="btn btn-primary pull-right" ng-disabled="!Login.loginForm.$valid || Login.pending" id="login">
+                Log In
+            </button>
+        </div>
+    </form>
+</div>

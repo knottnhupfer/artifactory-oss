@@ -1,0 +1,1 @@
+ALTER TABLE tasks MODIFY task_context VARCHAR2(2048);

@@ -1,0 +1,93 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="jfChefInfo.chefData">
+    <jf-panel jf-panel-heading="Package Info">
+        <table class="jf-data-table">
+            <!-- Name -->
+            <tr ng-if="jfChefInfo.chefData.name">
+                <td>Name:</td>
+                <td>
+                    <span ng-if="jfChefInfo.chefData.name">{{jfChefInfo.chefData.name}}</span>
+                    <span ng-if="!jfChefInfo.chefData.name">&nbsp;</span>
+                </td>
+            </tr>
+
+            <!-- Version -->
+            <tr ng-if="jfChefInfo.chefData.version">
+                <td>Version:</td>
+                <td>
+                    <span ng-if="jfChefInfo.chefData.version">{{jfChefInfo.chefData.version}}</span>
+                    <span ng-if="!jfChefInfo.chefData.version">&nbsp;</span>
+                </td>
+            </tr>
+
+            <!-- Maintainer -->
+            <tr ng-if="jfChefInfo.chefData.maintainer">
+                <td>Maintainer:</td>
+                <td>
+                    <span ng-if="jfChefInfo.chefData.maintainer">{{jfChefInfo.chefData.maintainer}}</span>
+                    <span ng-if="!jfChefInfo.chefData.maintainer">&nbsp;</span>
+                </td>
+            </tr>
+
+            <!-- Maintainer -->
+            <tr ng-if="jfChefInfo.chefData.sourceUrl">
+                <td>Source URL:</td>
+                <td>
+                    <span ng-if="jfChefInfo.chefData.sourceUrl">{{jfChefInfo.chefData.sourceUrl}}</span>
+                    <span ng-if="!jfChefInfo.chefData.sourceUrl">&nbsp;</span>
+                </td>
+            </tr>
+
+            <!-- License -->
+            <tr ng-if="jfChefInfo.chefData.license">
+                <td>License:</td>
+                <td>
+                    <span ng-if="jfChefInfo.chefData.license">{{jfChefInfo.chefData.license}}</span>
+                    <span ng-if="!jfChefInfo.chefData.license">&nbsp;</span>
+                </td>
+            </tr>
+
+        </table>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Description"
+            ng-if="jfChefInfo.chefData.description">
+        <p>{{jfChefInfo.chefData.description}}</p>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Dependencies"
+            ng-if="jfChefInfo.chefData.dependencies">
+
+        <jf-grid grid-options="jfChefInfo.chefDependenciesGridOptions"
+                ng-if="jfChefInfo.chefData.dependencies"
+                filter-field="name"
+                filter-field2="version"
+                object-name="Dependency/Dependencies"
+                no-pagination="true">
+        </jf-grid>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Platforms"
+            ng-if="jfChefInfo.chefData.platforms">
+        <jf-grid grid-options="jfChefInfo.chefPlatformsGridOptions"
+                ng-if="jfChefInfo.chefData.platforms" object-name="Platform"
+                filter-field="name" filter-field2="version">
+        </jf-grid>
+    </jf-panel>
+</div>

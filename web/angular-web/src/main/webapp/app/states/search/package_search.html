@@ -1,0 +1,87 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="search-query-maker">
+    <form novalidate>
+        <div ng-if="packageSearch.queryFields.length">
+            <div class="form-group criteria-container">
+                <div class="form-group-cell criterion"
+                     ng-repeat="field in packageSearch.queryFields track by $index"
+                     ng-class="{'string-criterion': field.id !== 'repo' && field.id !== 'dockerV1',
+                                'array-criterion': field.id === 'repo',
+                                'boolean-criterion': field.id === 'dockerV1'}"
+                     ng-if="field.default || field.visible">
+                    <a href
+                       ng-if="!field.default"
+                       class="remove-criterion"
+                       tabindex="-1"
+                       ng-click="packageSearch.removeCriterion(field)">
+                        <i class="clear-field">&#215;</i>
+                    </a>
+                    <div ng-if="field.id !== 'repo' && field.id !== 'dockerV1'" class="criterion-div">
+                        <jf-field autofocus="($index == 0 || field.autofocus) && packageSearch.focusField">
+                            <input type="text"
+                                   class="input-text"
+                                   jf-enter-press="packageSearch.search()"
+                                   id="field.id"
+                                   name="field.id"
+                                   ng-model="packageSearch.rawQuery[field.id].values"
+                                   placeholder="{{field.displayName}}">
+                        </jf-field>
+                    </div>
+                    <div ng-if="field.id === 'repo'" class="criterion-div">
+                        <jf-multi-dropdown title="{{field.displayName}}"
+                                           on-change="packageSearch.onRepoSelectionChange(field)"
+                                           dropdown-opened="packageSearch.openLimitDropDown"
+                                           no-items-message="No {{packageSearch.selectedPackageType.displayName}} Repositories Found"
+                                           items="packageSearch.selectionRepoList"></jf-multi-dropdown>
+                    </div>
+                    <div ng-if="field.id === 'dockerV1'" class="criterion-div">
+                        <i class="glyphicon glyphicon-filter"></i> {{field.displayName}}
+                    </div>
+
+                </div>
+                <div class="unpadder"></div>
+                <div class="form-group-cell add-criteria-select"
+                     ng-if="packageSearch.availableCriteria && packageSearch.availableCriteria.length">
+                    <jf-ui-select jf-select-model="packageSearch.criterionToAdd"
+                                  jf-select-change="packageSearch.onAddCriteria()"
+                                  jf-select-options="packageSearch.availableCriteria"
+                                  jf-select-display-attr="displayName"
+                                  jf-select-placeholder="Add search criteria...">
+                    </jf-ui-select>
+                </div>
+
+                <div class="form-group-cell action-buttons"
+                     ng-if="packageSearch.selectedPackageType">
+                    <button type="button" class="btn btn-default"
+                            ng-click="packageSearch.clear()">Clear
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            ng-disabled="!packageSearch.canSearch()"
+                            ng-click="packageSearch.search()">Search
+                    </button><!--ng-disabled="!packageSearch.query.name && !packageSearch.query.path"-->
+                </div>
+<!--
+                <div class="field-bottom-remark"><i class="icon icon-info"></i>Search is case sensitive, supports (*,?) and comma separated multiple values</div>
+-->
+            </div>
+        </div>
+
+    </form>
+</div>

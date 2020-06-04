@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<versionFeatures>
+    <features>
+        <feature>
+            <name>SYNC_PROPERTIES</name>
+            <availableFrom>
+                <version>4.1.0</version>
+                <revision>40011</revision>
+            </availableFrom>
+        </feature>
+        <feature>
+            <name>LIST_CONTENT</name>
+            <availableFrom>
+                <version>4.1.0</version>
+                <revision>40011</revision>
+            </availableFrom>
+        </feature>
+        <feature>
+            <name>SYNC_STATISTICS</name>
+            <availableFrom>
+                <version>4.2.0</version>
+                <revision>40030</revision>
+            </availableFrom>
+        </feature>
+        <feature>
+            <name>DETECT_ORIGIN_ABSENCE</name>
+            <availableFrom>
+                <version>4.3.3</version>
+                <revision>40071</revision>
+            </availableFrom>
+        </feature>
+        <feature>
+            <name>EVENT_BASED_PULL_REPLICATION</name>
+            <availableFrom>
+                <version>5.4.0-m001</version>
+                <revision>50050</revision>
+            </availableFrom>
+        </feature>
+    </features>
+</versionFeatures>

@@ -1,0 +1,55 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div>
+    <div ng-if="!jfXray.features.isJCR()" class="jf-xray-wrapper">
+
+        <div class="alert alert-warning xray-alert" ng-if="jfXray.artifactXrayData.xrayBlocked">
+        <span class="alert-button" ng-if="jfXray.artifactXrayData.xrayBlockReason != 'Artifact not yet scanned'">
+            <a href
+                    ng-click="jfXray._doAllowDownload()">
+                <i class="icon-xray-ignore-alert"></i>
+                Allow download
+            </a>
+        </span>
+            <span ng-bind="jfXray.xrayAlertMessage()"></span></div>
+
+        <jf-panel jf-panel-heading="JFrog Xray"
+                ng-if="jfXray.artifactXrayData.xrayIndexStatus">
+
+            <table class="jf-data-table">
+                <tr ng-repeat="(key,value) in jfXray.artifactXrayData">
+                    <td ng-if="key === 'xrayIndexStatus'">Status:</td>
+                    <td ng-if="key === 'xrayIndexStatus'">{{ value }}</td>
+
+                    <td ng-if="key === 'xrayBlockReason' && value">Block Reason:</td>
+                    <td ng-if="key === 'xrayBlockReason' && value">{{ value }}</td>
+
+                    <td ng-if="key === 'xrayIndexStatusLastUpdatedTimestamp'">Last Status Update:</td>
+                    <td ng-if="key === 'xrayIndexStatusLastUpdatedTimestamp'">{{value}}</td>
+
+                    <td ng-if="key === 'detailsUrl'" colspan="2"><a href="{{value}}" target="_blank">More Details In Xray</a></td>
+                </tr>
+            </table>
+        </jf-panel>
+
+    </div>
+    <div ng-if="jfXray.features.isJCR() && jfXray.showWidget" class="jf-xray-wrapper" >
+        <jf-xuc-data version="jfXray.version" package-id="jfXray.package_id"></jf-xuc-data>
+    </div>
+
+</div>

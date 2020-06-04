@@ -1,0 +1,44 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="conda">
+    <jf-panel jf-panel-heading="Package Info" ng-if="jfConda.condaData"><!--ng-if="jfConda.condaData.condaInfo"-->
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfConda.condaData"
+                    ng-if="key != 'description' && key != 'depends'">
+
+                <td ng-if="!(key === 'deprecated' && !value)">{{jfConda.DICTIONARY[key] || key }}:</td>
+                <td ng-if="key != 'depends' &&
+                            !(key === 'deprecated' && !value)">{{value}}</td>
+            </tr>
+        </table>
+    </jf-panel>
+
+
+    <jf-panel jf-panel-heading="Description"
+            ng-if="jfConda.condaData.description">
+        <p>{{jfCran.condaData.description}}</p>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Dependencies"
+            ng-if="jfConda.condaData.depends.length">
+        <jf-grid grid-options="jfConda.gridDependenciesOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true"></jf-grid>
+    </jf-panel>
+</div>

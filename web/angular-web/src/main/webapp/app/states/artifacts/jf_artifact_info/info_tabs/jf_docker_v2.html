@@ -1,0 +1,52 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<jf-panel jf-panel-heading="Tag Info"
+          ng-if="jfDockerV2.dockerV2Data.tagInfo">
+
+    <table class="jf-data-table">
+        <tr ng-repeat="(key,value) in jfDockerV2.dockerV2Data.tagInfo" ng-if="jfDockerV2.DICTIONARY[key] && jfDockerV2.isNotEmptyValue(value)">
+            <td>{{jfDockerV2.DICTIONARY[key]}}:</td>
+            <td>{{jfDockerV2.formatValue(value)}}</td>
+        </tr>
+        <tr ng-if="jfDockerV2.dockerV2Data.tagInfo.labels.length">
+            <td>Label Count:</td>
+            <td>
+                <a href class="jf-link"
+                    ng-click="jfDockerV2.scrollToLabels()">
+                {{jfDockerV2.dockerV2Data.tagInfo.labels.length}}</a>
+            </td>
+        </tr>
+    </table>
+
+</jf-panel>
+
+<jf-panel jf-panel-heading="Docker Layers Visualization"
+          class="docker-layers-panel"
+          ng-if="jfDockerV2.dockerV2Data.blobsInfo">
+    <jf-docker-v2-layers controller="jfDockerV2"
+                         data="jfDockerV2.dockerV2Data.blobsInfo"
+                         current-path="{{jfDockerV2.currentNode.data.path}}"></jf-docker-v2-layers>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Labels" id="labels"
+          ng-if="jfDockerV2.dockerV2Data.tagInfo.labels.length">
+    <jf-table-view class="preview-table"
+            options="jfDockerV2.tableViewOptions"
+            object-name="label">
+    </jf-table-view>
+</jf-panel>

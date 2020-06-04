@@ -1,0 +1,52 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<jf-panel jf-panel-heading="Settings"
+          ng-if="jfConanPackage.hasSettings(jfConanPackage.conanPackageData)">
+
+    <table class="jf-data-table">
+        <tr ng-repeat="key in jfConanPackage.knownSettings()">
+            <td ng-if="jfConanPackage.conanPackageData[key]">{{jfConanPackage.DICTIONARY[key]}}:</td>
+            <td ng-if="jfConanPackage.conanPackageData[key]">{{jfConanPackage.conanPackageData[key]}}</td>
+        </tr>
+        <!-- Add all other settings -->
+        <tr ng-repeat="(key,value) in jfConanPackage.conanPackageData.settings">
+            <td>{{jfConanPackage.DICTIONARY[key] || key}}:</td>
+            <td>{{value}}</td>
+        </tr>
+    </table>
+
+</jf-panel>
+
+<jf-panel jf-panel-heading="Options"
+        ng-if="jfConanPackage.isNonEmptyObject(jfConanPackage.conanPackageData.options)">
+    <table class="jf-data-table">
+        <tr ng-repeat="(key,value) in jfConanPackage.conanPackageData.options">
+            <td>{{jfConanPackage.DICTIONARY[key] || key}}:</td>
+            <td>{{value}}</td>
+        </tr>
+    </table>
+</jf-panel>
+
+<jf-panel jf-panel-heading="Requires"
+        ng-if="jfConanPackage.isNonEmptyObject(jfConanPackage.conanPackageData.requires)">
+    <table class="jf-data-table">
+        <tr ng-repeat="value in jfConanPackage.conanPackageData.requires">
+            <td>{{value}}</td>
+        </tr>
+    </table>
+</jf-panel>

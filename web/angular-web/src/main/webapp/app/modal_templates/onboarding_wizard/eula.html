@@ -1,0 +1,35 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div class="wizard-step-eula">
+    <div class="eula-content">
+        <div class="eula-inner-content" ng-bind-html="WizCtrl.eula.content"></div>
+    </div>
+
+    <div class="eula-approve" ng-class="{'enabled': WizCtrl.eula.bottomReached}">
+
+        <jf-checkbox text="I have read and agree to the terms and conditions stated in the EULA.">
+            <input type="checkbox"
+                    id="eulaConfirmation"
+                    name="eulaConfirmation"
+                    ng-disabled="!WizCtrl.eula.bottomReached"
+                    ng-model="WizCtrl.eula.eulaConfirmation">
+        </jf-checkbox>
+
+    </div>
+</div>

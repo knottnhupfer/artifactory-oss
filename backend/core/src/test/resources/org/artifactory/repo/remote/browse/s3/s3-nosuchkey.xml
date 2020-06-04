@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<Error>
+    <Code>NoSuchKey</Code>
+    <Message>The specified key does not exist.</Message>
+    <Key>org/artifactory/repo/remote/browse/s3/s3-nosuchkey.xml</Key>
+    <RequestId>E69C77E280506925</RequestId>
+    <HostId>AfNsMbcTZ0kw77y06lcsMEb6oxENUr80Xa0yR2P3kRs9fajMBHr0i1NYNRtjd8mV</HostId>
+</Error>

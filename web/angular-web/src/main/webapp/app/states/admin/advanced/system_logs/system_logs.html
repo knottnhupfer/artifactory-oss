@@ -1,0 +1,63 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>System Logs</h1>
+
+    <div class="content-wrapper system-logs">
+        <div class="card stretch card-pole-pad card-side-pad">
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <label>View System Logs</label>
+                    <selectize ng-model="SystemLogsController.selectedLog"
+                               ng-change="SystemLogsController.onChangeLog()"
+                               config="{maxItems:1, create: true, labelField: 'logName', valueField: 'logName'}"
+                               options="SystemLogsController.logs"></selectize>
+                </div>
+                <div class="form-group-cell form-button form-link">
+                    <div ng-if="SystemLogsController.timeCount >= 0">
+                        <span class="timer" ng-class="{'paused' : SystemLogsController.paused}">Refreshing logs in {{SystemLogsController.timeCount}} seconds</span>
+                        <a href class="jf-link systemlog-action" ng-click="SystemLogsController.togglePause()">
+                            <i class="glyphicon" ng-class="SystemLogsController.paused ? 'glyphicon-play' : 'glyphicon-pause'"></i>{{SystemLogsController.getPauseLinkText()}}
+                        </a>
+                        <a href class="jf-link systemlog-action" ng-click="SystemLogsController._getLogData()"><i class="glyphicon glyphicon-refresh"></i>Refresh now</a>
+                    </div>
+                    <div ng-if="SystemLogsController.timeCount < 0" class="icon-hourglass"></div>
+                </div>
+            </div>
+
+            <div>
+                <span>File last modified: {{SystemLogsController.data.lastUpdateModified | date:'EEE MMM dd HH:mm:ss IDT yyyy'}}</span>
+                <span>View last updated: {{SystemLogsController.data.lastUpdateLabel | date:'EEE MMM dd HH:mm:ss IDT yyyy'}}</span>
+            </div>
+            <span ng-click="SystemLogsController.download()">
+                <a class="jf-link" href="">
+                    Download
+                </a> &nbsp
+                <a href><i class="action-icon icon icon-download"></i></a>
+                &nbsp({{SystemLogsController.data.fileSize | filesize}})
+            </span>
+
+            <div class="fill-screen">
+                <textarea readonly
+                          spellcheck="false"
+                          id="textarea"
+                          class="input-text monospaced">{{SystemLogsController.data.logContent}}</textarea>
+            </div>
+        </div>
+    </div>
+</div>

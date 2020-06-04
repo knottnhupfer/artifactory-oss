@@ -1,0 +1,73 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container bundles-layout-container">
+    <div class="jf-page-wrapper bundles-page-wrapper">
+        <div class="title">
+            <h1><jf-marquee>{{BundlePage.$stateParams.bundleName}}</jf-marquee></h1>
+            <a href="" class="jf-back-link"
+                    ng-click="BundlePage.backToBundles()">Back to all bundles
+            </a>
+        </div>
+        <div class="versions-wrapper jf-content-section">
+            <h2>Versions List</h2>
+            <ul>
+                <li ng-repeat="version in BundlePage.versions">
+                    <div ng-click="BundlePage.goToVersion(version)"
+                            ng-class="{'active': version.version === BundlePage.$stateParams.version}"
+                            class="clearfix"
+                            jf-tooltip-on-overflow>
+                        <a href ng-click="BundlePage.deleteBundleVersion($event,version)" class="delete-button"><i class="icon-clear"></i></a>
+                        <span>{{ version.version }}</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="jf-page-summary jf-page-summary-switch-style">
+            <jf-summary-row ng-if="BundlePage.summaryColumns"
+                            columns="BundlePage.summaryColumns"
+                            parent-scope="BundlePage.$scope">
+            </jf-summary-row>
+        </div>
+        <div class="bundle-content jf-content-section">
+
+            <div class="inner-data-wrapper">
+                <div>
+                    <h2>List of artifacts</h2>
+                    <div>
+                        <div class="alert alert-info"
+                             ng-if="BundlePage.bundleData && BundlePage.bundleData.artifacts && BundlePage.bundleData.numberOfArtifacts && (BundlePage.bundleData.numberOfArtifacts > BundlePage.bundleData.artifacts.length)">
+                            There are {{ BundlePage.bundleData.numberOfArtifacts }} artifacts in the Release Bundle version. Displaying the first {{ BundlePage.bundleData.artifacts.length }} artifacts
+                        </div>
+                        <jf-drawer class="bundle-file-info" ng-repeat="item in BundlePage.artifactsList track by $index" open-first="{{$index}}" header="{{item.key != 'undefined' ? item.key : 'Files'}}">
+                            <ul>
+                                <li ng-repeat="file in item.value" ng-click="BundlePage.updateFileInfo(file)" ng-class="{'active': file.name === BundlePage.activeItem}">
+                                    <span class="file-name">{{file.name}}</span>
+                                    <span class="path" jf-tooltip-on-overflow>{{file.path}}</span>
+                                </li>
+                            </ul>
+                        </jf-drawer>
+                    </div>
+                </div>
+                <div class="details-panel">
+                    <div class="details-panel-inner"><jf-data-list items="BundlePage.fileInfo"></jf-data-list></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

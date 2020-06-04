@@ -1,0 +1,47 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container">
+    <h1>Permissions Management</h1>
+
+    <div class="content-wrapper">
+        <div class="card stretch card-pole-pad card-side-pad" style="display: flex;">
+            <div class="list-filter" style="max-width: 380px;
+                        position: absolute;
+                        z-index: 1;
+                        top :68px;
+                        min-width: 150px;
+                        width: 100%;">
+                <input type="text"
+                        name="filter"
+                        class="input-text"
+                        ng-model="Permissions.filter"
+                        ng-model-options="{ debounce: 400 }"
+                        ng-change="Permissions.onFilterChange()"
+                        placeholder="Search Permissions"/>
+
+            </div>
+            <div class="jf-table-container-permissions" style="flex:1">
+                <jf-table-view
+                        ng-class="{'empty-table': Permissions.showNoDataMessage}"
+                        options="Permissions.tableViewOptions"
+                        object-name="Permission"></jf-table-view>
+            </div>
+
+        </div>
+    </div>
+</div>

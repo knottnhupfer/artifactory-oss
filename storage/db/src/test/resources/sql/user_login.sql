@@ -1,0 +1,2 @@
+INSERT INTO users VALUES
+(21, 'gandalf','shallnotpass',NULL,'middle@earth.com',NULL,0,1,0,NULL,NULL,NULL,1494851665414,NULL,NULL,NULL,NULL,NULL,NULL);

@@ -1,0 +1,444 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="form-group">
+    <div class="form-group-cell">
+        <div class="drop-zone-wrapper single-deploy">
+            <div class="drop-zone"
+                 nv-file-drop uploader="jfSingleDeploy.deploySingleUploader.getUploader()"
+                 nv-file-over over-class="drop-zone-hover"
+                 ng-if="!jfSingleDeploy.deploySingleUploader.getQueue().length" jf-disable-ng-animate>
+                <label class="file-input-label">
+                    <input class="select-files-hidden"
+                            type="file"
+                            nv-file-select
+                            title=" "
+                            uploader="jfSingleDeploy.deploySingleUploader.getUploader()"/>
+                    <span class="icon icon-upload-small"></span>
+                    <span class="icon icon-upload-hover"></span>
+                    <br>
+                    <span>Drop file</span> here or <span>Select file</span>
+                </label>
+            </div>
+            <div ng-repeat="item in jfSingleDeploy.deploySingleUploader.getUploader().queue">
+                <div ng-show="jfSingleDeploy.deploySingleUploader.getUploader().isHTML5"
+                     ng-class="{uploaded:jfSingleDeploy.uploadCompleted}"
+                     class="progress-deploy file-info">
+                    <div class="progress"
+                         ng-if="!jfSingleDeploy.uploadCompleted">
+                        <div class="progress-bar" role="progressbar"
+                             ng-style="{ 'width': item.progress + '%' }">
+                        </div>
+                    </div>
+                    <div ng-if="jfSingleDeploy.uploadCompleted"
+                         class="file-name-deploy">
+                        <span> {{ item.file.name }} </span>
+                    </div>
+                    <a href=""
+                       ng-click="jfSingleDeploy.onRemoveSingle(); item.remove();jfSingleDeploy.deployFile.unitInfo={}; jfSingleDeploy.clearPath(); jfSingleDeploy.uploadCompleted = false"
+                       jf-tooltip="Remove"
+                       class="icon icon-clear"></a>
+                    <div ng-if="!jfSingleDeploy.uploadCompleted"
+                         class="file-name-deploy">
+                        <span> Uploading {{ item.file.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form name="targetPath">
+    <div class="form-group">
+        <div class="form-group-cell">
+            <jf-field>
+                <label for="target-file">Target Path
+                </label>
+                <jf-help-tooltip
+                        html="jfSingleDeploy.TOOLTIP.targetPath"></jf-help-tooltip>
+                <input type="text"
+                       class="input-text"
+                       id="target-file"
+                       ng-model="jfSingleDeploy.deployFile.targetPath"
+                       ng-change="jfSingleDeploy.targetChanged=true"
+                       ng-disabled="jfSingleDeploy.deployFile.unitInfo.mavenArtifact || jfSingleDeploy.deployFile.unitInfo.deployByLayout">
+            </jf-field>
+        </div>
+    </div>
+</form>
+
+<div class="form-group form-checkbox"
+     ng-if="jfSingleDeploy.deployFile.unitInfo && jfSingleDeploy.deployFile.unitInfo.valid && jfSingleDeploy.deployFile.repoDeploy.layoutPattern && !jfSingleDeploy.deployFile.unitInfo.mavenArtifact && !jfSingleDeploy.deployFile.unitInfo.debianArtifact && !jfSingleDeploy.deployFile.unitInfo.vagrantArtifact && !jfSingleDeploy.deployFile.unitInfo.crantArtifact && !jfSingleDeploy.deployFile.unitInfo.cranArtifact && !jfSingleDeploy.deployFile.unitInfo.bundle">
+    <jf-checkbox text="Deploy According To Layout">
+        <input type="checkbox"
+               id="delpoyByLayout"
+               ng-change="jfSingleDeploy.onToggleDeployByLayout()"
+               ng-model="jfSingleDeploy.deployFile.unitInfo.deployByLayout">
+    </jf-checkbox>
+</div>
+
+<div class="form-group form-checkbox"
+     ng-if="jfSingleDeploy.isMavenCheckBoxVisible() && !jfSingleDeploy.deployFile.unitInfo.bundle && !jfSingleDeploy.deployFile.unitInfo.deployByLayout && !jfSingleDeploy.deployFile.unitInfo.debianArtifact && !jfSingleDeploy.deployFile.unitInfo.vagrantArtifact">
+    <jf-checkbox text="Deploy as Maven Artifact">
+        <input type="checkbox"
+               id="maven"
+               ng-model="jfSingleDeploy.deployFile.unitInfo.mavenArtifact"
+               ng-change="jfSingleDeploy.changeMavenFileType()">
+    </jf-checkbox>
+    <jf-help-tooltip
+            html="jfSingleDeploy.TOOLTIP.deployAsMaven"></jf-help-tooltip>
+</div>
+<div class="form-group form-checkbox"
+     ng-if="(jfSingleDeploy.deployFile.unitInfo.debian || jfSingleDeploy.deployFile.unitInfo.artifactType=='debian' || jfSingleDeploy.deployFile.unitInfo.origArtifactType=='debian') && !jfSingleDeploy.deployFile.unitInfo.mavenArtifact && !jfSingleDeploy.deployFile.unitInfo.deployByLayout && !jfSingleDeploy.deployFile.unitInfo.vagrantArtifact &&!jfSingleDeploy.deployFile.unitInfo.bundle">
+    <jf-checkbox text="Deploy as Debian Package">
+        <input type="checkbox"
+               id="debian"
+               ng-model="jfSingleDeploy.deployFile.unitInfo.debianArtifact"
+               ng-change="jfSingleDeploy.changeDebianFileType()">
+    </jf-checkbox>
+    <jf-help-tooltip
+            html="jfSingleDeploy.TOOLTIP.deployAsDebian"></jf-help-tooltip>
+</div>
+
+
+<div class="form-group form-checkbox"
+     ng-if="(jfSingleDeploy.deployFile.unitInfo.cranArtifact && (jfSingleDeploy.deployFile.unitInfo.type === 'tgz' || jfSingleDeploy.deployFile.unitInfo.type === 'zip')) && !jfSingleDeploy.deployFile.unitInfo.debianArtifact && !jfSingleDeploy.deployFile.unitInfo.mavenArtifact && !jfSingleDeploy.deployFile.unitInfo.deployByLayout && !jfSingleDeploy.deployFile.unitInfo.bundle">
+    <jf-checkbox text="Deploy as CRAN Package">
+        <input type="checkbox"
+                id="cran"
+                ng-model="jfSingleDeploy.deployFile.unitInfo.cranArtifact">
+    </jf-checkbox>
+    <!--<jf-help-tooltip
+            html="jfSingleDeploy.TOOLTIP.deployAsCRAN"></jf-help-tooltip>-->
+</div>
+
+<div class="form-group form-checkbox"
+     ng-if="(jfSingleDeploy.deployFile.unitInfo.artifactType=='vagrant') && !jfSingleDeploy.deployFile.unitInfo.debianArtifact && !jfSingleDeploy.deployFile.unitInfo.mavenArtifact && !jfSingleDeploy.deployFile.unitInfo.deployByLayout && !jfSingleDeploy.deployFile.unitInfo.bundle">
+    <jf-checkbox text="Deploy as Vagrant Box">
+        <input type="checkbox"
+               id="vagrant"
+               ng-model="jfSingleDeploy.deployFile.unitInfo.vagrantArtifact"
+               ng-change="jfSingleDeploy.changeVagrantFileType()">
+    </jf-checkbox>
+    <jf-help-tooltip
+            html="jfSingleDeploy.TOOLTIP.deployAsVagrantBox"></jf-help-tooltip>
+</div>
+<div class="form-group form-checkbox"
+     ng-if="jfSingleDeploy.deployFile.unitInfo.valid && jfSingleDeploy.isBundle && !jfSingleDeploy.deployFile.unitInfo.mavenArtifact && !jfSingleDeploy.deployFile.unitInfo.debianArtifact && !jfSingleDeploy.deployFile.unitInfo.vagrantArtifact && !jfSingleDeploy.deployFile.unitInfo.deployByLayout && !jfSingleDeploy.deployFile.unitInfo.composerArtifact">
+    <jf-checkbox text="Deploy as Bundle Artifact">
+        <input type="checkbox"
+               id="bundle"
+                ng-change="jfSingleDeploy.onBundleDeploy()"
+               ng-model="jfSingleDeploy.deployFile.unitInfo.bundle">
+    </jf-checkbox>
+</div>
+
+<jf-panel jf-panel-heading="Layout Tokens"
+          ng-if="jfSingleDeploy.deployFile.unitInfo.deployByLayout">
+    <form name="jfSingleDeploy.layoutTokensForm" class="layoutTokenForm">
+        <div ng-repeat="(token, value) in jfSingleDeploy.layoutTokens track by $index"
+             class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common" delayed-init="true" dont-push-down-errors="true">
+                    <label for="token-{{token}}"
+                           ng-class="{mandatory: !jfSingleDeploy.layoutTokens[token].customSegment}"
+                           class="control-label deploy-label">{{token}}</label>
+                    <input type="text"
+                           class="input-text"
+                           id="token-{{token}}"
+                           name="token-{{token}}"
+                           ui-validate="{tokenRegexValidator: 'jfSingleDeploy.isTokenValueValid(token,$value)'}"
+                           ng-required="!jfSingleDeploy.layoutTokens[token].customSegment"
+                           ng-change="jfSingleDeploy.updatePathFromLayoutTokens()"
+                           ng-model="jfSingleDeploy.layoutTokens[token].value">
+                    <div class="jf-form-errors"
+                         ng-if="jfSingleDeploy.getTokenRegexError(token)"
+                         style="position: absolute">{{jfSingleDeploy.getTokenRegexError(token)}}</div>
+                </jf-field>
+            </div>
+        </div>
+    </form>
+</jf-panel>
+
+
+<jf-panel jf-panel-heading="Maven Artifact"
+          ng-if="jfSingleDeploy.isMavenSectionVisible()">
+    <form name="jfSingleDeploy.mavenArtifactForm" class="singleDeployForm">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="GroupId"
+                           class="control-label deploy-label mandatory">Group ID
+                    </label>
+                    <input type="text"
+                           class="input-text"
+                           id="GroupId"
+                           name="GroupId"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.groupId"
+                           ng-change="jfSingleDeploy.updateMavenTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="ArtifactId"
+                           class="control-label deploy-label mandatory">Artifact ID
+                    </label>
+                    <input type="text"
+                           class="input-text"
+                           id="ArtifactId"
+                           name="ArtifactId"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.artifactId"
+                           ng-change="jfSingleDeploy.updateMavenTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="Version"
+                           class="deploy-label mandatory">Version
+                    </label>
+                    <input type="text"
+                           class="input-text"
+                           id="Version"
+                           name="Version"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.version"
+                           ng-change="jfSingleDeploy.updateMavenTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field>
+                    <label for="Classifier"
+                           class="control-label deploy-label">Classifier
+                    </label>
+                    <input type="text"
+                           class="input-text"
+                           id="Classifier"
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.classifier"
+                           ng-change="jfSingleDeploy.updateMavenTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="Type"
+                           class="control-label deploy-label mandatory">Type
+                    </label>
+                    <input type="text"
+                           class="input-text"
+                           id="Type"
+                           name="Type"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.type"
+                           ng-change="jfSingleDeploy.updateMavenTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-checkbox text="Generate Default POM / Deploy Jar's Internal POM">
+
+                    <input type="checkbox"
+                           id="Internal"
+                           class="input-text"
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.Internal">
+                </jf-checkbox>
+            </div>
+        </div>
+        <div class="form-group" ng-if="jfSingleDeploy.deployFile.unitInfo.Internal">
+            <jf-code-mirror mime-type="xml"
+                            model="jfSingleDeploy.deployFile.unitConfigFileContent"
+                            height="200px"
+                            allowEdit="false">
+            </jf-code-mirror>
+        </div>
+    </form>
+</jf-panel>
+<jf-panel jf-panel-heading="CRAN Artifact"
+        ng-if="jfSingleDeploy.deployFile.unitInfo.cranArtifact && (jfSingleDeploy.deployFile.unitInfo.type === 'tgz' || jfSingleDeploy.deployFile.unitInfo.type === 'zip')">
+    <form name="cranArtifactForm">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common"
+                          autofocus="true">
+                    <label for="distribution"
+                            class="control-label deploy-label mandatory">Distribution
+                    </label>
+                    <input name="cranDistribution"
+                            type="text"
+                            class="input-text"
+                            id="distribution"
+                            required
+                            ng-model="jfSingleDeploy.deployFile.unitInfo.distribution">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="rVersion"
+                            class="deploy-label mandatory">R Version
+                    </label>
+                    <input name="rVersion"
+                            type="text"
+                            class="input-text"
+                            id="rVersion"
+                            required
+                            ng-model="jfSingleDeploy.deployFile.unitInfo.rVersion">
+                </jf-field>
+            </div>
+        </div>
+    </form>
+</jf-panel>
+<jf-panel jf-panel-heading="Debian Artifact"
+          ng-if="jfSingleDeploy.deployFile.unitInfo.debianArtifact">
+    <form name="mavenArifactForm">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common"
+                          autofocus="true">
+                    <label for="distribution"
+                           class="control-label deploy-label mandatory">Distribution
+                    </label>
+                    <input name="debDistribution"
+                           type="text"
+                           class="input-text"
+                           id="distribution"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.distribution"
+                           ng-change="jfSingleDeploy.updateDebianTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="component"
+                           class="control-label deploy-label mandatory">Component
+                    </label>
+                    <input name="debComponent"
+                           type="text"
+                           class="input-text"
+                           id="component"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.component"
+                           ng-change="jfSingleDeploy.updateDebianTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="architecture"
+                           class="deploy-label mandatory">Architecture
+                    </label>
+                    <input name="debArchitecture"
+                           type="text"
+                           class="input-text"
+                           id="architecture"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.architecture"
+                           ng-change="jfSingleDeploy.updateDebianTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+    </form>
+</jf-panel>
+<jf-panel jf-panel-heading="Vagrant Artifact"
+          ng-if="jfSingleDeploy.deployFile.unitInfo.vagrantArtifact">
+    <form name="vagrantArifactForm">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common"
+                          autofocus="true">
+                    <label for="boxName"
+                           class="control-label deploy-label mandatory">Name
+                    </label>
+                    <input name="boxName"
+                           type="text"
+                           class="input-text"
+                           id="boxName"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.boxName"
+                           ng-change="jfSingleDeploy.updateVagrantTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="boxProvider"
+                           class="control-label deploy-label mandatory">Provider
+                    </label>
+                    <input name="boxProvider"
+                           type="text"
+                           class="input-text"
+                           id="boxProvider"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.boxProvider"
+                           ng-change="jfSingleDeploy.updateVagrantTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="boxVersion"
+                           class="deploy-label mandatory">Version
+                    </label>
+                    <input name="boxVersion"
+                           type="text"
+                           class="input-text"
+                           id="boxVersion"
+                           required
+                           ng-model="jfSingleDeploy.deployFile.unitInfo.boxVersion"
+                           ng-change="jfSingleDeploy.updateVagrantTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+    </form>
+</jf-panel>
+<jf-panel jf-panel-heading="Composer Artifact"
+        ng-if="jfSingleDeploy.isComposerExtention && jfSingleDeploy.deployFile.repoDeploy.repoType === 'Composer'">
+    <form name="composerArifactForm">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field validations="common">
+                    <label for="Version"
+                            class="deploy-label">Version <jf-help-tooltip text="If the composer package does not contain the version attribute you must specify a version that will be assigned to this package."></jf-help-tooltip>
+                    </label>
+                    <input name="Version"
+                            type="text"
+                            class="input-text"
+                            id="Version"
+                            required
+                            ng-model="jfSingleDeploy.deployFile.unitInfo.version"
+                            ng-change="jfSingleDeploy.updateComposerTargetPath()">
+                </jf-field>
+            </div>
+        </div>
+    </form>
+</jf-panel>

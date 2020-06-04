@@ -1,0 +1,86 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header deploy">
+    <button type="button"
+            class="close"
+            data-dismiss="close"
+            aria-label="Close"
+            ng-click="Deploy.modalInstance.dismiss()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Deploy</h4>
+</div>
+<div class="modal-body deploy-body clearfix">
+    <div class="deploy">
+        <div class="form-group">
+            <div class="form-group-cell target-path">
+                <label>Target Repository</label>
+                <jf-ui-select jf-select-model="Deploy.deployFile.repoDeploy"
+                              jf-select-options="Deploy.comm.reposList"
+                              jf-select-change="Deploy.onRepoChange()"
+                              onclick-func=""
+                              jf-select-display-attr="repoKey">
+                </jf-ui-select>
+            </div>
+        </div>
+
+        <div class="not-deployable alert"
+             ng-class="Deploy.messageType"
+             ng-bind-html="Deploy.warningMessage"
+             ng-show="Deploy.showDeployWarningMessage()">
+        </div>
+
+        <div class="deploy-form-fields"
+             ng-show="Deploy.repo.repoInList">
+            <div class="form-group">
+                <div class="form-group-cell auto-width deploy-repo-data">
+                    <div ng-if="Deploy.deployFile.repoDeploy.repoText || Deploy.deployFile.repoDeploy.repoType"><label>Package Type:</label> <i class="icon icon-{{Deploy.deployFile.repoDeploy.repoTypeIcon}} repo-type-icon"></i> {{Deploy.deployFile.repoDeploy.repoText || Deploy.deployFile.repoDeploy.repoType}}</div>
+                    <div id="repo-layout" ng-if="Deploy.deployFile.repoDeploy.layoutPattern"><label>Repository Layout:</label>
+                        <small ng-bind-html="Deploy.deployFile.repoDeploy.layoutPatternDisplay"></small></div>
+                </div>
+            </div>
+            <div class="deploy-switch-wrapper">
+                <jf-switch ng-model="Deploy.currentDeploy"
+                        options="['Single', 'Multi']"></jf-switch>
+            </div>
+            <div ng-if="Deploy.comm.reposList && Deploy.isSelectedDeploy('Single')" class="deploy-drop">
+                <jf-single-deploy node="Deploy.node"
+                        comm="Deploy.comm"
+                        deploy-file="Deploy.deployFile"
+                        on-success="Deploy.onDeploySuccess()"
+                        file-size-limit="Deploy.fileSizeLimit"></jf-single-deploy>
+            </div>
+            <div ng-if="Deploy.comm.reposList && Deploy.isSelectedDeploy('Multi')" class="deploy-drop">
+                <jf-multi-deploy node="Deploy.node"
+                        comm="Deploy.comm"
+                        deploy-file="Deploy.deployFile"
+                        on-success="Deploy.onDeploySuccess()"
+                        file-size-limit="Deploy.fileSizeLimit"></jf-multi-deploy>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class=" clearfix modal-footer deploy-footer">
+    <div class="btn-group modal-footer-buttons-container">
+        <button class="btn btn-primary"
+                ng-disabled="!Deploy.deployController.isReady()"
+                ng-click="Deploy.deploy();">Deploy
+        </button>
+    </div>
+</div>

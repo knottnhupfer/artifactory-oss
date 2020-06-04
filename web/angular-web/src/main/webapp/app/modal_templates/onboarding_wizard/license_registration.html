@@ -1,0 +1,31 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="wizard-step-license">
+    <form name="WizCtrl.licenseForm">
+        <jf_drag_and_drop_txt id="key"
+                              dnd-content="WizCtrl.license.key"
+                              dnd-change="WizCtrl.errorMessage = undefined"
+                              dnd-style="{'width':'100%'}"
+                              dnd-required="false"
+                              dnd-on-error="WizCtrl.onError(msg)"
+                              dnd-call-to-action="'Copy your license(s) text or <b>drop a file</b>'">
+        </jf_drag_and_drop_txt>
+        <div class="jf-form-errors" ng-if="WizCtrl.errorMessage" ng-bind="WizCtrl.errorMessage"></div>
+        <div ng-if="WizCtrl.mainCtrl.haConfigured">For adding more than one license, use a semicolon or a space as a separator between the different keys.</div>
+    </form>
+</div>

@@ -1,0 +1,136 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<form>
+    <div class="content-layout-container search-page-wrapper">
+        <h1 ng-bind="SearchController.title"></h1>
+        <div class="content-wrapper">
+            <div class="card stretch card-pole-pad card-side-pad">
+
+                <div class="form-group">
+                    <div class="form-group-cell">
+                        <label>Search Type</label>
+                        <jf-ui-select class="search-panel-selector"
+                                      jf-select-model= "SearchController.currentSearch"
+                                      jf-select-display-func="SearchController.getPrettySearchType($item)"
+                                      jf-select-options="SearchController.options"></jf-ui-select>
+                    </div>
+                    <div class="form-group-cell margin-top-25 package-type-selection" ng-if="SearchController.currentSearch === 'package'">
+                        <ui-select jf-disable-ng-animate
+                                    ng-model="SearchController.selectedPackageType"
+                                    ng-change="SearchController.onPackageTypeChange()"
+                                    remove-selected="false">
+                            <ui-select-match placeholder="Select Package Type...">
+                                <i ng-if="$select.selected.icon" class="select-repo-icon icon icon-{{$select.selected.icon}}"></i>{{$select.selected.displayName}}
+                            </ui-select-match>
+                            <ui-select-choices jf-disable-ng-animate repeat="property in SearchController.availablePackageTypes | filter: $select.search track by $index">
+                                <i ng-if="property.icon" class="select-repo-icon icon icon-{{property.icon}}"></i>
+                                <span ng-bind-html="property.displayName | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+
+                <div class="jcenter-message" ng-if="SearchController.currentSearch === 'remote' && SearchController.isJcenterExists" class="">
+                    <p><a href="https://bintray.com/bintray/jcenter" class="jf-link" target="_blank">Bintray's JCenter</a> is the biggest Maven repository for commercial and open source Java libraries.</p>
+                </div>
+
+                <div class="alert alert-warning" ng-if="SearchController.currentSearch === 'remote' && SearchController.isJcenterExists === false">
+                    <p>A remote JCenter repository is not configured in Artifactory. <span ng-if="SearchController.currentUser.isAdmin()">Would you like to automatically <a href="" class="jf-link" ng-click="SearchController.createJcenter()">create it?</a></span></p>
+                </div>
+
+                <search-query-maker ng-if="SearchController.currentSearch !== 'package'"
+                                    search-type="SearchController.currentSearch"
+                                    query="SearchController.query"
+                                    parent-controller="SearchController"
+                                    repo-list="SearchController.repoList"
+                                    properties-data="SearchController.propertiesOptions">
+                </search-query-maker>
+
+                <package-search ng-if="SearchController.currentSearch === 'package'"
+                                query="SearchController.query"
+                                repo-list="SearchController.packageRepoList"
+                                parent-controller="SearchController">
+                </package-search>
+
+                <div class="separator-line"></div>
+
+                <div ng-if="SearchController.aql">
+                    <div id="show-aql-button-orig" style="display:none">
+                        <button class="btn btn-small" jf-tooltip="Show AQL Query"
+                                ng-click="SearchController.setShowAQL(true)"
+                                ng-show="!SearchController.showAQL"><i class="icon iconrepo iconrepo-aql"></i></button>
+                        <button class="btn btn-small" jf-tooltip="Hide AQL Query"
+                                ng-click="SearchController.setShowAQL(false)"
+                                ng-show="SearchController.showAQL"><i class="icon iconrepo iconrepo-aql"></i></button>
+                    </div>
+                    <div  class="no-margin-top" id="aql-viewer-orig" style="display:none">
+                        <div collapse="!SearchController.showAQL">
+                            <jf-clip-copy text-to-copy="SearchController.aql"
+                                          class="code-mirror-copy"
+                                          object-name="Query"></jf-clip-copy>
+                            <jf-code-mirror mime-type="json"
+                                            mode="aql"
+                                            model="SearchController.aql"
+                                            height="275px">
+                            </jf-code-mirror>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stash-container" ng-if="(SearchController.currentSearch !== 'remote' && SearchController.currentSearch !== 'trash')">
+                    <i id="stash-animation" class="icon icon-copy"></i>
+                    <div id="stash-menu" ng-if="SearchController.stashedItemsCount">
+                        <div id="calc-actions">
+                            <div><span class="icon-stash-add"
+                                       ng-click="SearchController.addToStash()"
+                                       jf-tooltip="Add"></span></div>
+                            <div><span class="icon-stash-subtract"
+                                       ng-click="SearchController.subtractFromStash()"
+                                       jf-tooltip="Subtract"></span></div>
+                            <div><span class="icon-stash-intersect"
+                                       ng-click="SearchController.intersectWithStash()"
+                                       jf-tooltip="Intersect"></span></div>
+                        </div>
+                        <div id="general-actions">
+                            <a ng-click="SearchController.gotoStash()"><i class="icon icon-show-in-tree"></i>View</a>
+                            <a ng-click="SearchController.clearStash()"><i class="icon icon-clear"></i>Clear</a>
+                        </div>
+                    </div>
+                    <div id="stash-box" ng-if="SearchController.showStashBox" ng-click="SearchController.gotoStash()">
+                        <span ng-class="{'icon-stash-stash-empty': SearchController.stashedItemsCount === 0, 'icon-stash-stash-full': SearchController.stashedItemsCount}"></span>
+                        <br>{{SearchController.stashedItemsCount}} Items
+                    </div>
+                </div>
+
+                <div class="search-results-title">
+                    {{SearchController.resultsMsg}} <span ng-if="SearchController.getSelectedRecords()"> ({{SearchController.getSelectedRecords()}} Selected)</span>
+                    <span ng-if="SearchController.gridOptions.data.length && !SearchController.gridOptions.data[0]._emptyRow && SearchController.stashedItemsCount === 0 && SearchController.currentSearch !== 'remote' && SearchController.currentSearch !== 'trash' && !SearchController.duringStashAnimation">
+                    <span>|</span><a href="" id="stash-results-button" ng-click="SearchController.saveToStash()">Stash Results</a><jf-help-tooltip html="SearchController.TOOLTIP.stash"></jf-help-tooltip>
+                </span>
+                </div>
+
+
+                <jf-grid ng-if="SearchController.showGrid"
+                        grid-options="SearchController.gridOptions"
+                        filter-field="name"
+                        no-count>
+                </jf-grid>
+            </div>
+        </div>
+    </div>
+</form>

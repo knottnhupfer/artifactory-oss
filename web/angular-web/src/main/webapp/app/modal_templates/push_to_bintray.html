@@ -1,0 +1,152 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="push-to-bintray">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="cancel()"><span
+                aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">Push To Bintray</h3>
+    </div>
+    <form name="pushToBintrayForm">
+        <div class="modal-body">
+            <div class="bintray-info-container">
+                <span ng-if="pushType==='build'">
+                    Distribute this build's artifacts to users by uploading them to
+                </span>
+                <span ng-if="pushType==='artifact'">
+                    Distribute this artifact to users by uploading it to
+                </span>
+                <span ng-if="pushType==='docker'">
+                    Distribute this docker tag to users by uploading it to
+                </span>
+                <a href="https://bintray.com" target="blank"> Bintray</a><br>
+                <span class="bintray-info">Bintray is a public online service through which you can share your release binaries with the world.</span>
+            </div>
+
+
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <label>Bintray Repository *</label>
+                    <selectize config="selectizeConfigNoAdd"
+                               options="data.bintrayRepos"
+                               ng-change="onRepoSelect()"
+                               ng-disabled="selection.useSpecificProperties"
+                               ng-model="selection.bintrayRepo">
+                    </selectize>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="pushType!=='docker'">
+                <div class="form-group-cell">
+                    <label>Bintray Package Name *</label>
+                    <jf-help-tooltip html="tooltip.bintrayPackageName"></jf-help-tooltip>
+                    <selectize config="selectizeConfigNoAdd"
+                               options="data.bintrayPackages"
+                               ng-change="onPackageSelect()"
+                               ng-disabled="selection.useSpecificProperties"
+                               ng-model="selection.bintrayPackageName">
+                    </selectize>
+                </div>
+            </div>
+            <div class="form-group" ng-if="pushType==='docker'">
+                <div class="form-group-cell">
+                    <label>Bintray Package Name</label>
+                    <jf-field>
+                        <input id="dockerPackageName"
+                               type="text"
+                               ng-model="docker.packageName"
+                               readonly
+                               name="dockerPackageName"
+                               class="input-text disabled-look">
+                    </jf-field>
+                </div>
+            </div>
+            <div class="form-group" ng-if="pushType!=='docker'">
+                <div class="form-group-cell">
+                    <label>Bintray Package Version *</label>
+                    <jf-help-tooltip html="tooltip.bintrayPackageVersion"></jf-help-tooltip>
+                    <selectize config="selectizeConfigAdd"
+                               options="data.bintrayPackageVersions"
+                               ng-disabled="selection.useSpecificProperties"
+                               ng-model="selection.bintrayPackageVersion">
+                    </selectize>
+                </div>
+            </div>
+            <div class="form-group" ng-if="pushType==='docker'">
+                <div class="form-group-cell">
+                    <label style="padding-left: 2px;">Tag</label>
+                    <jf-field>
+                        <input id="dockerTagName"
+                               type="text"
+                               ng-model="docker.tagName"
+                               readonly
+                               name="dockerTagName"
+                               class="input-text disabled-look">
+                    </jf-field>
+                </div>
+            </div>
+            <div class="form-group" ng-if="pushType==='artifact'">
+                <div class="form-group-cell">
+                    <label>File Path *</label>
+                    <jf-field validations="common">
+                        <input id="filePath"
+                               type="text"
+                               ng-model="selection.filePath"
+                               name="filePath"
+                               class="input-text">
+                    </jf-field>
+                </div>
+            </div>
+            <div ng-if="pushType==='build'">
+                <div class="form-group form-checkbox">
+                    <div class="form-group-cell">
+                        <jf-checkbox text="Use Bintray-Specific Artifact Properties">
+                            <input id="useSpecificProperties"
+                                   type="checkbox"
+                                   ng-model="selection.useSpecificProperties"
+                                   name="useSpecificProperties">
+                        </jf-checkbox>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-cell">
+                        <jf-checkbox text="Send Email Notification">
+                            <input id="sendEmail"
+                                   type="checkbox"
+                                   ng-model="selection.sendEmail"
+                                   name="sendEmail">
+                        </jf-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-footer-buttons-container">
+                <button class="btn btn-primary"
+                        ng-disabled="(!selection.bintrayRepo || (pushType !== 'docker' && !selection.bintrayPackageName) || (pushType !== 'docker' && !selection.bintrayPackageVersion) || (pushType==='artifact' && !selection.filePath)) && !selection.useSpecificProperties"
+                        ng-click="push()">Push
+                </button>
+                <button ng-if="pushType==='build'"
+                        ng-disabled="(!selection.bintrayRepo || !selection.bintrayPackageName || !selection.bintrayPackageVersion) && !selection.useSpecificProperties"
+                        class="btn btn-primary"
+                        ng-click="backgroundPush()">Background Push
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

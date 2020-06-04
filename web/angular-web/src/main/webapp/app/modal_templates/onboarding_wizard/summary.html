@@ -1,0 +1,55 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="repos-summary-wrapper">
+    <div class="no-repositories" ng-if="!WizCtrl.summary.data.length">
+        We noticed you skipped some steps. No worries! You can create default repositories for any package type from your
+        dashboard at any time.<br>Want to learn more about different repository types? Consult
+        the <a ng-if="!WizCtrl.features.isJCR()" href="https://www.jfrog.com/confluence/display/RTF/Configuring+Repositories" class="jf-link" target="_blank">JFrog Artifactory User Guide <i class="icon icon-external-link"></i></a><a ng-if="WizCtrl.features.isJCR()" href="https://www.jfrog.com/confluence/display/JCR/Configuring+Repositories" class="jf-link" target="_blank">JFrog Container Registry User Guide <i class="icon icon-external-link"></i></a>.
+    </div>
+
+    <ul ng-if="WizCtrl.summary.data.length <= 6" class="repos-summary-container-short">
+       <li ng-repeat="packageType in WizCtrl.summary.data">
+           <div class="icon-wrapper">
+               <div class="repotype iconrepo iconrepo-{{WizCtrl.getIconForPackageType(packageType.type)}}"></div>
+           </div>
+           <div class="repos-list">
+               <div class="repo-container" ng-repeat="local in packageType.localRepos"><span class="repo"><i class="icon icon-local-repo"></i> {{local}}</span></div>
+               <div class="repo-container" ng-repeat="remote in packageType.remoteRepos"><span class="repo"><i class="icon icon-cached-repo"></i> {{remote}}</span></div>
+               <div class="repo-container" ng-repeat="virtual in packageType.virtualRepos"><span class="repo"><i class="icon icon-virtual-repo"></i> {{virtual}}</span></div>
+           </div>
+       </li>
+    </ul>
+    <ul ng-if="WizCtrl.summary.data.length > 6"
+        ng-class="{'prevent-overflow': WizCtrl.summary.data.length > 15}"
+        class="repos-summary-container-long">
+        <li ng-repeat="packageType in WizCtrl.summary.data">
+            <div class="icon-wrapper"><div class="repotype iconrepo iconrepo-{{WizCtrl.getIconForPackageType(packageType.type)}}"></div></div>
+            <div>{{packageType.localRepos.length + packageType.remoteRepos.length + packageType.virtualRepos.length}} Repositories</div>
+
+
+            <div class="repos-list">
+                <div>
+                    <div class="repo-container" ng-repeat="local in packageType.localRepos"><span class="repo"><i class="icon icon-local-repo"></i> {{local}}</span></div>
+                    <div class="repo-container" ng-repeat="remote in packageType.remoteRepos"><span class="repo"><i class="icon icon-cached-repo"></i> {{remote}}</span></div>
+                    <div class="repo-container" ng-repeat="virtual in packageType.virtualRepos"><span class="repo"><i class="icon icon-virtual-repo"></i> {{virtual}}</span></div>
+                </div>
+            </div>
+
+        </li>
+    </ul>
+</div>

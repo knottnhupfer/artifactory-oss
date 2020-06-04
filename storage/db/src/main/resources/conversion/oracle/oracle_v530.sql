@@ -1,0 +1,1 @@
+ALTER TABLE groups ADD admin_privileges NUMBER(5, 0);

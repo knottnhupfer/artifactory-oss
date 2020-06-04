@@ -1,0 +1,153 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$close()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+    <form name="distributeRepo"
+          ng-if="!errorMessage">
+        <div class="form-group">
+            <div class="form-group-cell">
+                <jf-field>
+                    <label>Bintray Distribution Repository</label>
+                    <jf-ui-select jf-select-model="data.selectedRepo"
+                                  jf-select-disabled="redistribute"
+                                  jf-select-options="distributionRepositoriesOptions"></jf-ui-select>
+                </jf-field>
+            </div>
+        </div>
+
+        <div class="form-group form-checkbox">
+            <jf-checkbox text="Distribute Artifacts Asynchronously">
+                <input type="checkbox"
+                       id="async"
+                       ng-model="data.async"/>
+            </jf-checkbox>
+        </div>
+
+        <div class="form-group form-checkbox">
+            <jf-checkbox text="Publish Distributed Artifacts">
+                <input type="checkbox"
+                       id="publish"
+                       ng-model="data.publish"/>
+            </jf-checkbox>
+        </div>
+
+        <div class="form-group form-checkbox">
+            <jf-checkbox text="Override Existing Files">
+                <input type="checkbox"
+                       id="overrideExistingFiles"
+                       ng-model="data.overrideExistingFiles"/>
+            </jf-checkbox>
+        </div>
+        <div ng-if="data.dryRunResults">
+            <!-- SUCCESS -->
+            <div class="tree-wrapper" id="successTree" ng-if="data.dryRunResults.distributed">
+                <input type="checkbox" name="success-main" id="success-main" ng-model="data.toggleSuccessTitle">
+                <h2><input type="checkbox" ng-model="data.toggleSuccessTitle"><label for="success-main">Success</label></h2>
+
+                <ul>
+                    <li ng-repeat="item in data.dryRunResults.distributed">
+                        <input type="checkbox" name="{{item.customId}}" id="{{item.customId}}">
+                        <label for="{{item.customId}}">{{item.repoName}} <span class="type">Repository</span></label>
+                        <span class="caption" ng-if="item.created">Created new {{item.visibility}} repository</span>
+                        <ul ng-if="item.packages">
+                            <li ng-repeat="subitem in item.packages">
+                                <input type="checkbox" name="{{subitem.customId}}" id="{{subitem.customId}}">
+                                <label for="{{subitem.customId}}">{{subitem.packageName}} <span class="type">Package</span></label>
+                                <span class="caption" ng-if="subitem.created">Created a new package {{subitem.packageName}} <span ng-if="subitem.licenses.length">with license <span ng-repeat="license in subitem.licenses">{{license}}{{$last ? '' : ', ' }}</span></span></span>
+                                <ul ng-if="subitem.versions">
+                                    <li ng-repeat="version in subitem.versions">
+                                        <input type="checkbox" name="{{version.customId}}" id="{{version.customId}}">
+                                        <label for="{{version.customId}}" ng-class="{'no-paths': !version.paths.length}">{{version.versionName}} <span class="type">Version</span></label>
+                                        <span class="caption" ng-if="version.created">Created new version</span>
+                                        <ul class="paths" ng-if="version.paths">
+                                            <li ng-repeat="path in version.paths">
+                                                <span class="path">{{path}}</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- WARNINGS -->
+            <div ng-if="data.warningExist || data.dryRunResults.warnings" class="tree-wrapper" id="warnTree">
+                <h2><input type="checkbox" ng-model="data.toggleWarnTitle"><label for="warn-main">Warn</label></h2>
+                <input type="checkbox" name="warn-main" id="warn-main" ng-model="data.toggleWarnTitle">
+
+
+                <ul ng-if="data.dryRunResults.warnings" class="tree-wrapper" id="generalWarnings">
+                    <li>
+                        General Warnings
+                        <div ng-repeat="warning in data.dryRunResults.warnings">
+                            {{warning.message}}
+                        </div>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li ng-repeat="messages in data.dryRunResults.messagesByPath">
+                        <span class="path">File <em>{{messages.path}}</em> resulted with the following warnings</span>
+                        <div ng-repeat="warning in messages.warnings">{{warning.message}}</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- ERRORS -->
+
+            <div ng-if="data.errorsExist || data.dryRunResults.errors" class="tree-wrapper" id="errorTree">
+                <h2><input type="checkbox" ng-model="data.toggleErrorTitle"><label for="errors-main">Errors</label></h2>
+                <input type="checkbox" name="errors-main" id="errors-main" ng-model="data.toggleErrorTitle">
+
+                <ul ng-if="data.dryRunResults.errors" class="tree-wrapper" id="generalErrors">
+                    <li>
+                        General Errors
+                        <div ng-repeat="error in data.dryRunResults.errors">
+                            {{error.message}}
+                        </div>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li ng-repeat="messages in data.dryRunResults.messagesByPath">
+                        <span class="path">File <em>{{messages.path}}</em> resulted with the following errors</span>
+                        <div ng-repeat="error in messages.errors">{{error.message}}</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+    <div class="alert"
+         ng-class="messageType"
+         ng-if="errorMessage"
+         ng-bind-html="errorMessage"></div>
+</div>
+<div class="modal-footer">
+    <!--<button class="btn btn-default" ng-click="$dismiss()">Cancel</button>-->
+    <div class="modal-footer-buttons-container">
+        <button class="btn btn-secondary" ng-click="dryRun()" ng-disabled="!data.selectedRepo">Dry Run</button>
+        <button class="btn btn-primary" ng-click="distribute()" ng-disabled="!data.selectedRepo">Distribute</button>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+.center-login{
+  width: 471px;
+  margin: 140px auto 0;
+}
+
+.login-form {
+  background: @white;
+  padding: 0;
+
+  .login-inner {
+    padding: 13px 45px 12px;
+
+
+    h3 {
+      margin-bottom: 25px;
+      color: @blackBGDark;
+      font-weight: 600;
+      font-size: 21px;
+    }
+
+    &.logged-in{
+      padding: 13px 45px 47px;
+
+      h3.logged-in-message{
+        margin-bottom: 15px;
+      }
+
+      .logged-in-call-to-action{
+        margin-top: 22px;
+      }
+      .icon:before{
+        font-weight: 600!important;
+      }
+    }
+  }
+
+  &.change-password-form {
+
+    .login-inner {
+      padding: 15px 45px 20px;
+      h3 {
+        font-size: 22px;
+        margin-bottom: 25px;
+        line-height: 1.5em;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+      #validation-label {
+        margin: 5px 0;
+      }
+    }
+  }
+
+  .login-button-bar {
+//    background: @grayBGLoginLight;
+    margin-top: -10px;
+    border: 1px @grayBGDarker solid;
+    padding: 18px 45px;
+    overflow: auto;
+    .remember-me {
+      label {margin: 8px 0 0;}
+    }
+  }
+
+  .close-button {
+    color: @grayFontMediumDark;
+    padding: 10px 20px 0 0;
+    font-size: 22px;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.oauth-login {
+  border-top: 1px solid @grayBorderLighter;
+
+  .oauth-login-title {
+    padding: 15px 0 5px;
+  }
+
+  .oauth-login-links-container {
+    text-align: left;
+    margin-bottom: 0;
+    a {
+      display: inline-block;
+      width: 75px;
+      border: solid @grayBorderLighter;
+      border-width: 0 1px;
+      border-left: 0 none;
+      padding: 52px 5px 0;
+      text-align: center;
+      font-size: 12px;
+      color: @grayDocker;
+      height: 70px;
+      background-size: 65% auto;
+      background-position: center 5px;
+      &.single {border: 0;}
+      span {
+        display: block;
+        height: 35px;
+        overflow: hidden;
+        word-break: break-all;
+      }
+
+      /*&:nth-child(4n+1) {
+        border-left: 1px solid @grayBorderLighter;
+      }
+      &:nth-child(1n+5) {
+        border-top: 0 none;
+      }*/
+      &:hover {
+        color: @blackBorderDark;
+      }
+      &:last-child {
+        border-right: 0;
+      }
+    }
+  }
+}

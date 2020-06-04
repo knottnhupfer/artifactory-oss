@@ -1,0 +1,91 @@
+{
+  "pkgid": "rpm:5:kernel",
+  "type": "rpm",
+  "name": "kernel",
+  "qualifiers": {
+    "npm_scope": "@apple"
+  },
+  "lowercase_name": "kernel",
+  "description": "The kernel package contains the Linux...",
+  "website_url": "http://www.kernel.org/",
+  "vcs_url": "https://github.com/rpm",
+  "issues_url": "https://github.com/kernel/rpm/issues",
+  "creator_identity_urls": [
+    "https://twitter.com/kernel",
+    "release@kernel.org"
+  ],
+  "created": "2014-09-19T11:57:18.000Z",
+  "licenses": [
+    "Apache-2.0"
+  ],
+  "respects_semver": true,
+  "modified": "2017-12-11T02:02:52.024Z",
+  "edited": "2017-12-11T02:02:52.024Z",
+  "latest_version": "0:2.6.18-411.el5.centos.plus",
+  "versions": [
+    {
+      "name": "0:2.6.18-411.el5.centos.plus",
+      "pkgid": "rpm:5:kernel",
+      "lowercase_name": "0:2.6.18-411.el5.centos.plus",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "released": "2017-12-11T02:02:52.024Z",
+      "qualifiers": {},
+      "ordinal": 0.9,
+      "files": [
+        {
+          "name": "kernel-2.6.18-411.el5.centos.plus.i686.rpm",
+          "version": "0:2.6.18-411.el5.centos.plus",
+          "pkgid": "rpm:5:kernel",
+          "checksums": {
+            "sha256": "ef819f0d5af4259...87fff52049ce1a55f3e96197fbaa",
+            "sha1": "b1f8c56c532dea4d55b4b8b3e332f7e00eb3a1f4",
+            "md5": "914a834907c4f44fad73d7dac9b48e25"
+          },
+          "qualifiers": {
+            "rpm_arch": "i686",
+            "art_repo": "repo"
+          },
+          "primary": true
+        }
+      ],
+      "download_count": 9513,
+      "tags": [
+        "tag1",
+        "tag2"
+      ],
+      "user_properties": {
+        "prop1": [
+          "val1.0",
+          "val1.1"
+        ],
+        "prop2": []
+      }
+    }
+  ],
+  "download_count": 123445,
+  "follower_count": 82,
+  "rating": 8,
+  "tags": [
+    "tag1",
+    "tag2"
+  ],
+  "user_properties": {
+    "prop1": [
+      "val1.0",
+      "val1.1"
+    ],
+    "prop2": []
+  },
+  "package_info_sources": [
+    {
+      "name": "centos",
+      "updated": "2016-11-07T10:29:32.029Z"
+    },
+    {
+      "name": "archive-centos",
+      "updated": "2017-12-10T20:23:01.825Z"
+    }
+  ]
+}

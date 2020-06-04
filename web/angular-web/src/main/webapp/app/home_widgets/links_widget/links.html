@@ -1,0 +1,28 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget links" ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}">
+    <div class="link-box"
+            ng-repeat="link in ctrl.links track by $index">
+        <a ng-href="{{link.url}}" class="{{link.class}}" target="_blank" ng-click="ctrl.linkClick(link.linkText)">
+            <div class="links-icon">
+                <div class="icon"><ng-include src="link.svg"></ng-include></div>
+                <span>{{link.linkText}}</span>
+            </div>
+        </a>
+    </div>
+</div>

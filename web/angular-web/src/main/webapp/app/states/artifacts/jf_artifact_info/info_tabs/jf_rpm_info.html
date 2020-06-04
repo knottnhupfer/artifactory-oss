@@ -1,0 +1,102 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="rpm">
+    <jf-panel jf-panel-heading="Package Info"
+              ng-if="jfRpm.rpmData.generalRpmMetadata">
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfRpm.rpmData.generalRpmMetadata">
+                <td>{{jfRpm.DICTIONARY[key]}}:</td>
+                <td>{{value}}</td>
+            </tr>
+        </table>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Miscellaneous"
+              ng-if="jfRpm.rpmData.miscRpmMetadata">
+        <table class="jf-data-table">
+            <tr ng-repeat="(key,value) in jfRpm.rpmData.miscRpmMetadata">
+                <td ng-if="key === 'url'">{{jfRpm.DICTIONARY[key]}}:</td>
+                <td ng-if="key === 'url'"><a ng-href="{{value}}" target="_blank">{{value}}</a></td>
+
+                <td ng-if="key !== 'url'">{{jfRpm.DICTIONARY[key]}}:</td>
+                <td ng-if="key !== 'url'">{{value}}</td>
+            </tr>
+        </table>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Description">
+        <div class="panel-body general-info" ng-if="jfRpm.rpmData.description">
+            <p class="preserve-lb">{{jfRpm.rpmData.description}}</p>
+        </div>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Provides"
+              ng-if="jfRpm.rpmData.provide.length">
+        <jf-grid grid-options="jfRpm.gridProvideOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true">
+        </jf-grid>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Requires"
+              ng-if="jfRpm.rpmData.require.length">
+        <jf-grid grid-options="jfRpm.gridRequireOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true">
+        </jf-grid>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Obsoletes"
+              ng-if="jfRpm.rpmData.obsolete.length">
+        <jf-grid grid-options="jfRpm.gridObsoleteOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true">
+        </jf-grid>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Conflicts"
+              ng-if="jfRpm.rpmData.conflict.length">
+        <jf-grid grid-options="jfRpm.gridConflictOptions"
+                filter-field="name"
+                filter-field2="version"
+                no-pagination="true">
+        </jf-grid>
+    </jf-panel>
+
+    <jf-panel jf-panel-heading="Change Log"
+              jf-panel-classes="event-container changelogs"
+              ng-if="jfRpm.rpmData.changeLogs">
+        <div ng-repeat="item in jfRpm.rpmData.changeLogs track by $index"
+             class="padded-row-1x">
+
+            <div class="log-event panel-container">
+                <label class="panel-heading event-title">{{item.date}}</label>
+                <div class="panel-body">
+                    <div class="panel panel-default clearfix">
+                        <div class="event-author">{{item.author}}</div>
+                        <div class="preserve-lb">{{item.text}}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </jf-panel>
+</div>

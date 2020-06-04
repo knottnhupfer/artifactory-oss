@@ -1,0 +1,67 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div ng-if="generate.ivy" class="package-build-settings">
+    <div class="form-group">
+        <div class="form-group-cell">
+            <label>Libs Repository</label>
+            <jf-help-tooltip>Repository to use for resolution.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.ivy.libsRepository" remove-selected="false">
+                <ui-select-match placeholder="Plugin Releases">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.ivy.libsRepository | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group-cell">
+            <label>Libs Repository Layout</label>
+            <jf-help-tooltip>Repository Layout to build the artifact and Ivy patterns from.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.ivy.libsRepositoryLayout" remove-selected="false">
+                <ui-select-match placeholder="Plugin Releases">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.ivy.libsRepositoryLayout | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group-cell">
+            <label>Libs Resolver Name</label>
+            <jf-help-tooltip>An optional name for the generated resolver.</jf-help-tooltip>
+            <input type="text"
+                    ng-model="selection.ivy.libsResolverName"
+                    class="input-text"
+                    id="user" required>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group-cell">
+            <jf-checkbox text="Use Ibiblio Resolver">
+                <input type="checkbox" ng-model="selection.ivy.ibiblio" />
+            </jf-checkbox>
+            <jf-help-tooltip>Check if the resolver should use Ivy's ibiblio.</jf-help-tooltip>
+        </div>
+        <div class="form-group-cell">
+            <jf-checkbox text="Maven 2 Compatible">
+                <input type="checkbox" ng-model="selection.ivy.maven2" ng-checked="selection.ivy.maven2 || selection.ivy.ibiblio" ng-disabled="selection.ivy.ibiblio" />
+            </jf-checkbox>
+            <jf-help-tooltip>Check if the resolver should use a Maven 2 compatible pattern.</jf-help-tooltip>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<config version="v1">
+    <!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+    <chain template="s3"/>
+    <provider type="cache-fs" id="cache-fs">
+        <binariesDir>data/cache</binariesDir>
+        <fileStoreDir>cache</fileStoreDir>
+    </provider>
+    <provider type="eventual" id="eventual"/>
+    <provider type="retry" id="retry"/>
+    <provider type="s3" id="s3">
+        <endpoint>http://s3.amazonaws.com</endpoint>
+        <credential>s3password</credential>
+        <identity>s3admin</identity>
+        <property name="s3service.s3-endpoint-http-port" value="7"/>
+    </provider>
+</config>

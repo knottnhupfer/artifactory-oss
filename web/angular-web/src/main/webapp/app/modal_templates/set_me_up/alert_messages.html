@@ -1,0 +1,39 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="alert alert-warning config-message"
+        ng-if="adminUser && selection.repoType.value === 'cocoapods' && noBaseUrl">
+    Custom Base URL must be configured for CocoaPods repositories.<br/>
+    <a href
+        class="cocopods-alert-base-url"
+        ui-sref="admin.configuration.general({focusOnBaseUrl: true})">Click</a> to set Base URL.
+</div>
+
+<div class="alert alert-info config-message"
+      ng-if="adminUser && selection.repoType.value === 'puppet'"
+      ng-bind-html="MESSAGES.puppet.puppetClientVersion">
+</div>
+
+<div class="alert alert-warning"
+     ng-if="shownRepos.length == 0"
+     ng-bind-html="MESSAGES.hasNoRepositoriesOfType.message">
+</div>
+
+<div class="alert alert-warning"
+     ng-if="hasNoDeployPermissions"
+     ng-bind-html="MESSAGES.hasNoDeployPermissions.message">
+</div>

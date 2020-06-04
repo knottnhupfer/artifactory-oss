@@ -1,0 +1,103 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$dismiss()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">Show all resources for {{permissionName}}</h3>
+</div>
+<div class="modal-body clearfix permissions-resource-modal-body">
+    <jf-tabs tabs="tabs"
+            dictionary="tabsDict"
+            tab-width="{{tabs.length > 1 ? '46%' : '92%'}}"
+            container-margin="0">
+
+            <jf-tab name="Repositories">
+                <jf-table-view options="tableData"></jf-table-view>
+
+            </jf-tab>
+
+        <jf-tab name="Builds">
+
+            <h2 ng-if="buildIncludePatterns.length">Include Patterns</h2>
+            <div class="group-list-wrapper" ng-if="buildIncludePatterns.length">
+                <ul class="group-list">
+                    <li class="group-list-item"
+                            jf-tooltip-on-overflow
+                            ng-repeat="item in buildIncludePatterns track by $index">{{item}}
+                    </li>
+                </ul>
+            </div>
+            <h2 ng-if="buildExcludePatterns.length">Exclude Patterns</h2>
+            <div class="group-list-wrapper" ng-if="buildExcludePatterns.length">
+                <ul class="group-list">
+                    <li class="group-list-item"
+                            jf-tooltip-on-overflow
+                            ng-repeat="item in buildExcludePatterns track by $index">{{item}}
+                    </li>
+                </ul>
+            </div>
+        </jf-tab>
+
+    </jf-tabs>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div ng-if="tabs.length">
+        <jf-switch
+                ng-model="resourceData.currentTab"
+                options="tabs">
+        </jf-switch>
+    </div>
+
+    <div ng-if="resourceData.regex && resourceData.regex.length">
+        <h4>Build Regex</h4>
+        {{resourceData.regex}}
+        <br>
+    </div>
+
+    <div ng-if="resourceData.currentTab === 'Repositories' || (!resourceData.currentTab && resourceData.repoKeys.length)">
+        <h4>Repositories</h4>
+        <div class="group-list-wrapper">
+            <ul class="group-list">
+                <li class="group-list-item"
+                        jf-tooltip-on-overflow
+                        ng-repeat="item in resourceData.repoKeys track by $index">{{item}}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div ng-if="resourceData.currentTab === 'Builds' || (!resourceData.currentTab && resourceData.builds.length)">
+        <h4>Builds</h4>
+        <div class="group-list-wrapper">
+            <ul class="group-list">
+                <li class="group-list-item"
+                        jf-tooltip-on-overflow
+                        ng-repeat="item in resourceData.builds track by $index">{{item}}
+                </li>
+            </ul>
+        </div>
+
+    </div>-->
+
+
+
+
+
+
+
+
+
+</div>

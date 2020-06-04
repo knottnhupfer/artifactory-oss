@@ -1,0 +1,23 @@
+
+{
+  "results" : [ {
+    "repo" : "repo1",
+    "path" : "ant/ant/1.5",
+    "name" : "ant-1.5.jar",
+    "type" : "file",
+    "size" : 716139,
+    "created" : "2012-06-21T15:53:24.448+03:00",
+    "created_by" : "yossis-2201",
+    "modified" : "2012-06-21T15:53:24.448+03:00",
+    "modified_by" : "yossis-3274",
+    "updated" : "2012-06-21T15:53:24.448+03:00",
+    "releaseBundleFiles" : [ {
+      "release_artifact.repo_path" : "repo1:ant/ant/1.5/ant-1.5.jar"
+    } ]
+  } ],
+  "range" : {
+    "start_pos" : 0,
+    "end_pos" : 1,
+    "total" : 1
+  }
+}

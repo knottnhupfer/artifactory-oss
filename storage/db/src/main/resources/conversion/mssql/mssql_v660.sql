@@ -1,0 +1,1 @@
+ALTER TABLE build_jsons DROP CONSTRAINT build_jsons_builds_fk;

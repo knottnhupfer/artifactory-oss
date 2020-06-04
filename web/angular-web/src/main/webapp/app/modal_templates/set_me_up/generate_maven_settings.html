@@ -1,0 +1,85 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<!-- TODO: Break this down to smaller template files -->
+<div ng-if="generate.maven" class="package-build-settings">
+    <div class="form-group">
+        <div class="form-group-cell">
+            <label>Releases</label>
+            <jf-help-tooltip>The chosen releases repository.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.maven.releases" remove-selected="false">
+                <ui-select-match placeholder="Releases">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.maven.releases | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group-cell">
+            <label>Snapshots</label>
+            <jf-help-tooltip>The chosen snapshots repository.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.maven.snapshots" remove-selected="false">
+                <ui-select-match placeholder="Snapshots">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.maven.snapshots | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group-cell">
+            <!--<label><input type="checkbox" ng-model="selection.maven.mirror" /> Mirror Any</label>-->
+            <jf-checkbox text="Mirror Any"><input type="checkbox" ng-model="selection.maven.mirror" /></jf-checkbox>
+            <jf-help-tooltip>Check if you want to mirror a repository.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.maven.mirrorAny" ng-disabled="!selection.maven.mirror" remove-selected="false">
+                <ui-select-match placeholder="Plugin Releases">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.maven.anyMirror">
+                    <jf-marquee><inner-html ng-bind-html="property"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group-cell">
+            <label>Plugin Releases</label>
+            <jf-help-tooltip>The chosen plugins releases repository.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.maven.pluginReleases" remove-selected="false">
+                <ui-select-match placeholder="Plugin Releases">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.maven.pluginReleases | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group-cell">
+            <label>Plugin Snapshots</label>
+            <jf-help-tooltip>The chosen plugins snapshots repository.</jf-help-tooltip>
+            <ui-select jf-disable-ng-animate ng-model="selection.maven.pluginSnapshots" remove-selected="false">
+                <ui-select-match placeholder="Plugin Snapshots">
+                    <jf-marquee>{{$select.selected}}</jf-marquee>
+                </ui-select-match>
+                <ui-select-choices jf-disable-ng-animate repeat="property in settings.maven.pluginSnapshots | filter: $select.search track by $index">
+                    <jf-marquee><inner-html ng-bind-html="property | highlight: $select.search"></inner-html></jf-marquee>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+</div>

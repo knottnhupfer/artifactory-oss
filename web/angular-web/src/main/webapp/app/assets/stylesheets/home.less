@@ -1,0 +1,354 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+// Animations
+@-webkit-keyframes swell {
+  0% { transform: scale(0); }
+  47% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes swell {
+  0% { transform: scale(0); }
+  47% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.swelling {
+  -webkit-animation: swell 0.5s linear forwards;
+  animation: swell 0.5s linear forwards;
+}
+
+.home-page {
+  .home-header-container {
+    padding: 35px 0 0;
+    color: #373737;
+    @media @small-screen {
+      padding: 10px 0 ;
+    }
+
+    h1.home-header-happily {
+      font-size: 44px;
+      font-weight: 700;
+      margin: 0;
+      @media @small-screen {
+        font-size: 32px;
+      }
+    }
+
+    .artifactory-details {
+      margin: 2px 0;
+      padding: 0 15px;
+      @media @small-screen {
+        padding: 0 15px;
+      }
+
+      .artifactory-version {
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &.content-layout-container {
+    h1 {
+      font-size: 56px;
+      margin: 45px 0 0;
+      @media @small-screen {
+        font-size: 44px;
+        margin: 55px 0 0;
+        padding: 0 0 0 15px;
+      }
+    }
+    .content-wrapper {
+      top: 185px;
+      overflow: auto;
+      right: 0px;
+      left: 0px;
+      bottom: 5px;
+      @media @small-screen {
+        top: 135px;
+      }
+    }
+  }
+  h3 {
+    color: @blackFontDark;
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+
+  .jf-switch {
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+    border: solid #e8e8e8;
+    border-width: 1px 0;
+
+    .jf-switch-options {
+      li {
+        &:not(:first-child) {
+          padding-left: 40px;
+
+          &::before {
+            content: " ";
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .jf-switch-option {
+      display: block;
+      color: @grayFontLighter;
+      font-size: 16px;
+      white-space: nowrap;
+      padding: 22px 0;
+      min-width: 40px;
+      border-top: 1px solid #fff;
+      border-bottom: 1px solid #fff;
+
+      &:hover, &.active {
+        border-color: @greenFontHeader;
+      }
+      &:hover {
+        color: @grayFontLighter;
+      }
+      &.active {
+        color: @grayFontGeneral;
+        position: relative;
+
+        &::before {
+          content: '';
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 6px 6px 0 6px;
+          border-color: @greenBGDark transparent transparent transparent;
+          position: absolute;
+          bottom: -6px;
+          left: 50%;
+          margin-left: -6px;
+        }
+
+        &::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 4px 4px 0 4px;
+          border-color: @white transparent transparent transparent;
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          margin-left: -4px;
+        }
+      }
+    }
+  }
+
+  .message-of-day {
+    height: 35px;
+    line-height: 35px;
+    background-color: #fff;
+    padding-left: 15px;
+
+    span {
+      font-size: 12px;
+      color: @blueFontDark;
+    }
+  }
+
+  .home-page-intro {
+    margin-top: 20px;
+    position: relative;
+    padding-left: 15px;
+  }
+
+
+  .number-artifacts {
+    font-weight: bold;
+  }
+
+  .addon-list {
+    padding-left: 20px;
+  }
+
+  .addon-container {
+    position: relative;
+    display: inline-block;
+    height: 200px;
+    background: @grayBGLight;
+    margin: 0 20px 15px 0;
+    text-align: center;
+    transition: 0.5s all;
+
+    &, .addon-name, .addon-status, .addon-links {
+      width: 180px;
+    }
+
+    &:hover {
+      box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.17);
+    }
+
+    .addon-icon {
+      // Commented out animation until we get clearance from Yoav
+      //transform: scale(0);
+      width: 130px;
+      height: 70px;
+      margin: 35px auto 0;
+      background-position: center center;
+      background-size: auto 100%;
+    }
+
+    .addon-name {
+      position: absolute;
+      top: 120px;
+      font-weight: bold;
+      color: @grayFontLighter;
+    }
+
+    .addon-status {
+      position: absolute;
+      top: 145px;
+
+      color: @greenFontHeader;
+
+      &.available {
+        color: @blueFontDark;
+      }
+    }
+
+    .addon-links {
+      position: absolute;
+      top: 164px;
+      font-size: 12px;
+
+      &, a {
+        color: @grayFontLighter;
+      }
+
+      a:hover {
+        color: @greenFontHeader;
+      }
+
+      span {
+        font-size: 20px;
+        margin: 0 4px;
+        position: relative;
+        top: 3px;
+      }
+
+      visibility: hidden;
+    }
+
+    &:hover {
+      .addon-links {
+        visibility: visible;
+      }
+    }
+
+    &.license-required::after {
+      top: 7px;
+      right: 12px;
+    }
+  }
+
+  .today-content {
+    margin-left: 5px;
+  }
+
+  .icon-padlock {
+    font-size: 22px;
+    position: relative;
+    top: 4px;
+    margin-right: 4px;
+  }
+
+}
+
+#home-disclaimer {
+  position: absolute;
+  bottom: 0;
+  padding: 0 20px 0;
+  font-size: 11px;
+  color: #bbb;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  a {
+    opacity: 0.6;
+  }
+}
+
+.jf-news{
+  .updates{
+    width: 33.3%;
+    right: 6px;
+    white-space: normal;
+    text-align: left;
+    padding: 14px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    .inner{
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      left: 14px;
+      bottom: 14px;
+      border: none;
+      box-shadow: 0 1px 8px -2px rgba(0,0,0,.4);
+      background: #FFF;
+      overflow: auto;
+      height:17%;
+      .twitter{
+        margin-right: 8px;
+      }
+      h3{
+        text-align: left;
+        margin-bottom: 7px;
+        font-size: 19px;
+        margin-top: 10px;
+        margin-left: 14px;
+        color: #00569a;
+        .icon.icon-megaphone-on:before{
+          font-size: 40px!important;
+          line-height: 0;
+          position: relative;
+          top: 10px;
+          left: 3px;
+        }
+      }
+      hr{
+        border-top: 1px solid #00569a;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+    .news-content{
+      padding: 8px 12px 8px 12px;
+    }
+  }
+}

@@ -1,0 +1,89 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="set-me-up-actions" ng-if="generateSettings">
+    <button class="btn btn-secondary"
+            ng-disabled="validateToolSettings()"
+            ng-click="generateBuildSettings()">Generate Settings</button>
+    <div class="pull-right text-button-group">
+        <form ng-if="generate.maven && snippet" class="inline" method="get" action="../ui/setMeUp/downloadBuildMaven">
+            <input name="downloadScript" type="hidden" ng-value="true">
+            <input name="data" type="hidden" ng-value="getMavenProps()">
+            <div onclick="javascript:$(this).parents('form').submit()" class="text-button">
+                <span class="icon icon-download"></span>Download Snippet
+            </div>
+        </form>
+        <form ng-if="generate.gradle && snippet" class="inline" method="get" action="../ui/setMeUp/downloadBuildGradle">
+            <input name="downloadScript" type="hidden" ng-value="true">
+            <input name="data" type="hidden" ng-value="getGradleProps()">
+            <div onclick="javascript:$(this).parents('form').submit()" class="text-button">
+                <span class="icon icon-download"></span>Download Snippet
+            </div>
+        </form>
+        <form ng-if="generate.gradle && snippet" class="inline" method="get" action="../ui/setMeUp/downloadBuildGradle">
+            <input name="gradleProps" type="hidden" ng-value="true">
+            <input name="data" type="hidden" ng-value="getGradleProps()">
+            <div onclick="javascript:$(this).parents('form').submit()" class="text-button">
+                <span class="icon icon-download"></span>Download gradle.properties
+            </div>
+        </form>
+        <form ng-if="generate.ivy && snippet" class="inline" method="get" action="../ui/setMeUp/downloadBuildIvy">
+            <input name="downloadScript" type="hidden" ng-value="true">
+            <input name="data" type="hidden" ng-value="getIvyProps()">
+            <div onclick="javascript:$(this).parents('form').submit()" class="text-button">
+                <span class="icon icon-download"></span>Download Snippet
+            </div>
+        </form>
+
+        <div class="text-button"
+                ng-if="(generate.maven || generate.gradle || generate.ivy) && snippet && !deploySettingsMode"
+                ng-click="setDeploySettingsMode()">
+            <span class="icon icon-upload"></span>Deploy Settings
+        </div>
+    </div>
+    <div ng-if="deploySettingsMode" class="margin-top-20">
+        <form>
+            <jf-panel jf-panel-heading="Deploy Snippet">
+                <div class="form-group">
+                    <div class="form-group-cell">
+                        <label>Target Repository</label>
+                        <jf-ui-select jf-select-model="snippetDeploy.targetRepo"
+                                jf-select-options="snippetDeploy.reposList"
+                                jf-select-display-attr="repoKey">
+
+                        </jf-ui-select>
+                    </div>
+                    <div class="form-group-cell">
+                        <jf-field>
+                            <label for="target-file">Target Path
+                            </label>
+                            <input type="text"
+                                    class="input-text"
+                                    id="target-file"
+                                    ng-model="snippetDeploy.targetPath">
+                        </jf-field>
+                    </div>
+                    <button class="btn btn-secondary margin-top-25"
+                            ng-disabled="!snippetDeploy.targetRepo"
+                            type="button"
+                            ng-click="deploySettingsSnippet()">Deploy
+                    </button>
+                </div>
+            </jf-panel>
+        </form>
+    </div>
+</div>

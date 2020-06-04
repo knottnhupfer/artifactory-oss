@@ -1,0 +1,46 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="closeModal()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">{{modalTitle}}</h3>
+</div>
+<div class="modal-body clearfix certificate-details-modal">
+    <form name="form" class="form" novalidate>
+        <div class="card card-pole-pad card-side-pad">
+            <jf-panel ng-repeat="(dataGroupKey,dataGroupFields) in certificateDetails"
+                    jf-panel-heading="{{DICTIONARY[dataGroupKey]}}">
+                <table  class="jf-data-table">
+                    <tr ng-repeat="(fieldKey,fieldValue) in dataGroupFields">
+                        <td class="certificate-data-field-key">
+                            <span jf-tooltip-on-overflow>
+                                {{DICTIONARY[fieldKey]}}:
+                            </span>
+                        </td>
+                        <td class="certificate-data-field-value">
+                            <span jf-tooltip-on-overflow>
+                                {{!this.DICTIONARY.dateFields[fieldKey] ? fieldValue : fieldValue | date:'medium' }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </jf-panel>
+        </div>
+    </form>
+</div>

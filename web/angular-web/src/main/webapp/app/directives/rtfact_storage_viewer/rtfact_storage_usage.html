@@ -1,0 +1,33 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="storage-usage" ng-class="{'infinity-storage': StorageUsage.SpecialValues.isSpecialValue(StorageUsage.total)}">
+    <div ng-repeat="threshold in StorageUsage.thresholds"
+         class="threshold-container">
+        <div class="threshold"
+             ng-class="threshold.type"
+             ng-style="{left: threshold.value + '%'}">
+            <div class="threshold-icon" jf-tooltip="{{threshold.type === 'warning' ? 'Storage Space Warning ' + threshold.value + '%' : 'Storage Space Limit ' + threshold.value + '%'}}">{{threshold.value}}</div>
+        </div>
+    </div>
+    <span ng-if="StorageUsage.total === StorageUsage.SpecialValues.INFINITY_VALUE" class="infinity-sign">&nbsp;</span>
+    <span ng-if="StorageUsage.total === StorageUsage.SpecialValues.UNSUPPORTED_VALUE" class="unsupported-sign">&nbsp;</span>
+    <div class="storage-usage-used-container" ng-class="{'storage-full': StorageUsage.isStorageFull()}">
+        <div class="storage-usage-used" ng-style="{'width':StorageUsage.getPercents(),'min-width':'19px'}"></div>
+    </div>
+</div>
+

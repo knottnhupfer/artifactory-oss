@@ -1,0 +1,97 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--
+  ~ TAKE CARE! Making changes to this file may result in losing binaries stored in Artifactory!
+  ~ If you are not sure of what you are doing, please contact JFrog Support for assistance.
+  -->
+<!-- This file is used for NoNfsBinaryStoreConverterTest -->
+<!-- Default chains for Enterprise version -->
+<config version="v1">
+
+    <!-- S3 default chain based on jets3t -->
+    <chain template="s3">
+        <provider id="cache-fs" type="cache-fs">
+            <provider id="eventual" type="eventual">
+                <provider id="retry" type="retry">
+                    <provider id="s3" type="s3"/>
+                </provider>
+            </provider>
+        </provider>
+    </chain>
+
+    <!-- Google Storage Service default chain -->
+    <chain template="google-storage">
+        <provider id="cache-fs" type="cache-fs">
+            <provider id="eventual" type="eventual">
+                <provider id="retry" type="retry">
+                    <provider id="google-storage" type="google-storage"/>
+                </provider>
+            </provider>
+        </provider>
+    </chain>
+
+    <!-- Old S3 chain based on jclouds -->
+    <chain template="s3Old">
+        <provider id="cache-fs" type="cache-fs">
+            <provider id="eventual" type="eventual">
+                <provider id="retry" type="retry">
+                    <provider id="s3Old" type="s3Old"/>
+                </provider>
+            </provider>
+        </provider>
+    </chain>
+
+    <!-- Pure Sharding with 2 shards default chain, writing to one sub-provider only -->
+    <chain template="double-shards">
+        <provider id="cache-fs" type="cache-fs">
+            <provider id="sharding" type="sharding">
+                <redundancy>1</redundancy>
+                <sub-provider id="shard-fs-1" type="state-aware"/>
+                <sub-provider id="shard-fs-2" type="state-aware"/>
+            </provider>
+        </provider>
+    </chain>
+
+    <provider id="shard-fs-1" type="state-aware">
+        <fileStoreDir>shard-fs-1</fileStoreDir>
+    </provider>
+    <provider id="shard-fs-2" type="state-aware">
+        <fileStoreDir>shard-fs-2</fileStoreDir>
+    </provider>
+
+    <!-- Redundant Sharding with 2 shards default chain, writing to 2 sub-providers -->
+    <chain template="redundant-shards">
+        <provider id="cache-fs" type="cache-fs">
+            <provider id="sharding" type="sharding">
+                <redundancy>2</redundancy>
+                <sub-provider id="shard-state-aware-1" type="state-aware"/>
+                <sub-provider id="shard-state-aware-2" type="state-aware"/>
+            </provider>
+        </provider>
+    </chain>
+
+    <!-- State Aware Shards FS provider configuration -->
+    <provider id="shard-state-aware-1" type="state-aware">
+        <fileStoreDir>shard-state-aware-1</fileStoreDir>
+    </provider>
+    <provider id="shard-state-aware-2" type="state-aware">
+        <fileStoreDir>shard-state-aware-2</fileStoreDir>
+    </provider>
+
+</config>

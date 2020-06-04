@@ -1,0 +1,62 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header deploy">
+    <button type="button"
+            class="close"
+            data-dismiss="close"
+            aria-label="Close"
+            ng-click="close()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">{{title}}</h4>
+</div>
+<div class="modal-body clearfix set-me-up-modal">
+    <!-- User Data Injection -->
+    <ng-include src="'modal_templates/set_me_up/user_data_injection.html'"></ng-include>
+
+    <!-- Maven Build Settings -->
+    <ng-include src="'modal_templates/set_me_up/generate_maven_settings.html'"></ng-include>
+
+    <!-- Gradle Build Settings -->
+    <ng-include src="'modal_templates/set_me_up/generate_gradle_settings.html'"></ng-include>
+
+    <!-- Ivy Build Settings -->
+    <ng-include src="'modal_templates/set_me_up/generate_ivy_settings.html'"></ng-include>
+
+    <!-- Snippet Actions -->
+    <ng-include src="'modal_templates/set_me_up/snippet_actions.html'"></ng-include>
+
+    <!-- Repo selection -->
+    <ng-include src="'modal_templates/set_me_up/select_repo.html'"></ng-include>
+
+    <div class="clearfix"></div>
+
+    <!-- Alert Messages -->
+    <ng-include src="'modal_templates/set_me_up/alert_messages.html'"></ng-include>
+
+    <!-- Build Snippet -->
+    <ng-include src="'modal_templates/set_me_up/snippets.html'"></ng-include>
+</div>
+<div class="modal-footer"
+     ng-if="selection.repoType && selection.repoType.wiki">
+    <div id="package-description" class="text-left">
+        <a href="https://www.jfrog.com/confluence/display/RTF/{{selection.repoType.wiki}}" target="_blank">
+            Learn more about Artifactory support for {{selection.repoType.text}} <span ng-if="selection.repoType.value !== 'docker'">repository</span><span ng-if="selection.repoType.value === 'docker'">registry</span>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,1 @@
+ALTER TABLE artifact_bundles ALTER COLUMN version SET DATA TYPE VARCHAR(32);

@@ -1,0 +1,72 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="close" aria-label="Close" ng-click="$dismiss()"><span
+            aria-hidden="true">&times;</span>
+    </button>
+    <h3 class="modal-title">Updating DNS Record</h3>
+</div>
+<div class="modal-body clearfix docker-popup">
+    <div class="text-center">
+
+        <div class="new-docker">
+            <div class="dockerlogo"></div>
+            <div class="docker-container">
+                <div class="cont"></div>
+                <div class="sep"></div>
+                <div class="cont"></div>
+            </div>
+            <div class="artilogo"></div>
+        </div>
+
+        <h1>Adding a DNS record for your new Docker {{dockerData.packageType}} repository</h1>
+        <p>This process may take a few minutes to complete.</p>
+    </div>
+
+    <p>Once the DNS record is added you can test the configuration as follows:</p>
+
+
+    <div ng-repeat="snippet in dockerData.snippets" class="snippet-wrapper">
+        <p>{{snippet.message}}</p>    <!-- ng-if="snippet.message && dockerData.packageType != 'virtual'"-->
+        <jf-clip-copy
+                text-to-copy="snippet.snippet"
+                object-name=""
+                class="code-mirror-copy"
+        >
+        </jf-clip-copy>
+
+        <jf-code-mirror mime-type="xml"
+                        model="snippet.snippet"
+                        allowEdit="false">
+        </jf-code-mirror>
+
+
+    </div>
+
+    <p ng-if="dockerData.packageType == 'virtual' && dockerData.deployToLocal == false">Note that you can configure your virtual repository to support docker push. For more details please refer to <a href="https://www.jfrog.com/confluence/display/RTF/Deploying+Artifacts#DeployingArtifacts-DeployingtoaVirtualRepository">deploy to virtual</a> page in the user guide.</p>
+
+
+
+    <p>For additional information please refer to the wiki, in case this repository is still not available in a few minutes please contact <a href="mailto:support@jfrog.com?subject=Configure Docker Repository on {{dockerData.hostname}}">support</a></p>
+</div>
+
+<div class="modal-footer">
+    <div class="modal-footer-buttons-container">
+        <button class="btn btn-secondary btn-dark" type="button" ng-click="$dismiss()">Close</button>
+    </div>
+</div>

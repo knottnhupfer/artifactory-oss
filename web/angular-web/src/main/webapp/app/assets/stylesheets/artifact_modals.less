@@ -1,0 +1,60 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+.dry-run-result {
+  max-height: 100px;
+  overflow: auto;
+  margin-bottom: 0;
+}
+
+label.snippet {
+  color: @greenBGDark;
+  margin: 5px 0 0;
+
+  .icon {
+    position: relative;
+    top: 2px;
+    color: @grayFontMediumDark;
+  }
+}
+
+.cell-top-padding {
+  > * {
+    position: relative;
+    top: 34px;
+  }
+}
+
+.property-modal {
+  overflow: hidden !important;
+
+  .dropdown-min-height {
+    min-height: 250px;
+  }
+}
+.modal {
+  .modal-sm{
+    max-width: 600px;
+  }
+}
+.repository-type-modal {
+  .modal-footer {
+    min-height: 100px;
+  }
+}

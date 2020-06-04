@@ -1,0 +1,1 @@
+ALTER TABLE bundle_files ADD COLUMN original_component_details VARCHAR(1000) DEFAULT NULL;

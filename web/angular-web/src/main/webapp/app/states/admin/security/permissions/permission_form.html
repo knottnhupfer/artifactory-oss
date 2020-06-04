@@ -1,0 +1,548 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="content-layout-container permissions-form">
+    <h1>{{PermissionForm.title}}</h1>
+    <div class="content-wrapper">
+        <form name="PermissionForm.form" ng-submit="PermissionForm.save()">
+
+            <div class="card stretch card-pole-pad card-side-pad">
+                <div class="content-with-footer">
+                    <div class="form-group">
+                        <div class="form-group-cell">
+                            <jf-field validations="common" autofocus="true" dont-push-down-errors="true">
+                                <label class="mandatory">Name</label>
+                                <input type="text"
+                                        class="input-text"
+                                        name="name"
+                                        ng-disabled="!PermissionForm.newPermission"
+                                        ng-model="PermissionForm.permissionName" required/>
+                            </jf-field>
+                        </div>
+                    </div>
+                    <jf-wizard>
+                        <jf-wizard-element data-title="Resources">
+
+                            <jf-switch ng-model="PermissionForm.switchedValue"
+                                    options="PermissionForm.tabs"
+                                    watch-options="true">
+                            </jf-switch>
+                            <!--  RESOURCES  -->
+                            <div ng-if="PermissionForm.switchedValue === 'Add Repositories'">
+                                <!-- select any by repo type -->
+                                <div class="form-group">
+                                    <div class="form-group-cell double">
+                                        <jf-checkbox text="Any Local Repository">
+                                            <input type="checkbox"
+                                                    id="anyLocal"
+                                                    ng-model="PermissionForm.anyLocal"
+                                                    ng-change="PermissionForm.setAnyRepoOfType('local',PermissionForm.anyLocal)"
+                                                    ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-checkbox>
+                                        <jf-checkbox text="Any Remote Repository">
+                                            <input type="checkbox"
+                                                    id="anyRemote"
+                                                    ng-model="PermissionForm.anyRemote"
+                                                    ng-change="PermissionForm.setAnyRepoOfType('remote',PermissionForm.anyRemote)"
+                                                    ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-checkbox>
+                                        <jf-checkbox text="Any Distribution Repository">
+                                            <input type="checkbox"
+                                                    id="anyDistribution"
+                                                    ng-model="PermissionForm.anyDistribution"
+                                                    ng-change="PermissionForm.setAnyRepoOfType('distribution',PermissionForm.anyDistribution)"
+                                                    ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-checkbox>
+                                    </div>
+                                </div>
+                                <!-- /select any by repo type -->
+
+                                <!-- Include/Exclude patterns -->
+                                <div class="form-group">
+                                    <div class="form-group-cell">
+                                        <jf-list-maker values="PermissionForm.repoPermission.includePatterns"
+                                                label="Include Pattern"
+                                                help-tooltip="PermissionForm.TOOLTIP.repoPatterns"
+                                                object-name="Pattern"
+                                                ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-list-maker>
+                                    </div>
+                                    <div class="form-group-cell">
+                                        <jf-list-maker values="PermissionForm.repoPermission.excludePatterns"
+                                                label="Exclude Pattern"
+                                                help-tooltip="PermissionForm.TOOLTIP.repoPatterns"
+                                                object-name="Pattern"
+                                                ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-list-maker>
+                                    </div>
+                                </div>
+
+                                <!-- repositories list DnD -->
+                                <div class="form-group">
+                                    <jf-tabular-dnd
+                                            ng-if="PermissionForm.availableRepositories"
+                                            available-items="PermissionForm.availableRepositories"
+                                            selected-items="PermissionForm.selectedRepositories"
+                                            entity-name="Repository/Repositories"
+                                            app-scope="PermissionForm"
+                                            number-of-rows="5"
+                                            columns="PermissionForm.repositoriesColumns"
+                                            on-change="PermissionForm.reposChanged()"
+                                            ng-disabled="!PermissionForm.user.isAdmin()">
+                                    </jf-tabular-dnd>
+                                </div>
+                                <!-- /repositories list DnD -->
+
+                            </div> <!--  /Add Repositories  -->
+
+                            <div ng-if="PermissionForm.switchedValue === 'Add Builds'">
+
+                                <div class="alert alert-info">When adding a build, an include pattern will be generated
+                                                              for its path in the build info repository.<br>To remove a
+                                                              build, delete its corresponding include pattern.</div>
+
+                                <div class="form-group">
+                                    <div class="form-group-cell double">
+                                        <jf-checkbox text="Any Build">
+                                            <input type="checkbox"
+                                                    id="allBuilds"
+                                                    ng-model="PermissionForm.allBuilds"
+                                                    ng-change="PermissionForm.markAllBuilds(PermissionForm.allBuilds)"
+                                                    ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-checkbox>
+                                    </div>
+                                </div>
+
+                                <!-- Include/Exclude builds patterns -->
+                                <div class="form-group">
+                                    <div class="form-group-cell">
+                                        <jf-list-maker values="PermissionForm.buildPermission.includePatterns"
+                                                label="Include Pattern"
+                                                help-tooltip="PermissionForm.TOOLTIP.buildPatterns.includePatterns"
+                                                object-name="Pattern"
+                                                ng-disabled="PermissionForm.allBuilds || !PermissionForm.user.isAdmin()"
+                                                on-after-add-value="PermissionForm.updateBuildsList()"
+                                                on-after-delete-value="PermissionForm.updateBuildsList()">
+                                        </jf-list-maker>
+                                    </div>
+                                    <div class="form-group-cell">
+                                        <jf-list-maker values="PermissionForm.buildPermission.excludePatterns"
+                                                label="Exclude Pattern"
+                                                help-tooltip="PermissionForm.TOOLTIP.buildPatterns.excludePatterns"
+                                                object-name="Pattern"
+                                                on-after-add-value="PermissionForm.updateBuildsList()"
+                                                on-after-delete-value="PermissionForm.updateBuildsList()"
+                                                ng-disabled="!PermissionForm.user.isAdmin()">
+                                        </jf-list-maker>
+                                    </div>
+                                </div>
+                                <!-- /Include/Exclude builds patterns -->
+                                <div class="form-group">
+                                    <jf-tabular-dnd
+                                            ng-if="PermissionForm.availableBuilds"
+                                            available-items="PermissionForm.availableBuilds"
+                                            selected-items="PermissionForm.selectedBuilds"
+                                            entity-name="Build"
+                                            app-scope="PermissionForm"
+                                            number-of-rows="5"
+                                            item-draggable-attr="draggable"
+                                            on-change="PermissionForm.buildsChange()"
+                                            columns="PermissionForm.buildsColumns"
+                                            ng-disabled="!PermissionForm.user.isAdmin()">
+                                    </jf-tabular-dnd>
+                                </div>
+
+                            </div> <!--  /Add Builds  -->
+
+                            <div class="permissions-summary" ng-if="PermissionForm.switchedValue === 'Summary'">
+
+                                <div class="alert alert-info" ng-if="PermissionForm.buildGlobalBasicReadAllowed">
+                                    Allow Basic Read of Build Related Info is enabled. All users can view the published modules for all builds.
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-group-cell double" ng-if="PermissionForm.isReposSelected()">
+                                        <h3>Selected {{PermissionForm.selectedRepositories.length}} Repositories for this permission</h3>
+                                        <div class="form-group-cell">
+                                            <jf-list-maker values="PermissionForm.repoPermission.includePatterns"
+                                                    ng-disabled="true"
+                                                    label="Include Pattern"
+                                                    object-name="Pattern"
+                                                    hide-add-new-fields="true"
+                                                    ng-disabled="true">
+                                            </jf-list-maker>
+                                        </div>
+                                        <div class="form-group-cell">
+                                            <jf-list-maker values="PermissionForm.repoPermission.excludePatterns"
+                                                    ng-disabled="true"
+                                                    label="Exclude Pattern"
+                                                    hide-add-new-fields="true"
+                                                    object-name="Pattern"
+                                                    ng-disabled="true">
+                                            </jf-list-maker>
+                                        </div>
+
+
+                                        <div ng-if="PermissionForm.selectedRepositories">
+                                            <h3>Repository Name</h3>
+                                            <ul>
+                                                <li ng-repeat="item in PermissionForm.selectedRepositories">{{item.repoKey}}</li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group-cell double" ng-if="PermissionForm.isBuildsSelected()">
+                                        <h3>Selected {{PermissionForm.selectedBuilds.length}} Builds for this permission</h3>
+                                        <div class="form-group-cell">
+                                            <jf-list-maker values="PermissionForm.buildPermission.includePatterns"
+                                                    label="Include Pattern"
+                                                    object-name="Pattern"
+                                                    hide-add-new-fields="true"
+                                                    ng-disabled="true">
+                                            </jf-list-maker>
+                                        </div>
+                                        <div class="form-group-cell">
+                                            <jf-list-maker values="PermissionForm.buildPermission.excludePatterns"
+                                                    label="Exclude Pattern"
+                                                    hide-add-new-fields="true"
+                                                    object-name="Pattern"
+                                                    ng-disabled="true">
+                                            </jf-list-maker>
+                                        </div>
+
+                                        <div ng-if="PermissionForm.selectedBuilds">
+                                            <h3>Build Name</h3>
+                                            <ul>
+                                                <li ng-repeat="item in PermissionForm.selectedBuilds">{{item.buildName}}</li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div> <!-- /Summary -->
+                        </jf-wizard-element>
+
+
+                        <jf-wizard-element data-title="Users">
+
+
+                            <div class="permissions-tab">
+                                <div class="tabular-dnd-wrapper">
+                                    <jf-tabular-dnd
+                                            ng-if="PermissionForm.availableUsers"
+                                            available-items="PermissionForm.availableUsers"
+                                            selected-items="PermissionForm.selectedUsers"
+                                            entity-name="User"
+                                            number-of-rows="5"
+                                            app-scope="PermissionForm"
+                                            item-draggable-attr="draggable"
+                                            on-row-click="PermissionForm.onRowClick(row,list,'user')"
+                                            disable-whole-row-selection="true"
+                                            on-change="PermissionForm.changeSelections('user')"
+                                            item-class-attr="customClass"
+                                            columns="PermissionForm.usersColumns">
+                                    </jf-tabular-dnd>
+                                </div>
+
+                                <div class="edit-permissions-wrapper">
+                                    <div class="edit-permission">
+                                        <!--<div ng-show="!PermissionForm.activeUser" class="no-selected">Select and click item to change permissions</div>-->
+                                        <div class="edit-permission-inner" ng-show="PermissionForm.activeUser">
+                                            <!--<h2>{{ PermissionForm.newPermission ? 'Set' : 'Edit' }} permissions for <b>{{ PermissionForm.activeUser.principal }}</b> user</h2>-->
+                                            <div class="permission-checkboxes-wrapper">
+                                                <h3>Repository Actions <jf-help-tooltip html="PermissionForm.TOOLTIP.repositoriesPermissions"></jf-help-tooltip></h3>
+                                                <ul class="permission-checkboxes">
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Read</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userRepoRead"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-model="PermissionForm.activeUser.repoPermissions.read" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Annotate</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userRepoAnnotate"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.repoPermissions.annotate ? PermissionForm.activeUser.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.repoPermissions.annotate" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Deploy / Cache</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userRepoUpload"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.repoPermissions.upload ? PermissionForm.activeUser.repoPermissions.annotate = PermissionForm.activeUser.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.repoPermissions.upload" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Delete / Overwrite</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userRepoDelete"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.repoPermissions.delete ? PermissionForm.activeUser.repoPermissions.upload = PermissionForm.activeUser.repoPermissions.annotate = PermissionForm.activeUser.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.repoPermissions.delete" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Manage</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userRepoManage"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.repoPermissions.manage ? PermissionForm.activeUser.repoPermissions.delete = PermissionForm.activeUser.repoPermissions.upload = PermissionForm.activeUser.repoPermissions.annotate = PermissionForm.activeUser.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.repoPermissions.manage" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="permission-checkboxes-wrapper">
+                                                <h3>Build Actions <jf-help-tooltip html="PermissionForm.TOOLTIP.buildsPermissions"></jf-help-tooltip></h3>
+                                                <ul class="permission-checkboxes">
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Read</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userBuildsRead"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-model="PermissionForm.activeUser.buildsPermissions.read" />
+                                                        </jf-checkbox>
+                                                    </li>
+
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Annotate</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userBuildsAnnotate"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.buildsPermissions.annotate ? PermissionForm.activeUser.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.buildsPermissions.annotate" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Deploy</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userBuildsUpload"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.buildsPermissions.upload ? PermissionForm.activeUser.buildsPermissions.annotate = PermissionForm.activeUser.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.buildsPermissions.upload" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Delete</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userBuildsDelete"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.buildsPermissions.delete ? PermissionForm.activeUser.buildsPermissions.upload = PermissionForm.activeUser.buildsPermissions.annotate = PermissionForm.activeUser.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.buildsPermissions.delete" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li>
+                                                        <h4 class="permission-checkbox__title">Manage</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="userBuildsManage"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeUser.buildsPermissions.manage ? PermissionForm.activeUser.buildsPermissions.delete = PermissionForm.activeUser.buildsPermissions.upload = PermissionForm.activeUser.buildsPermissions.annotate = PermissionForm.activeUser.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeUser.buildsPermissions.manage" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </jf-wizard-element>
+
+                        <jf-wizard-element data-title="Groups">
+                            <div class="permissions-tab">
+                                <div class="tabular-dnd-wrapper">
+                                    <jf-tabular-dnd
+                                            ng-if="PermissionForm.availableGroups"
+                                            available-items="PermissionForm.availableGroups"
+                                            selected-items="PermissionForm.selectedGroups"
+                                            entity-name="Group"
+                                            number-of-rows="5"
+                                            app-scope="PermissionForm"
+                                            item-draggable-attr="draggable"
+                                            on-row-click="PermissionForm.onRowClick(row,list,'group')"
+                                            disable-whole-row-selection="true"
+                                            item-class-attr="customClass"
+                                            on-change="PermissionForm.changeSelections('group')"
+                                            columns="PermissionForm.groupsColumns">
+                                    </jf-tabular-dnd>
+                                </div>
+
+                                <div class="edit-permissions-wrapper">
+                                    <div class="edit-permission">
+                                        <!--<div ng-show="!PermissionForm.activeGroup" class="no-selected">Select and click item to change permissions</div>-->
+                                        <div class="edit-permission-inner" ng-show="PermissionForm.activeGroup">
+                                            <!--<h2>{{ PermissionForm.newPermission ? 'Set' : 'Edit' }} permissions for <b>{{ PermissionForm.activeGroup.principal }}</b> group</h2>-->
+                                            <div class="permission-checkboxes-wrapper">
+                                                <h3>Repository Actions <jf-help-tooltip html="PermissionForm.TOOLTIP.repositoriesPermissions"></jf-help-tooltip></h3>
+                                                <ul class="permission-checkboxes">
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Read</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupRepoRead"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-model="PermissionForm.activeGroup.repoPermissions.read" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Annotate</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupRepoAnnotate"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.repoPermissions.annotate ? PermissionForm.activeGroup.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.repoPermissions.annotate" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Deploy / Cache</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupRepoUpload"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.repoPermissions.upload ? PermissionForm.activeGroup.repoPermissions.annotate = PermissionForm.activeGroup.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.repoPermissions.upload" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Delete / Overwrite</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupRepoDelete"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.repoPermissions.delete ? PermissionForm.activeGroup.repoPermissions.upload = PermissionForm.activeGroup.repoPermissions.annotate = PermissionForm.activeGroup.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.repoPermissions.delete" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Manage</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupRepoManage"
+                                                                    ng-disabled="!PermissionForm.isReposSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.repoPermissions.manage ? PermissionForm.activeGroup.repoPermissions.delete = PermissionForm.activeGroup.repoPermissions.upload = PermissionForm.activeGroup.repoPermissions.annotate = PermissionForm.activeGroup.repoPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.repoPermissions.manage" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="permission-checkboxes-wrapper">
+                                                <h3>Build Actions <jf-help-tooltip html="PermissionForm.TOOLTIP.buildsPermissions"></jf-help-tooltip></h3>
+                                                <ul class="permission-checkboxes">
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Read</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupBuildsRead"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-model="PermissionForm.activeGroup.buildsPermissions.read" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Annotate</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupBuildsAnnotate"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.buildsPermissions.annotate ? PermissionForm.activeGroup.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.buildsPermissions.annotate" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Deploy</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupBuildsUpload"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.buildsPermissions.upload ? PermissionForm.activeGroup.buildsPermissions.annotate = PermissionForm.activeGroup.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.buildsPermissions.upload" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Delete</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupBuildsDelete"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.buildsPermissions.delete ? PermissionForm.activeGroup.buildsPermissions.upload = PermissionForm.activeGroup.buildsPermissions.annotate = PermissionForm.activeGroup.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.buildsPermissions.delete" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                    <li class="permission-checkbox">
+                                                        <h4 class="permission-checkbox__title">Manage</h4>
+                                                        <jf-checkbox>
+                                                            <input type="checkbox"
+                                                                    id="groupBuildsManage"
+                                                                    ng-disabled="!PermissionForm.isBuildsSelected()"
+                                                                    ng-click="!PermissionForm.activeGroup.buildsPermissions.manage ? PermissionForm.activeGroup.buildsPermissions.delete = PermissionForm.activeGroup.buildsPermissions.upload = PermissionForm.activeGroup.buildsPermissions.annotate = PermissionForm.activeGroup.buildsPermissions.read = true : null"
+                                                                    ng-model="PermissionForm.activeGroup.buildsPermissions.manage" />
+                                                        </jf-checkbox>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </jf-wizard-element>
+                    </jf-wizard>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="content-footer">
+                <div class="pull-right">
+                    <button class="btn btn-default" type="button"
+                            ui-sref="^.permissions">Cancel
+                    </button>
+
+                    <button type="submit"
+                            class="btn  btn-primary"
+                            ng-disabled="PermissionForm.formInvalid()">
+                        Save & Finish
+                    </button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>

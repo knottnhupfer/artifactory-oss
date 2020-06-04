@@ -1,0 +1,161 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="search-query-maker">
+    <div class="form-group criteria-container">
+        <form name="queryMaker.form" novalidate ng-if="!(queryMaker.queryDescriptor.searchTypeName.toLowerCase() === 'remote' && !queryMaker.parentController.isJcenterExists)">
+            <div ng-repeat="criterion in queryMaker.queryDescriptor.searchCriteria | orderBy:'order' track by $index"
+                 ng-if="criterion.default || criterion.visible"
+                 ng-style="{'min-width': criterion.type === 'keyVal' || criterion.type === 'keyValSet' ? '585px' : 'inherit'}"
+                 ng-class="{'string-criterion': criterion.type === 'string',
+                            'boolean-criterion': criterion.type === 'boolean',
+                            'key-val-criterion': criterion.type === 'keyVal' || criterion.type === 'keyValSet',
+                            'key-val-set-criterion': criterion.type === 'keyValSet',
+                            'array-criterion': criterion.type === 'array'}"
+                 class="form-group-cell criterion">
+
+                <a href
+                   ng-if="!criterion.default"
+                   class="remove-criterion"
+                   tabindex="-1"
+                   ng-click="queryMaker.removeCriterion(criterion)">
+                    <i class="clear-field">&#215;</i>
+                </a>
+
+                <div ng-switch="criterion.type"> <!--ng-if="queryMaker.searchType === 'remote' && queryMaker.parentController.isJcenterExists"-->
+                    <div ng-switch-when="string" class="criterion-div">
+                        <jf-field  delayed-init="true" autofocus="($index === 0 || criterion.autofocus) && queryMaker.focusField">
+                            <input type="text"
+                                   jf-enter-press="queryMaker.search()"
+                                   class="input-text"
+                                   id="criterion-string-{{$index}}"
+                                   name="criterion-{{$index}}"
+                                   ng-disabled="!queryMaker.parentController.isJcenterExists && queryMaker.searchType === 'remote'"
+                                   ng-required="criterion.mandatory"
+                                   placeholder="{{criterion.label}}"
+                                   ng-model="queryMaker.query[criterion.field]"/>
+                        </jf-field>
+                    </div>
+                    <div ng-switch-when="boolean" class="criterion-div">
+                        <i class="glyphicon glyphicon-filter"></i> {{criterion.label}}
+                    </div>
+                    <div ng-switch-when="keyVal" class="criterion-div">
+                        <div class="form-group-cell">
+                            <jf-field delayed-init="true" autofocus="$index === 0 || criterion.autofocus">
+                                <input type="text"
+                                       class="input-text"
+                                       id="criterion-key-{{$index}}"
+                                       name="criterion-key-{{$index}}"
+                                       jf-enter-press="queryMaker.search()"
+                                       required
+                                       placeholder="Key"
+                                       ng-model="queryMaker.query[criterion.field][criterion.index].key"/>
+                            </jf-field>
+                        </div>
+                        <div class="form-group-cell">
+                            <jf-field>
+                                <input type="text"
+                                       class="input-text"
+                                       id="criterion-value-{{$index}}"
+                                       name="criterion-value-{{$index}}"
+                                       jf-enter-press="queryMaker.search()"
+                                       placeholder="Value"
+                                       ng-model="queryMaker.query[criterion.field][criterion.index].values[0]"/>
+                            </jf-field>
+                        </div>
+                    </div>
+                    <div ng-switch-when="keyValSet" class="criterion-div">
+                        <div class="form-group-cell">
+                            <jf-ui-select jf-select-model="queryMaker.query[criterion.field][criterion.index].key"
+                                          jf-select-change="queryMaker.onChangePropertySetKey(criterion)"
+                                          jf-select-options="queryMaker.propertySetKeys"
+                                          jf-select-placeholder="Select Property Key">
+                            </jf-ui-select>
+                        </div>
+                        <div class="form-group-cell">
+                            <div ng-switch="queryMaker.getPropertySetByKey(queryMaker.query[criterion.field][criterion.index].key).propertyType">
+                                <div ng-switch-when="ANY_VALUE">
+                                    <jf-field>
+                                        <input type="text"
+                                               class="input-text"
+                                               id="criterion-valueset-{{$index}}"
+                                               name="criterion-valueset-{{$index}}"
+                                               placeholder="Value"
+                                               jf-enter-press="queryMaker.search()"
+                                               ng-model="queryMaker.query[criterion.field][criterion.index].values[0]"/>
+                                    </jf-field>
+                                </div>
+                                <div ng-switch-when="SINGLE_SELECT">
+                                    <jf-ui-select jf-select-model="queryMaker.query[criterion.field][criterion.index].values[0]"
+                                                  jf-select-options="queryMaker.getPropertySetByKey(queryMaker.query[criterion.field][criterion.index].key).values"
+                                                  jf-select-placeholder="Select Property Value">
+                                    </jf-ui-select>
+                                </div>
+                                <div ng-switch-when="MULTI_SELECT">
+                                    <jf-multi-dropdown title="Select Property Values"
+                                                       on-change="queryMaker.onMultiSelectPropertyChange(criterion)"
+                                                       items="queryMaker.getPropertySetByKey(queryMaker.query[criterion.field][criterion.index].key).values"></jf-multi-dropdown>
+                                </div>
+                                <div ng-switch-default>
+                                    <jf-field>
+                                        <input type="text"
+                                               class="input-text"
+                                               id="val-dummy"
+                                               name="val-dummy"
+                                               disabled
+                                               placeholder="Value"/>
+                                    </jf-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-switch-when="array" class="criterion-div">
+                        <jf-multi-dropdown ng-if="criterion.id === 'limitRepo'"
+                                           title="{{criterion.label}}"
+                                           on-change="queryMaker.onRepoSelectionChange(criterion)"
+                                           dropdown-opened="queryMaker.openLimitDropDown"
+                                           items="queryMaker.selectionRepoList"></jf-multi-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="queryMaker.searchType !== 'property'" class="unpadder"></div>
+            <div class="form-group-cell add-criteria-select"
+                 ng-if="queryMaker.availableCriteria && queryMaker.availableCriteria.length">
+                <jf-ui-select jf-select-model="queryMaker.criterionToAdd"
+                              jf-select-change="queryMaker.onAddCriteria()"
+                              jf-select-options="queryMaker.availableCriteria"
+                              jf-select-display-attr="label"
+                              jf-select-placeholder="Add search criteria...">
+                </jf-ui-select>
+            </div>
+            <div class="form-group-cell action-buttons"> <!-- ng-if="queryMaker.searchType === 'remote' && queryMaker.parentController.isJcenterExists"-->
+                <button type="button"
+                        ng-click="queryMaker.clear()"
+                        jf-clear-errors
+                        class="btn btn-default">Clear
+                </button>
+                <button type="button"
+                        class="btn btn-primary"
+                        ng-disabled="!queryMaker.canSearch()"
+                        ng-click="queryMaker.search()">Search
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</div>

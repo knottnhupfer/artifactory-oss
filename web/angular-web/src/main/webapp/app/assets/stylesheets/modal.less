@@ -1,0 +1,242 @@
+/*
+ *
+ * Artifactory is a binaries repository manager.
+ * Copyright (C) 2018 JFrog Ltd.
+ *
+ * Artifactory is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Artifactory is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+.push-to-bintray {
+  select {
+    width: 100%;
+  }
+
+  .bintray-info-container {
+    margin-bottom: 20px;
+  }
+  .bintray-info {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 100;
+  }
+}
+
+.inline {
+  display: inline;
+}
+.select-repo-icon {
+  position: relative;
+  margin-right: 10px;
+  top: 2px;
+  padding-left: 2px;
+}
+
+.select-target-path {
+  min-height: 300px;
+}
+
+#smart-remote-repository {
+  .sync-checkbox {
+    p {
+      margin-left: 25px;
+    }
+  }
+  ul {
+    margin-left: 25px;
+    
+    li {
+      margin-bottom: 10px;
+    }
+  }
+  .jf-checkbox {
+    font-weight: 700;
+  }
+}
+
+#show-all-modal {
+  .modal-body {
+    height: 412px;
+  }
+
+  .group-list-wrapper {
+    max-height: 322px;
+    overflow-y: auto;
+    margin-bottom: 0;
+  }
+}
+
+.modal {
+  .modal-title {
+    padding: 17px 0 15px;
+    line-height: 1.5em;
+    // Handel long text - as in long file name
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.modal-body {
+  .highlight-alert {
+    color: @redError;
+    font-weight: 700;
+  }
+
+  min-height: 142px;
+  &.set-me-up-modal{
+    min-height: 390px;
+  }
+}
+
+.property-form-modal {
+  .list-maker-list {
+    width: 492px;
+    border-top: 1px solid @grayBGMedium;
+    border-bottom: 1px solid @grayBGMedium;
+
+    .list-maker-list-row {
+      display: table;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+
+      &:nth-child(even) {
+        background-color: @white;
+      }
+      &:nth-child(odd) {
+        background-color: @grayGridRow;
+      }
+
+      div {
+        display: table-cell;
+
+        &:first-child {
+          padding-left: 10px;
+          width: 340px;
+        }
+
+        a {
+          color: @grayFontLighter;
+          font-size: 16px;
+          position: relative;
+          top: 2px;
+
+          &:hover {
+            color: @greenFontHeader;
+          }
+          &:hover, &:focus, &:active {
+            text-decoration: none;
+          }
+        }
+
+        jf-checkbox {
+          float: right;
+          margin-right: 20px;
+
+          label {
+            margin-bottom: 0;
+          }
+        }
+
+        &.list-maker-list-buttons {
+          text-align: right;
+          padding-right: 20px;
+          height: 40px;
+
+          a {
+            &[disabled]:hover {
+              color: @grayFontLighter;
+              cursor: default;
+            }
+            &.icon-clear:hover {
+              color: @redError;
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
+
+.signing-keys-modal{
+  &.modal-body {
+    .form-group{
+      .form-group-cell {
+        &#pem-file-dnd{
+          width: 100% !important;
+        }
+        &#alias-name-wrap,
+        &#key-type-wrap{
+          margin-bottom: 0;
+          width: 48.5% !important;
+        }
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.add-certificate-modal{
+  &.modal-body {
+    .form-group{
+      .form-group-cell {
+          width: 100% !important;
+        &#alias-name-wrap{
+          margin-bottom: 0;
+          width: 48.5% !important;
+        }
+        margin-bottom: 0;
+      }
+      margin-bottom: 27px;
+    }
+  }
+}
+.certificate-details-modal {
+    table.jf-data-table {
+      table-layout: fixed;
+      width: 100%;
+      white-space: nowrap;
+      td span{
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        display: block;
+      }
+    }
+    /* Column widths are based on these cells */
+    td.certificate-data-field-key {
+      display: inline-block;
+      width: 20%;
+    }
+    td.certificate-data-field-value {
+      display: inline-block;
+      width: 80%;
+    }
+}
+
+// Collapse/Expend module
+.expand-collapse-wrapper {
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f1f1f1;
+  a {
+    color: #9e9e9e;
+    i:before {
+      margin-left: 5px;
+      color: #9e9e9e;
+    }
+  }
+}

@@ -1,0 +1,30 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget updates">
+    <div class="inner">
+        <span class="screw screw-tr"></span>
+        <span class="screw screw-tl"></span>
+        <span class="screw screw-br"></span>
+        <span class="screw screw-bl"></span>
+        <div class="jfrog-news" ng-show="ctrl.showNews">
+            <h3>JFrog News</h3>
+            <div class="news-content" ng-bind-html="ctrl.updateHTML"></div>
+            <div class="twitter"><a href="https://twitter.com/intent/follow?screen_name=jfrog" class="twitter-follow-us">Follow us on<br><i class="icon icon-twitter"></i></a></div>
+        </div>
+    </div>
+</div>

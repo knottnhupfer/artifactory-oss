@@ -1,0 +1,586 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<jf-wizard config="RepositoryForm.wizardConfig">
+    <jf-wizard-element data-title='Basic'>
+        <div name="Basic" class="tab-content">
+            <div class="form-group">
+                <label class="input-label-weight label-type-box mandatory">Package Type</label>
+                <ul class="list-unstyled">
+                    <li class="inline-block package-type"
+                            ng-class="{
+                            typeValidation: !RepositoryForm.repoInfo.typeSpecific.repoType,
+                            'not-clickable': !RepositoryForm.newRepository
+                           }"
+                            ng-click="!RepositoryForm.newRepository || RepositoryForm.openRepoTypeModal()"
+                            id="repository-package-type-button">
+                        <span ng-if="!RepositoryForm.repoInfo.typeSpecific.repoType">No Type</span>
+
+                        <div ng-if="RepositoryForm.repoInfo.typeSpecific.repoType"
+                                class="repotype iconrepo iconrepo-{{RepositoryForm.repoInfo.typeSpecific.icon}}">
+                        </div>
+                        <div class="repotitle" ng-if="RepositoryForm.repoInfo.typeSpecific.repoType">
+                            {{ RepositoryForm.repoInfo.typeSpecific.text }}
+                        </div>
+                    </li>
+                </ul>
+                <input class="hidden"
+                        ng-model="RepositoryForm.repoInfo.typeSpecific.repoType"
+                        name="repoType"
+                        required
+                        ng-change="RepositoryForm.setRepoLayout()"/>
+                <span ng-if="!RepositoryForm.repoInfo.typeSpecific.repoType && !RepositoryForm.isTypeModalOpen"
+                        class="repository-error" id="repository-package-type-validator">You must specify a package type</span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group-cell"
+                        ng-if="RepositoryForm.newRepository">
+                    <jf-field validations="repositores"
+                            autofocus="RepositoryForm.repoInfo.typeSpecific.repoType">
+                        <label for="repoKey-new" class="mandatory">Repository Key</label>
+                        <input type="text" class="input-text"
+                                id="repoKey-new"
+                                name="repoKey"
+                                ng-required="RepositoryForm.repositoriesForm.repoType.$valid || (!RepositoryForm.repositoriesForm.repoType.$valid && !RepositoryForm.isTypeModalOpen)"
+                                jf-repokey-validator="RepositoryForm"
+                                ng-model="RepositoryForm.repoInfo.general.repoKey"
+                                ng-change="RepositoryForm.onChangeRepoKey()"
+                                ng-model-options="{debounce: { 'default': 500 } }"/>
+                    </jf-field>
+                    <ng-messages for="RepositoryForm.repositoriesForm.repoKey.$error" class="jf-validation">
+                        <div ng-message-exp="'repoKeyValidator'" id="repository-key-validator">{{ RepositoryForm.repoKeyValidatorMessage }}</div>
+                    </ng-messages>
+                </div>
+                <div class="form-group-cell"
+                        ng-if="!RepositoryForm.newRepository">
+                    <jf-field validations="repositores" autofocus="true">
+                        <label for="repoKey-edit" class="mandatory">Repository Key</label>
+                        <input type="text"
+                                class="input-text"
+                                id="repoKey-edit"
+                                name="repoKey"
+                                ng-model="RepositoryForm.repoInfo.general.repoKey"
+                                ng-disabled="!RepositoryForm.newRepository"/>
+                    </jf-field>
+                    <ng-messages for="RepositoryForm.repositoriesForm.repoKey.$error" class="jf-validation">
+                        <div ng-message-exp="'repoKeyValidator'" id="repository-key-validator">{{ RepositoryForm.repoKeyValidatorMessage }}</div>
+                    </ng-messages>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <jf-panel jf-panel-heading="General">
+                        <div class="form-group">
+                            <div class="form-group-cell">
+                                <jf-field>
+                                    <label>Repository Layout</label>
+                                    <ui-select jf-disable-ng-animate ng-model="RepositoryForm.repoInfo.basic.layout" remove-selected="false">
+                                        <ui-select-match placeholder="Select Repository Layout..."
+                                                id="local-repository-layout-dropdown">
+                                            {{$select.selected}}
+                                        </ui-select-match>
+                                        <ui-select-choices jf-disable-ng-animate
+                                                repeat="item in RepositoryForm.repositoryLayouts | filter: $select.search track by $index">
+                                            <div ng-bind-html="item | highlight: $select.search"
+                                                    name="local-repository-layout-item"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </jf-field>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group-cell">
+                                <jf-field>
+                                    <label>Public Description</label>
+                                    <textarea type="text"
+                                            class="input-text"
+                                            name="publicDescription"
+                                            cols="5"
+                                            ng-model="RepositoryForm.repoInfo.basic.publicDescription"
+                                            id="local-repository-public-description-textarea">
+                    </textarea>
+                                </jf-field>
+                            </div>
+                            <div class="form-group-cell">
+                                <jf-field>
+                                    <label>Internal Description</label>
+                                    <textarea type="text"
+                                            class="input-text"
+                                            name="internalDescription"
+                                            ng-model="RepositoryForm.repoInfo.basic.internalDescription"
+                                            cols="5"
+                                            id="local-repository-internal-description-textarea"></textarea>
+                                </jf-field>
+                            </div>
+                        </div>
+                    </jf-panel>
+                    <jf-panel ng-if="!RepositoryForm.isRightColumnEmptyInLocalRepo()"
+                            jf-panel-heading="Include / Exclude Patterns">
+                        <div class="form-group">
+                            <div class="form-group-cell">
+                                <jf-list-maker values="RepositoryForm.repoInfo.basic.includesPatternArray"
+                                        label="Include Patterns"
+                                        help-tooltip="RepositoryForm.TOOLTIP.localForm.includesPattern"
+                                        object-name="Pattern"
+                                        on-add-value="RepositoryForm.formatNewPattern(newValue)">
+                                </jf-list-maker>
+                            </div>
+                            <div class="form-group-cell">
+                                <jf-list-maker values="RepositoryForm.repoInfo.basic.excludesPatternArray"
+                                        label="Exclude Patterns"
+                                        help-tooltip="RepositoryForm.TOOLTIP.localForm.excludedPattern"
+                                        object-name="Pattern"
+                                        on-add-value="RepositoryForm.formatNewPattern(newValue)">
+                                </jf-list-maker>
+                            </div>
+                        </div>
+                    </jf-panel>
+                    <jf-panel jf-panel-heading="JFrog Xray Integration">
+                        <div class="alert alert-warning margin-top-25 xray-alert ng-scope" ng-if="RepositoryForm.footerDao.getInfo().xrayConfigured && !RepositoryForm.footerDao.getInfo().xrayEnabled">
+                            <div>Xray is currently disabled. No events are sent and new alerts are not being assigned to artifacts.</div>
+                            <div class="button-wrapper"><a href="" ng-click="AdminConfigurationXray._updateFooter(); AdminConfigurationXray.getData()" class="pull-right xray-refresh refresh-icon"><i class="icon-refresh"></i> Refresh</a></div>
+                        </div>
+                        <div ng-if="!RepositoryForm.footerDao.getInfo().xrayConfigured"
+                                ng-bind-html="RepositoryForm.features.isJCR() ? RepositoryForm.CONFIG_MESSAGES.remote.noXrayIntegrationMessageJCR : RepositoryForm.CONFIG_MESSAGES.remote.noXrayIntegrationMessage"
+                                class="alert alert-warning margin-top-10">
+                        </div>
+                        <div class="form-group form-checkbox" ng-if="RepositoryForm.footerDao.getInfo().xrayEnabled">
+                            <jf-checkbox text="Enable Indexing In Xray">
+                                <input type="checkbox"
+                                        id="xrayIndex"
+                                        ng-model="RepositoryForm.repoInfo.basic.xrayConfig.enabled"
+                                        ng-change="RepositoryForm.changeXrayIndexCheckbox()"/>
+                            </jf-checkbox>
+                        </div>
+                    </jf-panel>
+                </div>
+
+                <div class="col-lg-6">
+                    <div ng-if="RepositoryForm.repoInfo.isType('maven', 'gradle', 'ivy', 'sbt')">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.repoType}} Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label>Checksum Policy</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.checksumPolicy"></jf-help-tooltip>
+                                        <ui-select jf-disable-ng-animate ng-model="RepositoryForm.repoInfo.typeSpecific.localChecksumPolicy" remove-selected="false">
+                                            <ui-select-match placeholder="Select Checksum Policy..."
+                                                    id="local-repository-checksum-dropdown">
+                                                {{ RepositoryForm.localChecksumPolicies[$select.selected] }}
+                                            </ui-select-match>
+                                            <ui-select-choices jf-disable-ng-animate
+                                                    repeat="item in RepositoryForm.localChecksumPoliciesKeys | filter: $select.search track by $index">
+                                                <div ng-bind-html="RepositoryForm.localChecksumPolicies[item] | highlight: $select.search"
+                                                        id="local-repository-checksum-item"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label>Maven Snapshot Version Behavior</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.mavenSnapshotVersionBehavior"></jf-help-tooltip>
+                                        <ui-select jf-disable-ng-animate ng-model="RepositoryForm.repoInfo.typeSpecific.snapshotVersionBehavior" remove-selected="false"
+                                                ng-change="RepositoryForm.setSnapshotVersionBehavior()">
+                                            <ui-select-match placeholder="Select Maven Snapshot Version Behavior..."
+                                                    id="local-repository-behavior-dropdown">
+                                                {{RepositoryForm.mavenSnapshotRepositoryBehaviors[$select.selected] }}
+                                            </ui-select-match>
+                                            <ui-select-choices jf-disable-ng-animate
+                                                    repeat="item in RepositoryForm.mavenSnapshotRepositoryBehaviorsKeys | filter: $select.search track by $index">
+                                                <div ng-bind-html="RepositoryForm.mavenSnapshotRepositoryBehaviors[item] | highlight: $select.search"
+                                                        id="local-repository-behavior-item"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </jf-field>
+                                </div>
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label for="maxUniqueSnapshots">Max Unique Snapshots</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.maxUniqueSnapshots"></jf-help-tooltip>
+                                        <input type="text"
+                                                class="input-text"
+                                                id="maxUniqueSnapshots"
+                                                name="maxUniqueSnapshots"
+                                                placeholder="Leave empty for unlimited"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.maxUniqueSnapshots"
+                                                ng-disabled="RepositoryForm.repoInfo.typeSpecific.snapshotVersionBehavior=='NONUNIQUE'"/>
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <jf-checkbox text="Handle Releases">
+                                    <input type="checkbox"
+                                            id="handleReleases"
+                                            ng-model="RepositoryForm.repoInfo.typeSpecific.handleReleases">
+                                </jf-checkbox>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <jf-checkbox text="Handle Snapshots">
+                                    <input type="checkbox"
+                                            id="handleSnapshots"
+                                            ng-model="RepositoryForm.repoInfo.typeSpecific.handleSnapshots">
+                                </jf-checkbox>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <jf-checkbox text="Suppress POM Consistency Checks">
+                                    <input type="checkbox"
+                                            id="suppressPomConsistency"
+                                            ng-model="RepositoryForm.repoInfo.typeSpecific.suppressPomConsistencyChecks">
+                                </jf-checkbox>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <div ng-if="RepositoryForm.repoInfo.isType('yum')" class="yum-settings">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.text}} Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field validations="common">
+                                        <label>RPM Metadata Folder Depth</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.yumMetadataFolderDepth"></jf-help-tooltip>
+                                        <input type="number"
+                                                min="0"
+                                                name="metadataFolderDepth"
+                                                id="metadataFolderDepth"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.metadataFolderDepth"
+                                                ng-focus="RepositoryForm.hostYumOriginalValue()"
+                                                ng-change="RepositoryForm.changeYumFolderDepth()"
+                                                class="input-text">
+                                    </jf-field>
+                                </div>
+                                <div class="info-box yum-folder-depth-message" ng-if="RepositoryForm.yumTooltip">When changing the value of repository depth you might need to re index repository or move existing package to new depth so they will be available.</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group form-checkbox">
+                                    <jf-checkbox text="Auto Calculate RPM Metadata">
+                                        <input type="checkbox"
+                                                id="autoCalculateYumMetadata"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.autoCalculateYumMetadata">
+                                    </jf-checkbox>
+                                </div>
+                                <div class="form-group form-checkbox">
+                                    <jf-checkbox text="Enable File List Indexing">
+                                        <input type="checkbox"
+                                                id="enableFileListsIndexing"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.enableFileListsIndexing">
+                                    </jf-checkbox>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <jf-list-maker values="RepositoryForm.repoInfo.groupFileNamesArray"
+                                                label="RPM Group File Names"
+                                                help-tooltip="RepositoryForm.TOOLTIP.localForm.yumGroupFileNames"
+                                                object-name="File Name">
+                                        </jf-list-maker>
+                                    </jf-field>
+                                </div>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <div ng-if="RepositoryForm.repoInfo.isType('cocoapods')">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.repoType}} Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field validations="common">
+                                        <label for="baseUrl">Custom URL Base</label>
+                                        <jf-help-tooltip html="RepositoryForm.TOOLTIP.customURLBase"></jf-help-tooltip>
+                                        <input type="text"
+                                                class="input-text disabled-look"
+                                                name="baseUrl"
+                                                id="baseUrl"
+                                                readonly
+                                                ng-model="RepositoryForm.baseUrl"/>
+                                    </jf-field>
+                                </div>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <div ng-if="RepositoryForm.repoInfo.isType('debian')">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.repoType}} Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Trivial Layout">
+                                        <input type="checkbox"
+                                                id="trivialLayout"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.trivialLayout">
+                                    </jf-checkbox>
+                                    <jf-help-tooltip
+                                            html="RepositoryForm.TOOLTIP.localForm.trivialLayout"></jf-help-tooltip>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label>Optional Index Compression Formats</label>
+                                        <jf-multi-dropdown title="Select compression formats..."
+                                                items="RepositoryForm.optionalFormats"
+                                                no-sort="true"
+                                                on-change="RepositoryForm.onFormatSelectionChange()"
+                                                show-selected="true">
+                                        </jf-multi-dropdown>
+                                    </jf-field>
+                                </div>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <div ng-if="RepositoryForm.repoInfo.isType('docker')">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.repoType}} Settings">
+                            <div class="form-group form-checkbox"
+                                    ng-if="RepositoryForm.newRepository">
+                                <div class="form-group-cell no-margin-bottom">
+                                    <label class="input-label-weight">API Version</label>
+                                    <ul class="radio-select-list">
+                                        <li>
+                                            <input type="radio" id="v1" value="V1"
+                                                    ng-model="RepositoryForm.repoInfo.typeSpecific.dockerApiVersion"/>
+                                            <label for="v1" class="input-label-weight">V1</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="v2" value="V2"
+                                                    ng-model="RepositoryForm.repoInfo.typeSpecific.dockerApiVersion"/>
+                                            <label for="v2" class="input-label-weight">V2</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group"
+                                    ng-if="!RepositoryForm.newRepository">
+                                <div class="form-group-cell">
+                                    <div class="input-label-weight">API Version: <strong>{{RepositoryForm.repoInfo.typeSpecific.dockerApiVersion.toUpperCase()}}</strong></div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-if="RepositoryForm.repoInfo.typeSpecific.dockerApiVersion == 'V2'">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label for="maxUniqueTags">Max Unique Tags</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.maxUniqueTags"></jf-help-tooltip>
+                                        <input type="text"
+                                                class="input-text"
+                                                id="maxUniqueTags"
+                                                name="maxUniqueTags"
+                                                placeholder="Leave empty for unlimited"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.maxUniqueTags"/>
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox" ng-if="RepositoryForm.repoInfo.typeSpecific.dockerApiVersion == 'V2'">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Block pushing of image manifest v2 schema 1">
+                                        <input type="checkbox"
+                                                id="blockPushingSchema1"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.blockPushingSchema1">
+                                    </jf-checkbox>
+                                    <jf-help-tooltip
+                                            html="RepositoryForm.TOOLTIP.localForm.dockerBlockPushingSchema1"></jf-help-tooltip>
+                                </div>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <div ng-if="RepositoryForm.repoInfo.isType('nuget')">
+                        <jf-panel jf-panel-heading="{{RepositoryForm.repoInfo.typeSpecific.repoType}} Settings">
+                            <div class="form-group">
+                                <div class="form-group-cell">
+                                    <jf-field>
+                                        <label>Max Unique Snapshots</label>
+                                        <jf-help-tooltip
+                                                html="RepositoryForm.TOOLTIP.localForm.maxUniqueSnapshots"></jf-help-tooltip>
+                                        <input type="text"
+                                                class="input-text"
+                                                name="maxUniqueSnapshots"
+                                                id="nugetMaxUniqueSnapshots"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.maxUniqueSnapshots"
+                                                ng-disabled="RepositoryForm.disableMaxUniqueSnapshots"/>
+                                    </jf-field>
+                                </div>
+                            </div>
+                            <div class="form-group form-checkbox">
+                                <div class="form-group-cell">
+                                    <jf-checkbox text="Force Authentication">
+                                        <input type="checkbox"
+                                                id="forceNuGetAuth"
+                                                ng-model="RepositoryForm.repoInfo.typeSpecific.forceNugetAuthentication">
+                                    </jf-checkbox>
+                                    <jf-help-tooltip html="RepositoryForm.TOOLTIP.localForm.forceNugetAuth"></jf-help-tooltip>
+                                </div>
+                            </div>
+                        </jf-panel>
+                    </div>
+                    <!-- Instead of an empty space show this panel to the right-->
+                    <jf-panel ng-if="RepositoryForm.isRightColumnEmptyInLocalRepo()"
+                            jf-panel-heading="Include / Exclude Patterns">
+                        <div class="form-group">
+                            <div class="form-group-cell">
+                                <jf-list-maker values="RepositoryForm.repoInfo.basic.includesPatternArray"
+                                        label="Include Patterns"
+                                        help-tooltip="RepositoryForm.TOOLTIP.localForm.includesPattern"
+                                        object-name="Pattern"
+                                        on-add-value="RepositoryForm.formatNewPattern(newValue)">
+                                </jf-list-maker>
+                            </div>
+                            <div class="form-group-cell">
+                                <jf-list-maker values="RepositoryForm.repoInfo.basic.excludesPatternArray"
+                                        label="Exclude Patterns"
+                                        help-tooltip="RepositoryForm.TOOLTIP.localForm.excludedPattern"
+                                        object-name="Pattern"
+                                        on-add-value="RepositoryForm.formatNewPattern(newValue)">
+                                </jf-list-maker>
+                            </div>
+                        </div>
+                    </jf-panel>
+                </div>
+            </div>
+        </div>
+    </jf-wizard-element>
+    <jf-wizard-element data-title='Advanced'>
+        <div name="Advanced" class="tab-content">
+            <div class="row">
+                <div class="col-lg-6">
+                    <jf-panel jf-panel-heading="Select Property Sets"
+                            jf-panel-classes="borderless"
+                            jf-disable-feature="properties">
+                        <jf-drag-drop include-list="RepositoryForm.repoInfo.advanced.propertySets"
+                                ng-if="RepositoryForm.propertiesList && RepositoryForm.repoInfo.advanced.propertySets"
+                                ng-disabled="RepositoryForm.features.isDisabled('properties')"
+                                exclude-list="RepositoryForm.propertiesList"
+                                include-display-field="name"
+                                exclude-display-field="name"
+                                objects-name="Property Sets"
+                                include-list-id="dnd-include-list"
+                                exclude-list-id="dnd-exclude-list"
+                                headers="{leftTitle:'Available',rightTitle:'Selected'}"></jf-drag-drop>
+
+                    </jf-panel>
+
+                    <div class="form-group form-checkbox">
+                        <div class="form-group-cell">
+                            <jf-checkbox text="Blacked Out">
+                                <input type="checkbox"
+                                        id="blackedOut"
+                                        ng-model="RepositoryForm.repoInfo.advanced.blackedOut">
+                            </jf-checkbox>
+                            <jf-help-tooltip html="RepositoryForm.TOOLTIP.localForm.blackedOut"></jf-help-tooltip>
+                        </div>
+                    </div>
+                    <div class="form-group form-checkbox">
+                        <div class="form-group-cell form-checkbox">
+                            <jf-checkbox text="Allow Content Browsing">
+                                <input type="checkbox"
+                                        id="allowContentBrowsing"
+                                        ng-model="RepositoryForm.repoInfo.advanced.allowContentBrowsing">
+                            </jf-checkbox>
+                            <jf-help-tooltip html="RepositoryForm.TOOLTIP.localForm.allowContentBrowsing"></jf-help-tooltip>
+                        </div>
+                    </div>
+                    <div class="form-group no-margin-bottom"
+                            ng-if="!RepositoryForm.features.isAol()
+                                && RepositoryForm.repoInfo.isType('maven','debian','docker','npm','helm','pypi','bower','cran','composer','gems','generic','conan')">
+                        <div class="form-group-cell form-checkbox">
+                            <jf-checkbox text="Enable Direct Cloud Storage Download">
+                                <input type="checkbox"
+                                        ng-disabled="!RepositoryForm.features.isCloudProviderConfigured() ||
+                                                    !(RepositoryForm.features.isEnterprisePlus() || RepositoryForm.features.isEdgeNode())"
+                                        id="downloadRedirectConfig"
+                                        ng-model="RepositoryForm.repoInfo.advanced.downloadRedirectConfig.enabled">
+                            </jf-checkbox>
+                            <jf-help-tooltip html="RepositoryForm.TOOLTIP.downloadRedirectConfig"></jf-help-tooltip>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ng-include src="'states/admin/repositories/reverse_proxy.html'"></ng-include>
+                </div>
+            </div>
+        </div>
+    </jf-wizard-element>
+    <jf-wizard-element data-title='Replications'>
+        <div name="Replications" class="tab-content">
+            <div class="alert alert-static"
+                    ng-if="!RepositoryForm.repoInfo.replications || !RepositoryForm.repoInfo.replications.length"
+                    ng-bind-html="RepositoryForm.noReplicationsMessage">
+            </div>
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <!-- Cron expression is required only if there are replications -->
+                    <jf-field validations="common" autofocus="true">
+                        <label class="mandatory">Cron Expression</label>
+                        <jf-help-tooltip
+                                html="RepositoryForm.TOOLTIP.localForm.cronExpressionReplication"></jf-help-tooltip>
+                        <input
+                                type="text"
+                                class="input-text"
+                                name="cronExp"
+                                ng-required="RepositoryForm.repoInfo.replications.length"
+                                jf-validator-cron
+                                jf-validator-cron-is-replication="true"
+                                ng-model-options="{debounce: { 'default': 500 } }"
+                                ng-model="RepositoryForm.repoInfo.cronExp"/>
+                    </jf-field>
+                </div>
+                <div class="form-group-cell cron-wrapper">
+                    <jf-field class="inline-block">
+                        <label>Next Replication Time</label>
+                        <input type="text"
+                                jf-cron-formatter
+                                class="input-text disabled-look"
+                                name="numCron"
+                                placeholder="N/A"
+                                readonly
+                                ng-model="RepositoryForm.repoInfo.cronExp"/>
+                    </jf-field>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group-cell">
+                    <jf-checkbox text="Enable Event Replication">
+                        <input type="checkbox"
+                                id="enableEventReplication"
+                                ng-model="RepositoryForm.repoInfo.enableEventReplication">
+                    </jf-checkbox>
+                    <jf-help-tooltip html="RepositoryForm.TOOLTIP.localForm.enableEventReplication"></jf-help-tooltip>
+                </div>
+            </div>
+
+            <jf-panel jf-panel-heading="Replication">
+                <div class="alert alert-info"
+                        ng-if="RepositoryForm.globalReplicationsStatus.blockPushReplications">
+                    Push replications is blocked.
+                </div>
+                <div class="pull-right admin-grid-buttons replications-admin-grid-buttons">
+                    <a ng-click="RepositoryForm.newReplication()" id="new-button">
+                        <i class="grid-button-icon icon icon-new"></i>New
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+                <jf-table-view
+                        options="RepositoryForm.replicationsGridOption"
+                        auto-focus="true">
+                </jf-table-view>
+            </jf-panel>
+        </div>
+    </jf-wizard-element>
+</jf-wizard>

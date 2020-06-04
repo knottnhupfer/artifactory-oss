@@ -1,0 +1,45 @@
+<!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="home-page-widget most-downloaded" ng-class="{'open-menu' : ctrl.$scope.jfSidebar.pinMenuStatus}">
+    <div class="list-title">
+        <a href ng-click="ctrl.refresh()" class="refresh-button pull-right"><i class="icon icon-refresh"></i></a>
+        Most Downloaded Artifacts
+        <span>({{ctrl.dateTime | date: 'dd/MM/yy HH:mm:ss'}})</span>
+    </div>
+
+
+    <div class="list-content no-content" ng-if="!ctrl.data.mostDownloaded.length">
+        <p>No artifacts to display.</p>
+        <p>
+            <a href="https://www.jfrog.com/confluence/display/RTF/Deploying+Artifacts" class="jf-link" target="_blank">Learn how to</a> deploy your artifacts to Artifactory.
+        </p>
+    </div>
+
+    <div class="list-content" ng-if="ctrl.data.mostDownloaded.length">
+        <div class="list-item"
+                ng-repeat="item in ctrl.data.mostDownloaded">
+            <div class="list-item-inner">
+                <a href
+                        ui-sref="artifacts.browsers.path({tab:'General',browser:'tree',artifact:item.path})"
+                        ng-click="ctrl.itemClick()">
+                    <jf-marquee><span class="count">{{item.downloads | formatLongIntByScale}}</span> {{item.path}}</jf-marquee>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

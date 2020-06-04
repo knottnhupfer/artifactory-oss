@@ -1,0 +1,1 @@
+CREATE INDEX nodes_sha256_idx ON nodes (sha256);

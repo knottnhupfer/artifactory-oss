@@ -1,0 +1,48 @@
+<config version="v1">
+    <!--
+  ~ Artifactory is a binaries repository manager.
+  ~ Copyright (C) 2018 JFrog Ltd.
+  ~
+  ~ Artifactory is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Artifactory is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with Artifactory.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+    <chain template="s3"/>
+    <provider type="cache-fs" id="cache-fs">
+        <binariesDir>data/cache</binariesDir>
+        <maxCacheSize>17gb</maxCacheSize>
+        <fileStoreDir>cache</fileStoreDir>
+    </provider>
+    <provider type="eventual" id="eventual"/>
+    <provider type="retry" id="retry"/>
+    <provider type="s3" id="s3">
+        <proxyCredential>street</proxyCredential>
+        <bucketName>aBucketName</bucketName>
+        <testConnection>false</testConnection>
+        <useSignature>true</useSignature>
+        <proxyIdentity>darkProxy</proxyIdentity>
+        <proxyHost>Box</proxyHost>
+        <httpsPort>3</httpsPort>
+        <path>longestPath</path>
+        <proxyPort>2</proxyPort>
+        <endpoint>s3.amazonaws.com</endpoint>
+        <credential>someCred</credential>
+        <port>4</port>
+        <identity>ident</identity>
+        <httpsOnly>false</httpsOnly>
+        <roleName>aRoleName</roleName>
+        <refreshCredentials>true</refreshCredentials>
+        <region>aRegion</region>
+        <multiPartLimit>1000</multiPartLimit>
+        <s3AwsVersion>AWS2</s3AwsVersion>
+    </provider>
+</config>
