@@ -58,7 +58,7 @@
         <maven.version>3.6.3</maven.version>
 
         <!-- TODO: Move to embedded Tomcat test platform -->
-        <jetty.version>7.0.2.v20100331</jetty.version>
+        <jetty.version>9.4.41.v20210516</jetty.version>
 
         <!-- STRK-15 Unification of version, revision and timestamp properties -->
         <artifactory.version.prop>6.20.0</artifactory.version.prop>
