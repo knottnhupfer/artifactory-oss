@@ -53,7 +53,7 @@
         <sourceforgeId>175347</sourceforgeId>
         <sourceforgeName>artifactory</sourceforgeName>
 
-        <tomcat.version>8.5.54</tomcat.version>
+        <tomcat.version>8.5.75</tomcat.version>
         <tomcat.logging.version>8.5.2</tomcat.logging.version>
         <maven.version>3.6.3</maven.version>
 
